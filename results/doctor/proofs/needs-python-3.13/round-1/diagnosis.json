@@ -1,0 +1,33 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 676,
+  "outcome": "failed",
+  "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+  "phase": "project",
+  "exitCode": 1,
+  "rule": "D307",
+  "category": "spec",
+  "cause": "A package needs Python >=3.13, and the machine has 3.12.3.",
+  "evidence": [
+   {
+    "n": 675,
+    "text": "ERROR: Package 'newlib' requires a different Python: 3.12.3 not in '>=3.13'"
+   },
+   {
+    "n": 676,
+    "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "set-runtime",
+    "key": "python",
+    "value": "3.13"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -3,5 +3,5 @@\n \n runtimes:\n-  python: \"3.12\"\n+  python: \"3.13\"\n \n services:\n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/needs-python-3.13/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

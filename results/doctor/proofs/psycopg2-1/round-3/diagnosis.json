@@ -1,0 +1,32 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 1095,
+  "outcome": "failed",
+  "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+  "phase": "project",
+  "exitCode": 1,
+  "rule": "D303",
+  "category": "spec",
+  "cause": "A package is built from source and needs libpq-fe.h, from libpq-dev.",
+  "evidence": [
+   {
+    "n": 1074,
+    "text": "      ./psycopg/psycopg.h:36:10: fatal error: libpq-fe.h: No such file or directory"
+   },
+   {
+    "n": 1095,
+    "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-package",
+    "value": "libpq-dev"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -8,4 +8,5 @@\n   - build-essential\n   - python3-dev\n+  - libpq-dev\n \n services:\n",
+ "fixed": "/tmp/doctor-prove-ljpd0a87/psycopg2-1/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

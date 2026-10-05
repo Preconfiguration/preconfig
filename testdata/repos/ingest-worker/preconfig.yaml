@@ -1,0 +1,20 @@
+version: 1
+name: ingest-worker
+
+runtimes:
+  go: "1.25"
+
+services:
+  redis: "8"
+
+env:
+  REDIS_URL: redis://localhost:6379/0
+
+secrets:
+  - INGEST_TOKEN
+
+setup:
+  - go mod download
+
+ready:
+  - go test ./...

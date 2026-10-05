@@ -1,0 +1,8 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -7,4 +7,5 @@
+ packages:
+   - build-essential
++  - python3-dev
+ 
+ services:

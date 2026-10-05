@@ -1,0 +1,29 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    3.1s  step   machine 1/5: system packages
+verify   23.7s  ok     machine 1/5: system packages  (20.7 s)
+verify   23.7s  step   machine 2/5: python 3.12
+verify   32.4s  ok     machine 2/5: python 3.12  (8.7 s)
+verify   32.4s  step   machine 3/5: postgres 16
+verify   47.0s  ok     machine 3/5: postgres 16  (14.5 s)
+verify   47.0s  step   machine 4/5: redis 7
+verify   49.2s  ok     machine 4/5: redis 7  (2.2 s)
+verify   49.2s  step   machine 5/5: environment for login shells
+verify   49.2s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   49.2s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   49.2s  step   services 1/2: postgres 16
+verify   51.7s  ok     services 1/2: postgres 16  (2.5 s)
+verify   51.7s  step   services 2/2: redis 7
+verify   51.7s  ok     services 2/2: redis 7  (0.0 s)
+verify   51.7s  warn   PAYMENTS_API_KEY is not set
+verify   51.7s  step   project 1/2: python3 -m venv .venv
+verify   54.9s  ok     project 1/2: python3 -m venv .venv  (3.1 s)
+verify   54.9s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   62.8s  FAIL   project 2/2: .venv/bin/pip install -r requirements.txt  (exit code 1)
+verify   66.9s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               | WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fb822d0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/
+               | WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fb82480>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/
+               | WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fb82690>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/
+               | WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fb828a0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/
+               | ERROR: Could not find a version that satisfies the requirement psycopg==3.3.6 (from versions: none)
+               | ERROR: No matching distribution found for psycopg==3.3.6

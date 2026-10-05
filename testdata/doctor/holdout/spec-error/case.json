@@ -1,0 +1,22 @@
+{
+  "id": "spec-error",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "A tool misspelled in the spec: pnmp. verify refuses to start.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "",
+    "category": "spec",
+    "cause": "preconfig.yaml has errors",
+    "change": null
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "secrets:\n",
+      "tools:\n  - pnmp\n\nsecrets:\n"
+    ]
+  ],
+  "recorded": "2026-09-30T19:29:07Z"
+}

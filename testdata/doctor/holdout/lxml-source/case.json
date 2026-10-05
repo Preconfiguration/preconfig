@@ -1,0 +1,37 @@
+{
+  "id": "lxml-source",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "lxml built from source, with a compiler in the spec but no libxml2 headers.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "spec",
+    "cause": "lxml's build needs the development packages of libxml2 and libxslt: libxml2-dev and libxslt1-dev",
+    "change": [
+      {
+        "op": "add-package",
+        "value": "libxml2-dev"
+      },
+      {
+        "op": "add-package",
+        "value": "libxslt1-dev"
+      }
+    ]
+  },
+  "note": "Designed expecting only libxml2's headers to be named. lxml's build asks for the development packages of both libxml2 and libxslt, so the right fix adds both. Label set from the log.",
+  "edits": [
+    [
+      "append",
+      "requirements.txt",
+      "--no-binary lxml\nlxml==5.4.0\n"
+    ],
+    [
+      "replace",
+      "preconfig.yaml",
+      "secrets:\n",
+      "packages:\n  - build-essential\n\nsecrets:\n"
+    ]
+  ],
+  "recorded": "2026-09-30T19:15:38Z"
+}

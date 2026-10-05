@@ -1,0 +1,24 @@
+{
+  "id": "locale",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "A test that needs the de_DE.UTF-8 locale, which a clean Ubuntu doesn't have.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "The machine has no de_DE.UTF-8 locale",
+    "change": {
+      "op": "add-package",
+      "value": "locales-all"
+    }
+  },
+  "edits": [
+    [
+      "file",
+      "tests/test_locale.py",
+      "177 characters"
+    ]
+  ],
+  "recorded": "2026-09-30T18:48:14Z"
+}

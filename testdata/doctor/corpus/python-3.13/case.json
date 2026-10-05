@@ -1,0 +1,19 @@
+{
+  "id": "python-3.13",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "Python 3.13, which the setup installs with uv from GitHub's release downloads.",
+  "expect": {
+    "outcome": "passed"
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "  python: \"3.12\"\n",
+      "  python: \"3.13\"\n"
+    ]
+  ],
+  "recorded": "2026-09-30T19:04:19Z",
+  "note": "Designed expecting GitHub's downloads to be out of reach, as they were for the Alpha. uv downloaded Python 3.13.15 and the setup reached READY, so the case is a passing log. Label set from the log before Doctor read it."
+}

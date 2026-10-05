@@ -1,0 +1,33 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 1096,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 1,
+  "rule": "D401",
+  "category": "spec",
+  "cause": "The code connects to Redis on localhost:6379, and nothing is listening there: the spec doesn't run Redis.",
+  "evidence": [
+   {
+    "n": 778,
+    "text": "E           redis.exceptions.ConnectionError: Error 111 connecting to localhost:6379. Connection refused."
+   },
+   {
+    "n": 1096,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-service",
+    "key": "redis",
+    "value": "7"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -11,4 +11,5 @@\n     password: orders\n     database: orders\n+  redis: \"7\"\n \n env:\n",
+ "fixed": "/tmp/doctor-prove-d4o19nfq/no-redis/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

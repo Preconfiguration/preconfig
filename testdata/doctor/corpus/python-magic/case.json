@@ -1,0 +1,29 @@
+{
+  "id": "python-magic",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "python-magic added, and a test that uses it; libmagic isn't installed.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "python-magic needs the libmagic library",
+    "change": {
+      "op": "add-package",
+      "value": "libmagic1t64"
+    }
+  },
+  "edits": [
+    [
+      "append",
+      "requirements.txt",
+      "python-magic==0.4.27\n"
+    ],
+    [
+      "file",
+      "tests/test_magic.py",
+      "112 characters"
+    ]
+  ],
+  "recorded": "2026-09-30T18:46:23Z"
+}

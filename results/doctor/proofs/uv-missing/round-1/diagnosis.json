@@ -1,0 +1,32 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 650,
+  "outcome": "failed",
+  "step": "project 2/2: uv pip install --python .venv/bin/python -r requirements.txt",
+  "phase": "project",
+  "exitCode": 127,
+  "rule": "D306",
+  "category": "spec",
+  "cause": "The step runs uv, and uv isn't installed.",
+  "evidence": [
+   {
+    "n": 649,
+    "text": "/preconfig/setup.sh: line 98: uv: command not found"
+   },
+   {
+    "n": 650,
+    "text": ">>> preconfig: FAILED: project 2/2: uv pip install --python .venv/bin/python -r requirements.txt (exit code 127)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-tool",
+    "value": "uv"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -5,4 +5,7 @@\n   python: \"3.12\"\n \n+tools:\n+  - uv\n+\n services:\n   postgres:\n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/uv-missing/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

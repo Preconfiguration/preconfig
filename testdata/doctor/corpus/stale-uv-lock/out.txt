@@ -1,0 +1,29 @@
+verify    0.0s  start  orders-api: python 3.12, uv, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.4s  step   machine 1/6: system packages
+verify   28.0s  ok     machine 1/6: system packages  (23.6 s)
+verify   28.0s  step   machine 2/6: python 3.12
+verify   40.3s  ok     machine 2/6: python 3.12  (12.3 s)
+verify   40.3s  step   machine 3/6: uv
+verify   54.9s  ok     machine 3/6: uv  (14.6 s)
+verify   54.9s  step   machine 4/6: postgres 16
+verify   69.7s  ok     machine 4/6: postgres 16  (14.8 s)
+verify   69.7s  step   machine 5/6: redis 7
+verify   72.1s  ok     machine 5/6: redis 7  (2.4 s)
+verify   72.1s  step   machine 6/6: environment for login shells
+verify   72.2s  ok     machine 6/6: environment for login shells  (0.1 s)
+verify   72.2s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   72.2s  step   services 1/2: postgres 16
+verify   74.7s  ok     services 1/2: postgres 16  (2.5 s)
+verify   74.7s  step   services 2/2: redis 7
+verify   74.7s  ok     services 2/2: redis 7  (0.0 s)
+verify   74.7s  warn   PAYMENTS_API_KEY is not set
+verify   74.7s  step   project 1/1: uv sync --locked
+verify   75.1s  FAIL   project 1/1: uv sync --locked  (exit code 1)
+verify   79.4s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               | Using CPython 3.12.3 interpreter at: /usr/bin/python3.12
+               | Creating virtual environment at: .venv
+               | Resolved 17 packages in 351ms
+               | error: The lockfile at `uv.lock` needs to be updated, but `--locked` was provided.
+               | 
+               | hint: To update the lockfile, run `uv lock`.

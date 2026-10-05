@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preconfig Doctor Live Demo</title>
+<meta name="description" content="Preconfig Doctor reads the log of a failed setup, finds the lines that matter, names the cause and writes the change to preconfig.yaml that fixes it. The real engine, running in your browser, on failures recorded on a clean machine.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://preconfiguration.com/demo/doctor/">
+<base target="_top">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231F3A5F'/%3E%3Cpath d='M9 10h9a5 5 0 0 1 0 10h-9zM9 20v5' stroke='%2350C4CC' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>if (window.self !== window.top) document.documentElement.className += ' embedded';</script>
+<link rel="stylesheet" href="demo.v1.css">
+<link rel="stylesheet" href="doctor.v1.css">
+</head>
+<body>
+
+<header class="appbar">
+  <div class="wrap">
+    <a class="brand" href="https://preconfiguration.com/">Preconfiguration.com</a>
+    <span class="tag">Doctor live demo</span>
+    <span class="grow"></span>
+    <a class="home" href="https://preconfiguration.com/demo/doctor/">How to run it</a>
+  </div>
+</header>
+
+<main>
+  <noscript><div class="wrap"><p class="noscript">This demo needs JavaScript switched on.</p></div></noscript>
+  <div class="wrap">
+    <section class="section" id="doctor">
+      <p class="eyebrow">Preconfig Doctor</p>
+      <h2>Read a failed setup, name the cause, fix the spec</h2>
+      <p class="muted">Pick a failure recorded on a clean Ubuntu 24.04 machine, or paste a log of your own: the output of <code>preconfig verify</code>, the setup script, a Docker build or a GitHub Actions job. Doctor finds the step that broke and the lines that show why, and when the fix belongs in <code>preconfig.yaml</code>, it writes the change and rebuilds every platform's file. It all runs in this page.</p>
+      <p class="engine-line"><span id="engine-state">Starting the engine...</span></p>
+      <div class="presets" id="presets" aria-label="Recorded failures"></div>
+
+      <div class="lab-grid dx-grid">
+        <div class="dx-inputs">
+          <label class="kind" for="log-text">The log <span class="muted small" id="log-meta"></span></label>
+          <textarea id="log-text" spellcheck="false" aria-label="The log of a failed setup"></textarea>
+          <details class="spec-box" id="spec-box">
+            <summary>preconfig.yaml the setup was built from <span class="muted small">(optional; Doctor fills in values from it)</span></summary>
+            <textarea id="spec-text" spellcheck="false" aria-label="preconfig.yaml"></textarea>
+          </details>
+          <div class="dx-actions">
+            <button class="btn primary" id="btn-diagnose" type="button" disabled>Diagnose</button>
+            <span class="muted small" id="dx-time"></span>
+          </div>
+        </div>
+
+        <div class="lab-side">
+          <div class="counters three" id="dx-counters">
+            <div class="counter"><div class="n" id="n-lines">0</div><div class="l">lines in the log</div></div>
+            <div class="counter"><div class="n" id="n-evidence">0</div><div class="l">lines that show the cause</div></div>
+            <div class="counter" id="where-box"><div class="n" id="n-where">none yet</div><div class="l">where the fix belongs</div></div>
+          </div>
+          <div class="dx-card" id="dx-card" hidden>
+            <p class="dx-step" id="dx-step"></p>
+            <p class="dx-cause" id="dx-cause"></p>
+            <ol class="dx-evidence" id="dx-evidence" aria-label="The lines that show it"></ol>
+            <div class="dx-fix" id="dx-fix" hidden>
+              <h3>The fix, in preconfig.yaml</h3>
+              <ul id="dx-changes"></ul>
+              <button class="btn primary small" id="btn-fix" type="button">Apply the fix and rebuild the files</button>
+            </div>
+            <p class="dx-advice" id="dx-advice" hidden></p>
+            <p class="dx-rule muted small" id="dx-rule"></p>
+          </div>
+          <div class="dx-empty muted" id="dx-empty">Pick a recorded failure above, or paste a log and press Diagnose.</div>
+        </div>
+      </div>
+
+      <div class="dx-result" id="fix-out" hidden>
+        <div class="proof" id="proof" hidden></div>
+        <h3>preconfig.yaml <span class="p-sub" id="fix-sub"></span></h3>
+        <pre class="code small" id="spec-diff"></pre>
+        <h3>The files build rewrites</h3>
+        <div class="viewer">
+          <div class="tabs" id="file-tabs" role="tablist"></div>
+          <pre class="code" id="file-view" tabindex="0"></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <h2>How Doctor decides</h2>
+      <div class="real">
+        <div>
+          <h3>Rules, and no guessing</h3>
+          <ul>
+            <li>Doctor reads the log's step markers to find the step that failed, then tries its rules on that step's lines, the most specific first: a blocked download before a missing package, a missing package before a failed test.</li>
+            <li>Each rule was written for a real kind of failure. When none fits, Doctor says it doesn't know and shows the lines that look like errors. It never changes the spec on a guess.</li>
+            <li>Only causes that live in the spec come with a change. A blocked network, a stale lockfile, an unset secret or a test that fails on the code get an explanation and where to fix it instead.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>What is real here</h3>
+          <ul>
+            <li>Every recorded log above is what the machine printed during a real run of <code>preconfig verify</code>, or a real Docker build, on the test machine on <span data-recorded></span>. Eight of the nine failures were made on purpose, and the ninth comes from the test machine's network; each has a known cause.</li>
+            <li>The diagnosis and the rebuilt files come from the engine's own Go code, compiled to WebAssembly for this page. A test compares every answer with the command line's.</li>
+            <li>Where a fix says it was proven, the changed spec was run again on a clean machine, and the result shown is that run's.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="appfoot">
+  <div class="wrap">
+    <span id="foot-version">Preconfig Doctor</span> · Copyright Preconfiguration.com 2026 · Apache License 2.0 · <a href="https://github.com/Preconfiguration/preconfig">Code on GitHub</a> · <a href="https://preconfiguration.com/contact/">Contact</a>
+  </div>
+</footer>
+
+<script src="engine.v2.js"></script>
+<script src="doctor-cases.v1.js"></script>
+<script src="doctor.v1.js"></script>
+</body>
+</html>

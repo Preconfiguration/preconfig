@@ -1,0 +1,2171 @@
+[
+ {
+  "set": "tuning",
+  "id": "bad-pin",
+  "form": "log",
+  "lines": 973,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "repository",
+   "cause": "requirements.txt asks for requests 99.0.0, which PyPI doesn't have",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.4,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 658,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D308",
+   "category": "repository",
+   "cause": "The requirements ask for requests==99.0.0, which the package index doesn't have.",
+   "evidence": [
+    {
+     "n": 656,
+     "text": "ERROR: Could not find a version that satisfies the requirement requests==99.0.0 (from versions: 0.2.0, 0.2.1, 0.2.2, 0.2.3, 0.2.4, 0.3.0, 0.3.1, 0.3.2, 0.3.3, 0.3.4, 0.4.0, 0.4.1, 0.5.0, 0.5.1, 0.6.0, 0.6.1, 0.6.2, 0.6.3, 0.6.4, 0.6.5, 0.6.6, 0.7.0, 0.7.1, 0.7.2, 0.7.3, 0.7.4, 0.7.5, 0.7.6, 0.8.0, 0.8.1, 0.8.2, 0.8.3, 0.8.4, 0.8.5, 0.8.6, 0.8.7, 0.8.8, 0.8.9, 0.9.0, 0.9.1, 0.9.2, 0.9.3, 0.10.0, 0.10.1, 0.10.2, 0.10.3, 0.10.4, 0.10.6, 0.10.7, 0.10.8, 0.11.1, 0.11.2, 0.12.0, 0.12.1, 0.13.0, 0.13.1, 0.13.2, 0.13.3, 0.13.4, 0.13.5, 0.13.6, 0.13.7, 0.13.8, 0.13.9, 0.14.0, 0.14.1, 0.14.2, 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.2.0, 1.2.1, 1.2.2, 1.2.3, 2.0.0, 2.0.1, 2.1.0, 2.2.0, 2.2.1, 2.3.0, 2.4.0, 2.4.1, 2.4.2, 2.4.3, 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.6.0, 2.6.1, 2.6.2, 2.7.0, 2.8.0, 2.8.1, 2.9.0, 2.9.1, 2.9.2, 2.10.0, 2.11.0, 2.11.1, 2.12.0, 2.12.1, 2.12.2, 2.12.3, 2.12.4, 2.12.5, 2.13.0, 2.14.0, 2.14.1, 2.14.2, 2.15.1, 2.16.0, 2.16.1, 2.16.2, 2.16.3, 2.16.4, 2.16.5, 2.17.0, 2.17.1, 2.17.2, 2.17.3, 2.18.0, 2.18.1, 2.18.2, 2.18.3, 2.18.4, 2.19.0, 2.19.1, 2.20.0, 2.20.1, 2.21.0, 2.22.0, 2.23.0, 2.24.0, 2.25.0, 2.25.1, 2.26.0, 2.27.0, 2.27.1, 2.28.0, 2.28.1, 2.28.2, 2.29.0, 2.30.0, 2.31.0, 2.32.2, 2.32.3, 2.32.4, 2.32.5, 2.33.0, 2.33.1, 2.34.0.dev1, 2.34.0, 2.34.1, 2.34.2)"
+    },
+    {
+     "n": 658,
+     "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+    }
+   ],
+   "advice": "Fix the pin in the requirements file; the newest versions on the index are 2.34.0, 2.34.1, 2.34.2."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "bad-pin",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "repository",
+   "cause": "requirements.txt asks for requests 99.0.0, which PyPI doesn't have",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.5,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D308",
+   "category": "repository",
+   "cause": "The requirements ask for requests==99.0.0, which the package index doesn't have.",
+   "evidence": [
+    {
+     "n": 28,
+     "text": "ERROR: Could not find a version that satisfies the requirement requests==99.0.0 (from versions: 0.2.0, 0.2.1, 0.2.2, 0.2.3, 0.2.4, 0.3.0, 0.3.1, 0.3.2, 0.3.3, 0.3.4, 0.4.0, 0.4.1, 0.5.0, 0.5.1, 0.6.0, 0.6.1, 0.6.2, 0.6.3, 0.6.4, 0.6.5, 0.6.6, 0.7.0, 0.7.1, 0.7.2, 0.7.3, 0.7.4, 0.7.5, 0.7.6, 0.8.0, 0.8.1, 0.8.2, 0.8.3, 0.8.4, 0.8.5, 0.8.6, 0.8.7, 0.8.8, 0.8.9, 0.9.0, 0.9.1, 0.9.2, 0.9.3, 0.10.0, 0.10.1, 0.10.2, 0.10.3, 0.10.4, 0.10.6, 0.10.7, 0.10.8, 0.11.1, 0.11.2, 0.12.0, 0.12.1, 0.13.0, 0.13.1, 0.13.2, 0.13.3, 0.13.4, 0.13.5, 0.13.6, 0.13.7, 0.13.8, 0.13.9, 0.14.0, 0.14.1, 0.14.2, 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.2.0, 1.2.1, 1.2.2, 1.2.3, 2.0.0, 2.0.1, 2.1.0, 2.2.0, 2.2.1, 2.3.0, 2.4.0, 2.4.1, 2.4.2, 2.4.3, 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.6.0, 2.6.1, 2.6.2, 2.7.0, 2.8.0, 2.8.1, 2.9.0, 2.9.1, 2.9.2, 2.10.0, 2.11.0, 2.11.1, 2.12.0, 2.12.1, 2.12.2, 2.12.3, 2.12.4, 2.12.5, 2.13.0, 2.14.0, 2.14.1, 2.14.2, 2.15.1, 2.16.0, 2.16.1, 2.16.2, 2.16.3, 2.16.4, 2.16.5, 2.17.0, 2.17.1, 2.17.2, 2.17.3, 2.18.0, 2.18.1, 2.18.2, 2.18.3, 2.18.4, 2.19.0, 2.19.1, 2.20.0, 2.20.1, 2.21.0, 2.22.0, 2.23.0, 2.24.0, 2.25.0, 2.25.1, 2.26.0, 2.27.0, 2.27.1, 2.28.0, 2.28.1, 2.28.2, 2.29.0, 2.30.0, 2.31.0, 2.32.2, 2.32.3, 2.32.4, 2.32.5, 2.33.0, 2.33.1, 2.34.0.dev1, 2.34.0, 2.34.1, 2.34.2)"
+    }
+   ],
+   "advice": "Fix the pin in the requirements file; the newest versions on the index are 2.34.0, 2.34.1, 2.34.2."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "code-failure",
+  "form": "log",
+  "lines": 1020,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "code",
+   "cause": "A test failed on its own assertion; the setup worked",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 10.5,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 705,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D408",
+   "category": "code",
+   "cause": "The setup worked. The tests ran and failed on their own assertions, which is about the code, not the machine.",
+   "evidence": [
+    {
+     "n": 697,
+     "text": "E       AssertionError: assert 1 == 2"
+    },
+    {
+     "n": 701,
+     "text": "tests/test_orders.py:35: AssertionError"
+    },
+    {
+     "n": 703,
+     "text": "FAILED tests/test_orders.py::test_count_is_cached_in_redis - AssertionError: ..."
+    },
+    {
+     "n": 705,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "advice": "Look at the failing assertion. Nothing in preconfig.yaml needs to change."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "code-failure",
+  "form": "terminal",
+  "lines": 33,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "code",
+   "cause": "A test failed on its own assertion; the setup worked",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 8.6,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 33,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D408",
+   "category": "code",
+   "cause": "The setup worked. The tests ran and failed on their own assertions, which is about the code, not the machine.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E       AssertionError: assert 1 == 2"
+    },
+    {
+     "n": 30,
+     "text": "tests/test_orders.py:35: AssertionError"
+    },
+    {
+     "n": 32,
+     "text": "FAILED tests/test_orders.py::test_count_is_cached_in_redis - AssertionError: ..."
+    }
+   ],
+   "advice": "Look at the failing assertion. Nothing in preconfig.yaml needs to change."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "docker-node-blocked",
+  "form": "docker",
+  "lines": 474,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "network",
+   "cause": "The machine can't reach NodeSource",
+   "change": null,
+   "host": "deb.nodesource.com"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.1,
+  "exit": 1,
+  "diagnosis": {
+   "log": "docker",
+   "lines": 369,
+   "outcome": "failed",
+   "step": "machine 2/5: node 22",
+   "phase": "machine",
+   "exitCode": 2,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine's network inspects TLS, and the machine doesn't trust the certificate it presents for deb.nodesource.com.",
+   "evidence": [
+    {
+     "n": 338,
+     "text": "curl: (60) SSL certificate problem: self-signed certificate in certificate chain"
+    },
+    {
+     "n": 346,
+     "text": ">>> preconfig: FAILED: machine 2/5: node 22 (exit code 2)"
+    }
+   ],
+   "advice": "Give the machine your network's CA bundle: preconfig verify --ca-file, or add it to the image. Nothing in preconfig.yaml is wrong."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "docker-pass",
+  "form": "docker",
+  "lines": 990,
+  "expect": {
+   "outcome": "passed"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.5,
+  "exit": 0,
+  "diagnosis": {
+   "log": "docker",
+   "lines": 675,
+   "outcome": "passed"
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "docker-typo-package",
+  "form": "docker",
+  "lines": 91,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "spec",
+   "cause": "Ubuntu 24.04 has no package named libpq-devv",
+   "change": {
+    "op": "replace-package",
+    "old": "libpq-devv",
+    "value": "libpq-dev"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.4,
+  "exit": 1,
+  "diagnosis": {
+   "log": "docker",
+   "lines": 91,
+   "outcome": "failed",
+   "step": "machine 1/5: system packages",
+   "phase": "machine",
+   "exitCode": 100,
+   "rule": "D101",
+   "category": "spec",
+   "cause": "Ubuntu 24.04's archive has no package named libpq-devv; libpq-dev is the likely name.",
+   "evidence": [
+    {
+     "n": 67,
+     "text": "E: Unable to locate package libpq-devv"
+    },
+    {
+     "n": 68,
+     "text": ">>> preconfig: FAILED: machine 1/5: system packages (exit code 100)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "replace-package",
+     "value": "libpq-dev",
+     "old": "libpq-devv"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "go-blocked",
+  "form": "log",
+  "lines": 484,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "network",
+   "cause": "The machine can't download the Go 1.25 toolchain",
+   "change": null,
+   "host": "golang.org"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 8.7,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 358,
+   "outcome": "failed",
+   "step": "machine 2/4: go 1.25",
+   "phase": "machine",
+   "exitCode": 1,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach Go's module proxy (proxy.golang.org), where this step downloads Go toolchains and modules.",
+   "evidence": [
+    {
+     "n": 352,
+     "text": "go: download go1.25.0: golang.org/toolchain@v0.0.1-go1.25.0.linux-amd64: reading https://proxy.golang.org/golang.org/toolchain/@v/v0.0.1-go1.25.0.linux-amd64.zip: 403 Forbidden"
+    },
+    {
+     "n": 355,
+     "text": "go: download go1.25.0: golang.org/toolchain@v0.0.1-go1.25.0.linux-amd64: reading https://proxy.golang.org/golang.org/toolchain/@v/v0.0.1-go1.25.0.linux-amd64.zip: 403 Forbidden"
+    },
+    {
+     "n": 357,
+     "text": ">>> preconfig: FAILED: machine 2/4: go 1.25 (exit code 1)"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks the source. Allow proxy.golang.org from the machine, or point the setup at a mirror your network allows."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "go-blocked",
+  "form": "terminal",
+  "lines": 14,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "network",
+   "cause": "The machine can't download the Go 1.25 toolchain",
+   "change": null,
+   "host": "golang.org"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.8,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 14,
+   "outcome": "failed",
+   "step": "machine 2/4: go 1.25",
+   "phase": "machine",
+   "exitCode": 1,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach Go's module proxy (proxy.golang.org), where this step downloads Go toolchains and modules.",
+   "evidence": [
+    {
+     "n": 9,
+     "text": "go: download go1.25.0: golang.org/toolchain@v0.0.1-go1.25.0.linux-amd64: reading https://proxy.golang.org/golang.org/toolchain/@v/v0.0.1-go1.25.0.linux-amd64.zip: 403 Forbidden"
+    },
+    {
+     "n": 12,
+     "text": "go: download go1.25.0: golang.org/toolchain@v0.0.1-go1.25.0.linux-amd64: reading https://proxy.golang.org/golang.org/toolchain/@v/v0.0.1-go1.25.0.linux-amd64.zip: 403 Forbidden"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks the source. Allow proxy.golang.org from the machine, or point the setup at a mirror your network allows."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "locale",
+  "form": "log",
+  "lines": 1036,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The machine has no de_DE.UTF-8 locale",
+   "change": {
+    "op": "add-package",
+    "value": "locales-all"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 10.2,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 721,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D405",
+   "category": "spec",
+   "cause": "The code asks for a locale that a clean Ubuntu doesn't have; it ships only C.UTF-8.",
+   "evidence": [
+    {
+     "n": 715,
+     "text": "E       locale.Error: unsupported locale setting"
+    },
+    {
+     "n": 721,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "locales-all"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "locale",
+  "form": "terminal",
+  "lines": 31,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The machine has no de_DE.UTF-8 locale",
+   "change": {
+    "op": "add-package",
+    "value": "locales-all"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.9,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 31,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D405",
+   "category": "spec",
+   "cause": "The code asks for a locale that a clean Ubuntu doesn't have; it ships only C.UTF-8.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E       locale.Error: unsupported locale setting"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "locales-all"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "missing-requirements-file",
+  "form": "log",
+  "lines": 965,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "repository",
+   "cause": "requirements.txt includes requirements-dev.txt, which doesn't exist",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 8.9,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 650,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D309",
+   "category": "repository",
+   "cause": "The setup installs from requirements-dev.txt, which isn't in the repository.",
+   "evidence": [
+    {
+     "n": 649,
+     "text": "ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'requirements-dev.txt'"
+    },
+    {
+     "n": 650,
+     "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+    }
+   ],
+   "advice": "Add requirements-dev.txt to the repository, or remove the line that includes it."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "missing-requirements-file",
+  "form": "terminal",
+  "lines": 24,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "repository",
+   "cause": "requirements.txt includes requirements-dev.txt, which doesn't exist",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 5.7,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 24,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D309",
+   "category": "repository",
+   "cause": "The setup installs from requirements-dev.txt, which isn't in the repository.",
+   "evidence": [
+    {
+     "n": 24,
+     "text": "ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'requirements-dev.txt'"
+    }
+   ],
+   "advice": "Add requirements-dev.txt to the repository, or remove the line that includes it."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "missing-secret",
+  "form": "log",
+  "lines": 1022,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "secret",
+   "cause": "PAYMENTS_API_KEY is a secret, and it isn't set where the setup runs",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.7,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 707,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D404",
+   "category": "secret",
+   "cause": "The code reads PAYMENTS_API_KEY, a secret the spec names, and it isn't set where the setup runs.",
+   "evidence": [
+    {
+     "n": 701,
+     "text": "E   KeyError: 'PAYMENTS_API_KEY'"
+    },
+    {
+     "n": 707,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "advice": "Set PAYMENTS_API_KEY in the platform's secret settings. For preconfig verify, export it in the shell that runs verify; verify passes the secrets the spec names."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "missing-secret",
+  "form": "terminal",
+  "lines": 31,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "secret",
+   "cause": "PAYMENTS_API_KEY is a secret, and it isn't set where the setup runs",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 6.3,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 31,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D404",
+   "category": "secret",
+   "cause": "The code reads PAYMENTS_API_KEY, a secret the spec names, and it isn't set where the setup runs.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E   KeyError: 'PAYMENTS_API_KEY'"
+    }
+   ],
+   "advice": "Set PAYMENTS_API_KEY in the platform's secret settings. For preconfig verify, export it in the shell that runs verify; verify passes the secrets the spec names."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "needs-python-3.13",
+  "form": "log",
+  "lines": 991,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "newlib requires Python 3.13 or later; the spec installs 3.12",
+   "change": {
+    "op": "set-runtime",
+    "name": "python",
+    "value": "3.13"
+   },
+   "proof": "unreachable"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 12.0,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 676,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D307",
+   "category": "spec",
+   "cause": "A package needs Python >=3.13, and the machine has 3.12.3.",
+   "evidence": [
+    {
+     "n": 675,
+     "text": "ERROR: Package 'newlib' requires a different Python: 3.12.3 not in '>=3.13'"
+    },
+    {
+     "n": 676,
+     "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-runtime",
+     "key": "python",
+     "value": "3.13"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "needs-python-3.13",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "newlib requires Python 3.13 or later; the spec installs 3.12",
+   "change": {
+    "op": "set-runtime",
+    "name": "python",
+    "value": "3.13"
+   },
+   "proof": "unreachable"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 6.2,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D307",
+   "category": "spec",
+   "cause": "A package needs Python >=3.13, and the machine has 3.12.3.",
+   "evidence": [
+    {
+     "n": 29,
+     "text": "ERROR: Package 'newlib' requires a different Python: 3.12.3 not in '>=3.13'"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-runtime",
+     "key": "python",
+     "value": "3.13"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "no-database-url",
+  "form": "log",
+  "lines": 1093,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The tests read DATABASE_URL, and the spec doesn't set it",
+   "change": {
+    "op": "add-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 12.9,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 778,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D404",
+   "category": "spec",
+   "cause": "The code reads DATABASE_URL, and the spec doesn't set it; the spec's service says what it should be.",
+   "evidence": [
+    {
+     "n": 706,
+     "text": "E   KeyError: 'DATABASE_URL'"
+    },
+    {
+     "n": 727,
+     "text": "E   KeyError: 'DATABASE_URL'"
+    },
+    {
+     "n": 778,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-env",
+     "key": "DATABASE_URL",
+     "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "no-database-url",
+  "form": "terminal",
+  "lines": 32,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The tests read DATABASE_URL, and the spec doesn't set it",
+   "change": {
+    "op": "add-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.1,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 32,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D404",
+   "category": "spec",
+   "cause": "The code reads DATABASE_URL, and the spec doesn't set it; the spec's service says what it should be.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E   KeyError: 'DATABASE_URL'"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-env",
+     "key": "DATABASE_URL",
+     "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "no-postgres",
+  "form": "log",
+  "lines": 1077,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "PostgreSQL isn't running: the tests can't connect to localhost:5432",
+   "change": {
+    "op": "add-service",
+    "name": "postgres",
+    "version": "16",
+    "user": "orders",
+    "password": "orders",
+    "database": "orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 25.8,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 825,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D401",
+   "category": "spec",
+   "cause": "The code connects to PostgreSQL on localhost:5432, and nothing is listening there: the spec doesn't run PostgreSQL.",
+   "evidence": [
+    {
+     "n": 608,
+     "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5432 failed: Connection refused"
+    },
+    {
+     "n": 825,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-service",
+     "key": "postgres",
+     "value": "16",
+     "user": "orders",
+     "password": "orders",
+     "database": "orders"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "no-postgres",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "PostgreSQL isn't running: the tests can't connect to localhost:5432",
+   "change": {
+    "op": "add-service",
+    "name": "postgres",
+    "version": "16",
+    "user": "orders",
+    "password": "orders",
+    "database": "orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.2,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D401",
+   "category": "spec",
+   "cause": "The code connects to PostgreSQL on localhost:5432, and nothing is listening there: the spec doesn't run PostgreSQL.",
+   "evidence": [
+    {
+     "n": 22,
+     "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5432 failed: Connection refused"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-service",
+     "key": "postgres",
+     "value": "16",
+     "user": "orders",
+     "password": "orders",
+     "database": "orders"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "no-python",
+  "form": "log",
+  "lines": 794,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "The setup runs python3, and no Python is installed",
+   "change": {
+    "op": "set-runtime",
+    "name": "python",
+    "value": "3.12"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.5,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 542,
+   "outcome": "failed",
+   "step": "project 1/2: python3 -m venv .venv",
+   "phase": "project",
+   "exitCode": 127,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs python3, and no Python runtime is installed.",
+   "evidence": [
+    {
+     "n": 541,
+     "text": "/preconfig/setup.sh: line 93: python3: command not found"
+    },
+    {
+     "n": 542,
+     "text": ">>> preconfig: FAILED: project 1/2: python3 -m venv .venv (exit code 127)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-runtime",
+     "key": "python",
+     "value": "3.12"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "no-python",
+  "form": "terminal",
+  "lines": 20,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "The setup runs python3, and no Python is installed",
+   "change": {
+    "op": "set-runtime",
+    "name": "python",
+    "value": "3.12"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.8,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 20,
+   "outcome": "failed",
+   "step": "project 1/2: python3 -m venv .venv",
+   "phase": "project",
+   "exitCode": 127,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs python3, and no Python runtime is installed.",
+   "evidence": [
+    {
+     "n": 20,
+     "text": "/preconfig/setup.sh: line 93: python3: command not found"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-runtime",
+     "key": "python",
+     "value": "3.12"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "no-redis",
+  "form": "log",
+  "lines": 1327,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "Redis isn't running: the tests can't connect to localhost:6379",
+   "change": {
+    "op": "add-service",
+    "name": "redis",
+    "version": "7"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 38.9,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 1096,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D401",
+   "category": "spec",
+   "cause": "The code connects to Redis on localhost:6379, and nothing is listening there: the spec doesn't run Redis.",
+   "evidence": [
+    {
+     "n": 778,
+     "text": "E           redis.exceptions.ConnectionError: Error 111 connecting to localhost:6379. Connection refused."
+    },
+    {
+     "n": 1096,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-service",
+     "key": "redis",
+     "value": "7"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "no-redis",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "Redis isn't running: the tests can't connect to localhost:6379",
+   "change": {
+    "op": "add-service",
+    "name": "redis",
+    "version": "7"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.4,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D401",
+   "category": "spec",
+   "cause": "The code connects to Redis on localhost:6379, and nothing is listening there: the spec doesn't run Redis.",
+   "evidence": [
+    {
+     "n": 22,
+     "text": "E           redis.exceptions.ConnectionError: Error 111 connecting to localhost:6379. Connection refused."
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-service",
+     "key": "redis",
+     "value": "7"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "node-blocked",
+  "form": "log",
+  "lines": 422,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "network",
+   "cause": "The machine can't reach NodeSource",
+   "change": null,
+   "host": "deb.nodesource.com"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 10.0,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 317,
+   "outcome": "failed",
+   "step": "machine 2/5: node 22",
+   "phase": "machine",
+   "exitCode": 2,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach NodeSource (deb.nodesource.com), where this step downloads Node.js.",
+   "evidence": [
+    {
+     "n": 314,
+     "text": "curl: (22) The requested URL returned error: 403"
+    },
+    {
+     "n": 317,
+     "text": ">>> preconfig: FAILED: machine 2/5: node 22 (exit code 2)"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks the source. Allow deb.nodesource.com from the machine, or point the setup at a mirror your network allows."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "node-blocked",
+  "form": "terminal",
+  "lines": 10,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "network",
+   "cause": "The machine can't reach NodeSource",
+   "change": null,
+   "host": "deb.nodesource.com"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 6.7,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 10,
+   "outcome": "failed",
+   "step": "machine 2/5: node 22",
+   "phase": "machine",
+   "exitCode": 2,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach NodeSource (deb.nodesource.com), where this step downloads Node.js.",
+   "evidence": [
+    {
+     "n": 9,
+     "text": "curl: (22) The requested URL returned error: 403"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks the source. Allow deb.nodesource.com from the machine, or point the setup at a mirror your network allows."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "pass-orders-api",
+  "form": "log",
+  "lines": 1003,
+  "expect": {
+   "outcome": "passed"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.0,
+  "exit": 0,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 688,
+   "outcome": "passed"
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "pass-orders-api",
+  "form": "terminal",
+  "lines": 24,
+  "expect": {
+   "outcome": "passed"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.3,
+  "exit": 0,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 24,
+   "outcome": "passed"
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "port-5432-taken",
+  "form": "log",
+  "lines": 959,
+  "expect": {
+   "outcome": "failed",
+   "phase": "services",
+   "category": "platform",
+   "cause": "Another program holds port 5432, so PostgreSQL can't start",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 10.4,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 644,
+   "outcome": "failed",
+   "step": "services 1/2: postgres 16",
+   "phase": "services",
+   "exitCode": 1,
+   "rule": "D202",
+   "category": "platform",
+   "cause": "PostgreSQL 16 was installed but didn't start.",
+   "evidence": [
+    {
+     "n": 644,
+     "text": ">>> preconfig: FAILED: postgres 16 is not accepting connections on localhost:5432"
+    }
+   ],
+   "advice": "The lines above are the service's own reasons. A machine without systemd starts it directly; check that nothing else holds its port."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "port-5432-taken",
+  "form": "terminal",
+  "lines": 17,
+  "expect": {
+   "outcome": "failed",
+   "phase": "services",
+   "category": "platform",
+   "cause": "Another program holds port 5432, so PostgreSQL can't start",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.7,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 17,
+   "outcome": "failed",
+   "step": "services 1/2: postgres 16",
+   "phase": "services",
+   "exitCode": 1,
+   "rule": "D202",
+   "category": "platform",
+   "cause": "PostgreSQL 16 was installed but didn't start.",
+   "advice": "The lines above are the service's own reasons. A machine without systemd starts it directly; check that nothing else holds its port."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "postgres-17-blocked",
+  "form": "log",
+  "lines": 606,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "network",
+   "cause": "The machine can't reach the PostgreSQL project's archive",
+   "change": null,
+   "host": "postgresql.org"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 8.8,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 438,
+   "outcome": "failed",
+   "step": "machine 3/5: postgres 17",
+   "phase": "machine",
+   "exitCode": 22,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach the PostgreSQL project's site (www.postgresql.org), where this step downloads the PostgreSQL archive's signing key.",
+   "evidence": [
+    {
+     "n": 437,
+     "text": "curl: (22) The requested URL returned error: 403"
+    },
+    {
+     "n": 438,
+     "text": ">>> preconfig: FAILED: machine 3/5: postgres 17 (exit code 22)"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks the source. Allow www.postgresql.org from the machine, or point the setup at a mirror your network allows. If the project can use PostgreSQL 16, it comes from Ubuntu's own archive."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "postgres-17-blocked",
+  "form": "terminal",
+  "lines": 10,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "network",
+   "cause": "The machine can't reach the PostgreSQL project's archive",
+   "change": null,
+   "host": "postgresql.org"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.2,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 10,
+   "outcome": "failed",
+   "step": "machine 3/5: postgres 17",
+   "phase": "machine",
+   "exitCode": 22,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach the PostgreSQL project's site (www.postgresql.org), where this step downloads the PostgreSQL archive's signing key.",
+   "evidence": [
+    {
+     "n": 10,
+     "text": "curl: (22) The requested URL returned error: 403"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks the source. Allow www.postgresql.org from the machine, or point the setup at a mirror your network allows. If the project can use PostgreSQL 16, it comes from Ubuntu's own archive."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "psycopg2-1",
+  "form": "log",
+  "lines": 1063,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "The build needs a C compiler, from build-essential",
+   "change": {
+    "op": "add-package",
+    "value": "build-essential"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 17.0,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 748,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D302",
+   "category": "spec",
+   "cause": "A package is built from source, and the machine has no C compiler.",
+   "evidence": [
+    {
+     "n": 741,
+     "text": "      error: [Errno 2] No such file or directory: 'x86_64-linux-gnu-gcc'"
+    },
+    {
+     "n": 748,
+     "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "build-essential"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "psycopg2-1",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "The build needs a C compiler, from build-essential",
+   "change": {
+    "op": "add-package",
+    "value": "build-essential"
+   }
+  },
+  "verdict": "unknown",
+  "why": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+  "ms": 10.4,
+  "exit": 2,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "category": "unknown",
+   "cause": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+   "evidence": [
+    {
+     "n": 22,
+     "text": "verify   58.3s  NOT READY  a setup step failed (exit 2)"
+    },
+    {
+     "n": 27,
+     "text": "  ERROR: Failed building wheel for psycopg2"
+    },
+    {
+     "n": 28,
+     "text": "Failed to build psycopg2"
+    },
+    {
+     "n": 29,
+     "text": "ERROR: Could not build wheels for psycopg2, which is required to install pyproject.toml-based projects"
+    }
+   ],
+   "advice": "These are the lines that look like errors. Doctor doesn't guess: nothing in preconfig.yaml is changed."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "psycopg2-2",
+  "form": "log",
+  "lines": 1424,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "The build needs Python.h, from python3-dev",
+   "change": {
+    "op": "add-package",
+    "value": "python3-dev"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 17.4,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 1046,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D303",
+   "category": "spec",
+   "cause": "A package is built from source and needs Python.h, from python3-dev.",
+   "evidence": [
+    {
+     "n": 1025,
+     "text": "      ./psycopg/psycopg.h:35:10: fatal error: Python.h: No such file or directory"
+    },
+    {
+     "n": 1046,
+     "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "python3-dev"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "psycopg2-2",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "The build needs Python.h, from python3-dev",
+   "change": {
+    "op": "add-package",
+    "value": "python3-dev"
+   }
+  },
+  "verdict": "unknown",
+  "why": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+  "ms": 10.5,
+  "exit": 2,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "category": "unknown",
+   "cause": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+   "evidence": [
+    {
+     "n": 22,
+     "text": "verify   73.2s  NOT READY  a setup step failed (exit 2)"
+    },
+    {
+     "n": 27,
+     "text": "  ERROR: Failed building wheel for psycopg2"
+    },
+    {
+     "n": 28,
+     "text": "Failed to build psycopg2"
+    },
+    {
+     "n": 29,
+     "text": "ERROR: Could not build wheels for psycopg2, which is required to install pyproject.toml-based projects"
+    }
+   ],
+   "advice": "These are the lines that look like errors. Doctor doesn't guess: nothing in preconfig.yaml is changed."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "python-3.13",
+  "form": "log",
+  "lines": 1027,
+  "expect": {
+   "outcome": "passed"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 10.0,
+  "exit": 0,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 712,
+   "outcome": "passed"
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "python-3.13",
+  "form": "terminal",
+  "lines": 24,
+  "expect": {
+   "outcome": "passed"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 8.8,
+  "exit": 0,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 24,
+   "outcome": "passed"
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "python-magic",
+  "form": "log",
+  "lines": 1025,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "python-magic needs the libmagic library",
+   "change": {
+    "op": "add-package",
+    "value": "libmagic1t64"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 12.9,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 710,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 2,
+   "rule": "D305",
+   "category": "spec",
+   "cause": "A program needs the shared library libmagic, from libmagic1t64.",
+   "evidence": [
+    {
+     "n": 705,
+     "text": "E   ImportError: failed to find libmagic.  Check your installation"
+    },
+    {
+     "n": 710,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 2)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "libmagic1t64"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "python-magic",
+  "form": "terminal",
+  "lines": 31,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "python-magic needs the libmagic library",
+   "change": {
+    "op": "add-package",
+    "value": "libmagic1t64"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 10.3,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 31,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 2,
+   "rule": "D305",
+   "category": "spec",
+   "cause": "A program needs the shared library libmagic, from libmagic1t64.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E   ImportError: failed to find libmagic.  Check your installation"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "libmagic1t64"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "redis-8-blocked",
+  "form": "log",
+  "lines": 815,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "network",
+   "cause": "The machine can't reach Redis's packages",
+   "change": null,
+   "host": "packages.redis.io"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 10.7,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 584,
+   "outcome": "failed",
+   "step": "machine 4/5: redis 8",
+   "phase": "machine",
+   "exitCode": 2,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach Redis's packages (packages.redis.io), where this step downloads Redis.",
+   "evidence": [
+    {
+     "n": 581,
+     "text": "curl: (22) The requested URL returned error: 403"
+    },
+    {
+     "n": 584,
+     "text": ">>> preconfig: FAILED: machine 4/5: redis 8 (exit code 2)"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks the source. Allow packages.redis.io from the machine, or point the setup at a mirror your network allows. If the project can use Redis 7, it comes from Ubuntu's own archive."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "redis-8-blocked",
+  "form": "terminal",
+  "lines": 14,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "network",
+   "cause": "The machine can't reach Redis's packages",
+   "change": null,
+   "host": "packages.redis.io"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 6.6,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 14,
+   "outcome": "failed",
+   "step": "machine 4/5: redis 8",
+   "phase": "machine",
+   "exitCode": 2,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach Redis's packages (packages.redis.io), where this step downloads Redis.",
+   "evidence": [
+    {
+     "n": 13,
+     "text": "curl: (22) The requested URL returned error: 403"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks the source. Allow packages.redis.io from the machine, or point the setup at a mirror your network allows. If the project can use Redis 7, it comes from Ubuntu's own archive."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "sqlite3-cli",
+  "form": "log",
+  "lines": 1197,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The tests run sqlite3, which isn't installed",
+   "change": {
+    "op": "add-package",
+    "value": "sqlite3"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 29.4,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 882,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs sqlite3, and sqlite3 isn't installed.",
+   "evidence": [
+    {
+     "n": 876,
+     "text": "E                   FileNotFoundError: [Errno 2] No such file or directory: 'sqlite3'"
+    },
+    {
+     "n": 882,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "sqlite3"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "sqlite3-cli",
+  "form": "terminal",
+  "lines": 31,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The tests run sqlite3, which isn't installed",
+   "change": {
+    "op": "add-package",
+    "value": "sqlite3"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.7,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 31,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs sqlite3, and sqlite3 isn't installed.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E                   FileNotFoundError: [Errno 2] No such file or directory: 'sqlite3'"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "sqlite3"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "stale-uv-lock",
+  "form": "log",
+  "lines": 1053,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "repository",
+   "cause": "uv.lock is out of date with pyproject.toml",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.3,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 717,
+   "outcome": "failed",
+   "step": "project 1/1: uv sync --locked",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D311",
+   "category": "repository",
+   "cause": "uv.lock is out of date with the project's dependencies, and the setup installs strictly from it.",
+   "evidence": [
+    {
+     "n": 714,
+     "text": "error: The lockfile at `uv.lock` needs to be updated, but `--locked` was provided."
+    },
+    {
+     "n": 717,
+     "text": ">>> preconfig: FAILED: project 1/1: uv sync --locked (exit code 1)"
+    }
+   ],
+   "advice": "Update the lockfile in the repository (uv lock, pnpm install, npm install, poetry lock or go mod tidy) and commit it. The strict install is right to refuse."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "stale-uv-lock",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "repository",
+   "cause": "uv.lock is out of date with pyproject.toml",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 8.5,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "project 1/1: uv sync --locked",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D311",
+   "category": "repository",
+   "cause": "uv.lock is out of date with the project's dependencies, and the setup installs strictly from it.",
+   "evidence": [
+    {
+     "n": 27,
+     "text": "error: The lockfile at `uv.lock` needs to be updated, but `--locked` was provided."
+    }
+   ],
+   "advice": "Update the lockfile in the repository (uv lock, pnpm install, npm install, poetry lock or go mod tidy) and commit it. The strict install is right to refuse."
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "typo-package",
+  "form": "log",
+  "lines": 41,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "spec",
+   "cause": "Ubuntu 24.04 has no package named libpq-devv",
+   "change": {
+    "op": "replace-package",
+    "old": "libpq-devv",
+    "value": "libpq-dev"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 10.1,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 41,
+   "outcome": "failed",
+   "step": "machine 1/5: system packages",
+   "phase": "machine",
+   "exitCode": 100,
+   "rule": "D101",
+   "category": "spec",
+   "cause": "Ubuntu 24.04's archive has no package named libpq-devv; libpq-dev is the likely name.",
+   "evidence": [
+    {
+     "n": 40,
+     "text": "E: Unable to locate package libpq-devv"
+    },
+    {
+     "n": 41,
+     "text": ">>> preconfig: FAILED: machine 1/5: system packages (exit code 100)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "replace-package",
+     "value": "libpq-dev",
+     "old": "libpq-devv"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "typo-package",
+  "form": "terminal",
+  "lines": 11,
+  "expect": {
+   "outcome": "failed",
+   "phase": "machine",
+   "category": "spec",
+   "cause": "Ubuntu 24.04 has no package named libpq-devv",
+   "change": {
+    "op": "replace-package",
+    "old": "libpq-devv",
+    "value": "libpq-dev"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 7.3,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 11,
+   "outcome": "failed",
+   "step": "machine 1/5: system packages",
+   "phase": "machine",
+   "exitCode": 100,
+   "rule": "D101",
+   "category": "spec",
+   "cause": "Ubuntu 24.04's archive has no package named libpq-devv; libpq-dev is the likely name.",
+   "evidence": [
+    {
+     "n": 11,
+     "text": "E: Unable to locate package libpq-devv"
+    }
+   ],
+   "changes": [
+    {
+     "op": "replace-package",
+     "value": "libpq-dev",
+     "old": "libpq-devv"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "uv-missing",
+  "form": "log",
+  "lines": 965,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "The setup runs uv, and uv isn't installed",
+   "change": {
+    "op": "add-tool",
+    "value": "uv"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 8.8,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 650,
+   "outcome": "failed",
+   "step": "project 2/2: uv pip install --python .venv/bin/python -r requirements.txt",
+   "phase": "project",
+   "exitCode": 127,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs uv, and uv isn't installed.",
+   "evidence": [
+    {
+     "n": 649,
+     "text": "/preconfig/setup.sh: line 98: uv: command not found"
+    },
+    {
+     "n": 650,
+     "text": ">>> preconfig: FAILED: project 2/2: uv pip install --python .venv/bin/python -r requirements.txt (exit code 127)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-tool",
+     "value": "uv"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "uv-missing",
+  "form": "terminal",
+  "lines": 24,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "The setup runs uv, and uv isn't installed",
+   "change": {
+    "op": "add-tool",
+    "value": "uv"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 6.5,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 24,
+   "outcome": "failed",
+   "step": "project 2/2: uv pip install --python .venv/bin/python -r requirements.txt",
+   "phase": "project",
+   "exitCode": 127,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs uv, and uv isn't installed.",
+   "evidence": [
+    {
+     "n": 24,
+     "text": "/preconfig/setup.sh: line 98: uv: command not found"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-tool",
+     "value": "uv"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "wrong-db-password",
+  "form": "log",
+  "lines": 1285,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "DATABASE_URL's password doesn't match the postgres service's",
+   "change": {
+    "op": "set-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 34.8,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 970,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D402",
+   "category": "spec",
+   "cause": "PostgreSQL refused the password for orders: DATABASE_URL doesn't use the user and password the spec's postgres service creates.",
+   "evidence": [
+    {
+     "n": 753,
+     "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5432 failed: FATAL:  password authentication failed for user \"orders\""
+    },
+    {
+     "n": 970,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-env",
+     "key": "DATABASE_URL",
+     "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+   ]
+  }
+ },
+ {
+  "set": "tuning",
+  "id": "wrong-db-password",
+  "form": "terminal",
+  "lines": 33,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "DATABASE_URL's password doesn't match the postgres service's",
+   "change": {
+    "op": "set-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 8.6,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 33,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D402",
+   "category": "spec",
+   "cause": "PostgreSQL refused the password for orders: DATABASE_URL doesn't use the user and password the spec's postgres service creates.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5432 failed: FATAL:  password authentication failed for user \"orders\""
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-env",
+     "key": "DATABASE_URL",
+     "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+   ]
+  }
+ }
+]

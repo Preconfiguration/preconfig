@@ -1,0 +1,11 @@
+version: 1
+name: yarn-poetry
+runtimes:
+  node: "20"
+  python: "3.11"
+tools: [yarn, poetry]
+setup:
+  - yarn install --immutable
+  - poetry install --no-interaction
+ready:
+  - yarn test

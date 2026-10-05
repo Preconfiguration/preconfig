@@ -1,0 +1,2 @@
+preconfig.yaml:11:17: warning S062: DATABASE_URL points at PostgreSQL on this machine, but services doesn't list postgres
+    Add postgres under services, or point DATABASE_URL somewhere else.

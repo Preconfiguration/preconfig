@@ -1,0 +1,8 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -15,4 +15,5 @@
+ env:
+   DATABASE_URL: postgres://orders:orders@localhost:5432/orders
++  REDIS_URL: redis://localhost:6379/0
+ 
+ secrets:

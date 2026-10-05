@@ -1,0 +1,2 @@
+106 of 106 package names found in Ubuntu 24.04's archive
+exit 0

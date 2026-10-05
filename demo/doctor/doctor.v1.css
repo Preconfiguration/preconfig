@@ -1,0 +1,52 @@
+/* Preconfig Doctor demo: what the shared demo.v1.css doesn't have. */
+.engine-line { margin: 4px 0 0; font-size: 13.5px; color: var(--gray); }
+.engine-line .ok { color: var(--green); font-weight: 650; }
+.engine-line .bad { color: var(--red); font-weight: 650; }
+
+.dx-grid { margin-top: 6px; }
+.dx-inputs { min-width: 0; }
+.dx-inputs textarea#log-text { min-height: 360px; font-size: 12px; white-space: pre; overflow-wrap: normal; overflow-x: auto; }
+.spec-box { margin-top: 8px; border: 1px solid var(--rule); border-radius: 10px; padding: 6px 10px; background: var(--zebra); }
+.spec-box summary { cursor: pointer; color: var(--navy); font-size: 14px; }
+.spec-box textarea { margin-top: 8px; min-height: 260px !important; font-size: 12.5px; }
+.dx-actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+
+.dx-card { border: 1px solid var(--rule); border-radius: 12px; padding: 12px 14px; background: #fff; min-width: 0; }
+.dx-card h3 { margin: 12px 0 6px; font-size: 15px; }
+.dx-step { margin: 0 0 6px; font: 12.5px var(--mono); color: var(--gray); overflow-wrap: anywhere; }
+.dx-cause { margin: 0 0 8px; font-size: 16px; font-weight: 650; color: var(--navy); }
+.dx-evidence { list-style: none; margin: 0; padding: 0; background: var(--term); border-radius: 8px; overflow: auto; max-height: 220px; }
+.dx-evidence li { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 8px; padding: 3px 10px; font: 11.8px/1.5 var(--mono); color: #d7e1ec; }
+.dx-evidence li .ln { color: #7f93a8; text-align: right; }
+.dx-evidence li .tx { white-space: pre; overflow-x: auto; }
+.dx-evidence li.fail .tx { color: #ffb4a8; }
+.dx-fix ul { margin: 0 0 10px; padding-left: 20px; }
+.dx-fix li { margin: 2px 0; }
+.dx-advice { margin: 10px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--amber-light); color: #6b4308; font-size: 14px; }
+.dx-rule { margin: 8px 0 0; }
+.dx-empty { border: 1px dashed var(--rule); border-radius: 12px; padding: 16px; }
+
+.counter.cat-spec { background: var(--teal-light); }
+.counter.cat-spec .n { color: var(--teal-2); }
+.counter.cat-network .n, .counter.cat-platform .n, .counter.cat-secret .n, .counter.cat-repository .n { color: var(--amber); }
+.counter.cat-network, .counter.cat-platform, .counter.cat-secret, .counter.cat-repository { background: var(--amber-light); }
+.counter.cat-code { background: var(--off); }
+.counter.cat-passed { background: var(--green-light); }
+.counter.cat-passed .n { color: var(--green); }
+.counter.cat-unknown .n { color: var(--gray); }
+#dx-counters .counter .n { font-size: 18px; }
+
+.dx-result { margin-top: 6px; }
+.proof { border-radius: 10px; padding: 10px 12px; margin: 6px 0 4px; font-size: 14.5px; background: var(--green-light); color: #1f5e3a; }
+.proof.partial { background: var(--teal-light); color: var(--teal-2); }
+.proof b { font-weight: 700; }
+.proof ol { margin: 6px 0 0; padding-left: 20px; }
+
+@media (max-width: 720px) {
+  .dx-inputs textarea#log-text { min-height: 260px; }
+  .dx-evidence li { grid-template-columns: 40px minmax(0, 1fr); padding: 3px 8px; }
+  #dx-counters .counter .n { font-size: 16px; }
+}
+@media (max-width: 480px) {
+  .appbar .tag { display: none; }
+}

@@ -1,0 +1,33 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 542,
+  "outcome": "failed",
+  "step": "project 1/2: python3 -m venv .venv",
+  "phase": "project",
+  "exitCode": 127,
+  "rule": "D306",
+  "category": "spec",
+  "cause": "The step runs python3, and no Python runtime is installed.",
+  "evidence": [
+   {
+    "n": 541,
+    "text": "/preconfig/setup.sh: line 93: python3: command not found"
+   },
+   {
+    "n": 542,
+    "text": ">>> preconfig: FAILED: project 1/2: python3 -m venv .venv (exit code 127)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "set-runtime",
+    "key": "python",
+    "value": "3.12"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -2,4 +2,7 @@\n name: orders-api\n \n+runtimes:\n+  python: \"3.12\"\n+\n services:\n   postgres:\n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/no-python/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

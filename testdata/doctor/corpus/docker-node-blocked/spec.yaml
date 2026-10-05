@@ -1,0 +1,28 @@
+version: 1
+name: web-shop
+
+runtimes:
+  node: "22"
+
+tools:
+  - pnpm@10
+
+services:
+  postgres:
+    version: "17"
+    user: shop
+    password: shop
+    database: shop
+
+env:
+  DATABASE_URL: postgres://shop:shop@localhost:5432/shop
+
+secrets:
+  - SESSION_SECRET
+  - STRIPE_API_KEY
+
+setup:
+  - pnpm install --frozen-lockfile
+
+ready:
+  - pnpm test

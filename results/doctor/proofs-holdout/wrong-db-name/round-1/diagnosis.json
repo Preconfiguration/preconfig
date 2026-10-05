@@ -1,0 +1,33 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 966,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 1,
+  "rule": "D403",
+  "category": "spec",
+  "cause": "DATABASE_URL names the database shop, and the spec's postgres service creates orders.",
+  "evidence": [
+   {
+    "n": 753,
+    "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5432 failed: FATAL:  database \"shop\" does not exist"
+   },
+   {
+    "n": 966,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "set-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -14,5 +14,5 @@\n \n env:\n-  DATABASE_URL: postgres://orders:orders@localhost:5432/shop\n+  DATABASE_URL: postgres://orders:orders@localhost:5432/orders\n   REDIS_URL: redis://localhost:6379/0\n \n",
+ "fixed": "/tmp/doctor-prove-2us7emkd/wrong-db-name/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

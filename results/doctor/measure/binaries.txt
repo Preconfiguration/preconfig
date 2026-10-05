@@ -1,0 +1,15 @@
+# The preconfig binaries with Doctor, as delivered in the v2 demo kit (Package v2, October 1, 2026)
+# Built with: CGO_ENABLED=0 go build -trimpath -ldflags "-s -w" ./cmd/preconfig, Go 1.24.7
+# bytes  MB (10^6)  file
+  3611856   3.61  preconfig-darwin-amd64
+  3438146   3.44  preconfig-darwin-arm64
+  3596472   3.60  preconfig-linux-amd64
+  3408056   3.41  preconfig-linux-arm64
+  3726848   3.73  preconfig-windows-amd64.exe
+
+# Browser build (TinyGo 0.39.0)
+  1215382   1.22  engine.wasm
+  1639280   1.64  engine.v2.js
+
+# Rebuilt from this tree on October 1, 2026 with the same command: preconfig-linux-amd64 came out byte for byte
+# the same (SHA-256 a25f596e62dd8652d03d...).

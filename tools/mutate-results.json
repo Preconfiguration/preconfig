@@ -1,0 +1,350 @@
+[
+  {
+    "n": 1,
+    "bug": "spec: names may contain spaces",
+    "file": "internal/spec/spec.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestErrors"
+    ]
+  },
+  {
+    "n": 2,
+    "bug": "spec: a secret's value in env is let through",
+    "file": "internal/spec/spec.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestErrors"
+    ]
+  },
+  {
+    "n": 3,
+    "bug": "spec: the line separator U+2028 is let through",
+    "file": "internal/spec/spec.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestErrors"
+    ]
+  },
+  {
+    "n": 4,
+    "bug": "knowledge: Node.js 21, an odd release, counts as installable",
+    "file": "internal/kb/kb.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestSpecErrorsStopTheComparison",
+      "TestErrors"
+    ]
+  },
+  {
+    "n": 5,
+    "bug": "knowledge: the script target is left out of the defaults",
+    "file": "internal/kb/kb.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestBuild",
+      "TestBuildDryRunAndJSON",
+      "TestBuildWithABrokenSpec",
+      "TestCheckExitCodes",
+      "TestBrokenRepo",
+      "TestDrift",
+      "TestCursor",
+      "TestLoadsTheSample",
+      "TestCursorPullsInScript"
+    ]
+  },
+  {
+    "n": 6,
+    "bug": "knowledge: Copilot's timeout limit is off by one",
+    "file": "internal/kb/kb.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCopilotFindings"
+    ]
+  },
+  {
+    "n": 7,
+    "bug": "knowledge: the Copilot job has the wrong name",
+    "file": "internal/kb/kb.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestBuild",
+      "TestCheck",
+      "TestSampleReposAreClean",
+      "TestCopilotFindings",
+      "TestCrossCheck",
+      "TestDrift",
+      "TestGolden"
+    ]
+  },
+  {
+    "n": 8,
+    "bug": "YAML: a key written twice is accepted",
+    "file": "internal/yaml/yaml.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestErrorString",
+      "TestErrors"
+    ]
+  },
+  {
+    "n": 9,
+    "bug": "YAML: .5 is read as text, not a number",
+    "file": "internal/yaml/yaml.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestNumbers"
+    ]
+  },
+  {
+    "n": 10,
+    "bug": "YAML: the \\N escape gives the wrong character",
+    "file": "internal/yaml/yaml.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestEscapes"
+    ]
+  },
+  {
+    "n": 11,
+    "bug": "YAML: |+ drops the trailing blank lines",
+    "file": "internal/yaml/yaml.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestBlockScalars"
+    ]
+  },
+  {
+    "n": 12,
+    "bug": "JSON: a trailing comma in an object is accepted everywhere",
+    "file": "internal/jsonc/jsonc.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCursorFindings",
+      "TestStrictness"
+    ]
+  },
+  {
+    "n": 13,
+    "bug": "JSON: comments are accepted everywhere",
+    "file": "internal/jsonc/jsonc.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestStrictness"
+    ]
+  },
+  {
+    "n": 14,
+    "bug": "script: no trap, so a failed step isn't named",
+    "file": "internal/gen/script.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestBuild",
+      "TestCheck",
+      "TestSampleReposAreClean",
+      "TestDrift",
+      "TestGolden",
+      "TestScriptReportsTheFailedStep"
+    ]
+  },
+  {
+    "n": 15,
+    "bug": "Copilot: pull requests don't run the setup",
+    "file": "internal/gen/copilot.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestBuild",
+      "TestCheck",
+      "TestSampleReposAreClean",
+      "TestDrift",
+      "TestGolden",
+      "TestCopilotWorkflow"
+    ]
+  },
+  {
+    "n": 16,
+    "bug": "Cursor: the build context is .cursor, not the repository",
+    "file": "internal/gen/cursor.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestBuild",
+      "TestCheck",
+      "TestSampleReposAreClean",
+      "TestDrift",
+      "TestGolden",
+      "TestCursor"
+    ]
+  },
+  {
+    "n": 17,
+    "bug": "dev container: the Node.js feature ignores the version",
+    "file": "internal/gen/devcontainer.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestSampleReposAreClean",
+      "TestGolden",
+      "TestDevcontainer"
+    ]
+  },
+  {
+    "n": 18,
+    "bug": "cloud-init: the header has a space",
+    "file": "internal/gen/cloudinit.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestBuild",
+      "TestCheck",
+      "TestSampleReposAreClean",
+      "TestDrift",
+      "TestGolden",
+      "TestCloudInit"
+    ]
+  },
+  {
+    "n": 19,
+    "bug": "quoting: values starting with a digit go unquoted",
+    "file": "internal/tree/tree.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestBuild",
+      "TestCheck",
+      "TestSampleReposAreClean",
+      "TestDrift",
+      "TestYamlStr",
+      "FuzzYamlStr",
+      "TestGolden",
+      "TestCopilotToolsAndCaches",
+      "TestQuoting",
+      "TestYAMLString"
+    ]
+  },
+  {
+    "n": 20,
+    "bug": "shell: $ goes unquoted",
+    "file": "internal/gen/gen.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestQuoting"
+    ]
+  },
+  {
+    "n": 21,
+    "bug": "check: a timeout of exactly 59 is flagged",
+    "file": "internal/check/check.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCopilotFindings"
+    ]
+  },
+  {
+    "n": 22,
+    "bug": "check: Cursor's trailing commas pass",
+    "file": "internal/check/check.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCursorFindings"
+    ]
+  },
+  {
+    "n": 23,
+    "bug": "check: only the major version is compared",
+    "file": "internal/check/facts.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCheckExitCodes",
+      "TestBrokenRepo",
+      "TestVersionAgainstSpec",
+      "TestSameVersion"
+    ]
+  },
+  {
+    "n": 24,
+    "bug": "check: 22 and 22.11 count as different versions",
+    "file": "internal/check/facts.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCrossCheck"
+    ]
+  },
+  {
+    "n": 25,
+    "bug": "check: a file with preconfig's header is trusted without comparing",
+    "file": "internal/check/facts.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCheck",
+      "TestSampleReposAreClean",
+      "TestDrift"
+    ]
+  },
+  {
+    "n": 26,
+    "bug": "detect: pnpm installs ignore the lockfile",
+    "file": "internal/detect/detect.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestSamplesRoundTrip",
+      "TestPackageManagers"
+    ]
+  },
+  {
+    "n": 27,
+    "bug": "detect: names ending in TOKEN aren't treated as secrets",
+    "file": "internal/detect/detect.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestSamplesRoundTrip",
+      "TestEnv"
+    ]
+  },
+  {
+    "n": 28,
+    "bug": "detect: lts/iron maps to the wrong Node.js",
+    "file": "internal/detect/detect.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestNodeVersions"
+    ]
+  },
+  {
+    "n": 29,
+    "bug": "verify: a failed ready check counts as a failed setup",
+    "file": "internal/verify/verify.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestVerifyNotReady",
+      "TestRecordedFail",
+      "TestReadyKilledWithoutAMarker"
+    ]
+  },
+  {
+    "n": 30,
+    "bug": "verify: the test runner's error lines aren't picked for the summary",
+    "file": "internal/verify/verify.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestVerifyNotReady",
+      "TestRecordedFail",
+      "TestTail"
+    ]
+  },
+  {
+    "n": 31,
+    "bug": "diff: the hunk header swaps old and new",
+    "file": "internal/textdiff/textdiff.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestUnified",
+      "TestAddToEmpty"
+    ]
+  },
+  {
+    "n": 32,
+    "bug": "command: check exits 1, not 4, on a broken spec",
+    "file": "cmd/preconfig/main.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCheckExitCodes"
+    ]
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "id": "node-blocked",
+  "repo": "web-shop",
+  "kind": "verify",
+  "made": "The web-shop sample as it is: Node.js 22 comes from NodeSource, which this machine can't reach.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "machine",
+    "category": "network",
+    "cause": "The machine can't reach NodeSource",
+    "change": null,
+    "host": "deb.nodesource.com"
+  },
+  "edits": [],
+  "recorded": "2026-09-30T19:06:16Z"
+}

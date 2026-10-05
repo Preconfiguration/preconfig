@@ -1,0 +1,22 @@
+{
+  "id": "code-failure",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "A test changed to expect the wrong count: the code is fine, the test is wrong.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "code",
+    "cause": "A test failed on its own assertion; the setup worked",
+    "change": null
+  },
+  "edits": [
+    [
+      "replace",
+      "tests/test_orders.py",
+      "assert orders.order_count(conn, r, c) == 1\n    assert r.get",
+      "assert orders.order_count(conn, r, c) == 2\n    assert r.get"
+    ]
+  ],
+  "recorded": "2026-09-30T18:59:27Z"
+}

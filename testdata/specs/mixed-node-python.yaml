@@ -1,0 +1,12 @@
+version: 1
+name: mixed
+runtimes:
+  node: "24"
+  python: "3.13"
+tools: [pnpm@10, uv]
+setup:
+  - pnpm install --frozen-lockfile
+  - uv sync --frozen
+ready:
+  - pnpm test
+  - uv run pytest -q

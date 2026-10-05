@@ -1,0 +1,9 @@
+{
+  "name": "web-shop",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "install": "bash .preconfig/setup.sh project",
+  "start": "bash .preconfig/setup.sh services"
+}

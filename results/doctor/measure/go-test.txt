@@ -1,0 +1,15 @@
+ok  	preconfiguration.com/preconfig/cmd/preconfig	0.310s
+ok  	preconfiguration.com/preconfig/internal/check	0.040s
+ok  	preconfiguration.com/preconfig/internal/detect	0.013s
+ok  	preconfiguration.com/preconfig/internal/doctor	0.335s
+ok  	preconfiguration.com/preconfig/internal/gen	0.627s
+ok  	preconfiguration.com/preconfig/internal/jsonc	0.002s
+?   	preconfiguration.com/preconfig/internal/kb	[no test files]
+ok  	preconfiguration.com/preconfig/internal/spec	0.005s
+ok  	preconfiguration.com/preconfig/internal/textdiff	0.003s
+ok  	preconfiguration.com/preconfig/internal/tree	0.002s
+ok  	preconfiguration.com/preconfig/internal/verify	1.224s
+ok  	preconfiguration.com/preconfig/internal/yaml	0.004s
+?   	preconfiguration.com/preconfig/tools/demo/events	[no test files]
+?   	preconfiguration.com/preconfig/tools/doctor/packages	[no test files]
+exit 0

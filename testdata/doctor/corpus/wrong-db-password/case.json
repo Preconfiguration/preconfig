@@ -1,0 +1,26 @@
+{
+  "id": "wrong-db-password",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "DATABASE_URL has a password that doesn't match the spec's postgres service.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "DATABASE_URL's password doesn't match the postgres service's",
+    "change": {
+      "op": "set-env",
+      "key": "DATABASE_URL",
+      "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "  DATABASE_URL: postgres://orders:orders@localhost:5432/orders\n",
+      "  DATABASE_URL: postgres://orders:secret@localhost:5432/orders\n"
+    ]
+  ],
+  "recorded": "2026-09-30T19:00:40Z"
+}

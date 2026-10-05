@@ -1,0 +1,21 @@
+{
+  "id": "bad-pin",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "requirements.txt pins a version of requests that doesn't exist.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "repository",
+    "cause": "requirements.txt asks for requests 99.0.0, which PyPI doesn't have",
+    "change": null
+  },
+  "edits": [
+    [
+      "append",
+      "requirements.txt",
+      "requests==99.0.0\n"
+    ]
+  ],
+  "recorded": "2026-09-30T18:54:37Z"
+}

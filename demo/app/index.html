@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preconfiguration.com Live Demo</title>
+<meta name="description" content="One preconfig.yaml, compiled into the setup files of five platforms, checked, and verified on a clean machine. Replayed from real runs of the Preconfiguration.com Alpha, with the real engine running in your browser.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://preconfiguration.com/demo/">
+<base target="_top">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231F3A5F'/%3E%3Cpath d='M9 10h9a5 5 0 0 1 0 10h-9zM9 20v5' stroke='%2350C4CC' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>if (window.self !== window.top) document.documentElement.className += ' embedded';</script>
+<link rel="stylesheet" href="demo.v1.css">
+</head>
+<body>
+
+<header class="appbar">
+  <div class="wrap">
+    <a class="brand" href="https://preconfiguration.com/">Preconfiguration.com</a>
+    <span class="tag">Live demo</span>
+    <span class="grow"></span>
+    <a class="home" href="https://preconfiguration.com/demo/">How to run it</a>
+  </div>
+</header>
+
+<main>
+  <noscript><div class="wrap"><p class="noscript">This demo needs JavaScript switched on.</p></div></noscript>
+
+  <div class="controls" id="controls">
+    <div class="wrap">
+      <button class="btn primary" id="btn-play" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>
+        <span id="play-label">Play</span>
+      </button>
+      <button class="btn" id="btn-prev" type="button" title="Previous step">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+        <span class="long">Back</span>
+      </button>
+      <button class="btn" id="btn-next" type="button" title="Next step">
+        <span class="long">Next</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <button class="btn" id="btn-restart" type="button" title="Back to the start">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v5h5"/></svg>
+        <span class="long">Restart</span>
+      </button>
+      <div class="progress" aria-label="Progress of the replay">
+        <div class="bar"><i id="progress-bar"></i></div>
+        <span class="pct" id="progress-text">Ready</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <nav class="steps" id="steps" aria-label="Steps"></nav>
+
+    <section class="stage" aria-live="polite">
+      <div class="scene-head">
+        <p class="eyebrow" id="scene-no">Step 1 of 6</p>
+        <h2 id="scene-title">Draft the spec from the repository</h2>
+        <p class="scene-text" id="scene-intro"></p>
+      </div>
+
+      <div class="stage-grid">
+        <div class="term-card">
+          <div class="term-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="term-title" id="term-title">Terminal, replayed from the recorded run</span></div>
+          <div class="term" id="term" role="log" aria-label="Terminal output"></div>
+        </div>
+
+        <div class="panel-card">
+          <!-- step 1: the repository and what detect read -->
+          <div class="panel" id="panel-repo">
+            <h3 class="p-h">The repository <span class="p-sub">orders-api, before any setup files</span></h3>
+            <ul class="files" id="repo-files"></ul>
+            <div class="verdict-line" id="repo-verdict" hidden></div>
+          </div>
+
+          <!-- step 2: one spec, five targets -->
+          <div class="panel" id="panel-targets" hidden>
+            <svg id="targets" viewBox="0 0 700 330" role="img" aria-label="preconfig.yaml compiled into the files of five platforms"></svg>
+            <div class="viewer">
+              <div class="tabs" id="file-tabs" role="tablist"></div>
+              <pre class="code" id="file-view" tabindex="0"></pre>
+            </div>
+            <div class="here">
+              <button class="btn small" id="btn-build-here" type="button" disabled>Build it again in this page</button>
+              <span class="muted small" id="build-here-note">The engine compiled to WebAssembly compares its seven files with the command line's.</span>
+            </div>
+          </div>
+
+          <!-- step 3: findings on hand-written files -->
+          <div class="panel" id="panel-findings" hidden>
+            <div class="counters">
+              <div class="counter"><div class="n" id="n-files">0</div><div class="l">files checked</div></div>
+              <div class="counter badn"><div class="n" id="n-errors">0</div><div class="l">errors</div></div>
+              <div class="counter warnn"><div class="n" id="n-warnings">0</div><div class="l">warnings</div></div>
+              <div class="counter"><div class="n" id="n-missing">0</div><div class="l">files missing</div></div>
+            </div>
+            <div class="findings" id="findings"></div>
+          </div>
+
+          <!-- steps 4 and 5: the verify timeline -->
+          <div class="panel" id="panel-timeline" hidden>
+            <div class="counters three">
+              <div class="counter"><div class="n" id="v-clock">0.0 s</div><div class="l">on the clean machine</div></div>
+              <div class="counter"><div class="n" id="v-have">nothing yet</div><div class="l">installed and running</div></div>
+              <div class="counter" id="v-result-box"><div class="n" id="v-result">running</div><div class="l">result</div></div>
+            </div>
+            <div class="timeline" id="timeline"></div>
+            <div class="machine-card">
+              <div class="machine-bar">What the machine printed <span id="machine-step"></span></div>
+              <div class="machine" id="machine" aria-label="The machine's own output"></div>
+            </div>
+          </div>
+
+          <!-- step 6: one change -->
+          <div class="panel" id="panel-change" hidden>
+            <h3 class="p-h">preconfig.yaml <span class="p-sub">one line changes</span></h3>
+            <pre class="code small" id="spec-diff"></pre>
+            <h3 class="p-h">What build rewrites</h3>
+            <ul class="files" id="change-files"></ul>
+            <details class="diffs" id="change-diffs-box">
+              <summary>Show the changes, as <code>preconfig check --diff</code> prints them</summary>
+              <pre class="code small" id="change-diffs"></pre>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <p class="scene-outro" id="scene-outro" hidden></p>
+    </section>
+
+    <section class="section" id="lab-build">
+      <h2>Build your own spec</h2>
+      <p class="muted">Edit preconfig.yaml, or start from one of the samples. The engine checks it as you type and writes every platform's file, in this page. Try a typo such as <code>runtime:</code>, a Node.js version that doesn't exist, or a token written into <code>env</code>.</p>
+      <div class="presets" id="spec-presets"></div>
+      <div class="lab-grid">
+        <div>
+          <textarea id="spec-text" spellcheck="false" aria-label="preconfig.yaml"></textarea>
+          <p class="lab-status" id="spec-status"></p>
+        </div>
+        <div class="lab-side">
+          <ul class="diags" id="spec-diags"></ul>
+        </div>
+      </div>
+      <div class="viewer" id="lab-viewer" hidden>
+        <div class="tabs" id="lab-tabs" role="tablist"></div>
+        <pre class="code" id="lab-view" tabindex="0"></pre>
+      </div>
+    </section>
+
+    <section class="section" id="lab-check">
+      <h2>Check a setup file</h2>
+      <p class="muted">Paste a setup file a platform reads, pick what it is, and check it. The examples are the mistakes from step 3 and a few more. With the second box ticked, the file is also compared with the spec in the panel above.</p>
+      <div class="presets" id="check-presets"></div>
+      <div class="lab-grid">
+        <div>
+          <label class="kind">This file is
+            <select id="check-kind">
+              <option value=".github/workflows/copilot-setup-steps.yml">GitHub Copilot: .github/workflows/copilot-setup-steps.yml</option>
+              <option value=".cursor/environment.json">Cursor: .cursor/environment.json</option>
+              <option value=".devcontainer/devcontainer.json">Dev container: .devcontainer/devcontainer.json</option>
+              <option value="cloud-init.yaml">cloud-init: cloud-init.yaml</option>
+              <option value=".preconfig/setup.sh">Setup script: .preconfig/setup.sh</option>
+            </select>
+          </label>
+          <textarea id="check-text" spellcheck="false" aria-label="The setup file"></textarea>
+        </div>
+        <div class="lab-side">
+          <label class="check"><input type="checkbox" id="check-with-spec"> Compare with the spec above</label>
+          <button class="btn primary" id="btn-check" type="button" disabled>Check it</button>
+          <p class="muted small">The same checks as <code>preconfig check</code> on the command line.</p>
+          <ul class="diags" id="check-out"></ul>
+        </div>
+      </div>
+      <pre class="code small" id="check-diff" hidden></pre>
+    </section>
+
+    <section class="section" id="real">
+      <h2>What is real here</h2>
+      <div class="real">
+        <div>
+          <h3>Real</h3>
+          <ul>
+            <li>Every line in the terminal in steps 1, 2, 3 and 6: what the command-line engine printed on the sample repositories, recorded on <span data-recorded></span> and replayed at a readable pace.</li>
+            <li>Steps 4 and 5: two runs of <code>preconfig verify</code> on a clean Ubuntu 24.04 container on <span data-verified></span>, from verify's own JSON events and the machine's own output, replayed five times faster. The minutes and seconds are the recorded ones.</li>
+            <li>The files, the findings and the drafts in the two panels above, and the build in step 2: the Alpha's own Go code, compiled to WebAssembly for this page. A test compares its answers with the same code built with standard Go, and the files it writes with the command line's, byte for byte.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Stand-ins</h3>
+          <ul>
+            <li>orders-api is a small sample service written for this demo, and the hand-written files of step 3 were written to show common mistakes.</li>
+            <li>No coding agent runs here. The files are checked against each platform's published format and schema, and the setup script was run on a clean machine; Copilot, Cursor and Codespaces themselves did not run them for this demo.</li>
+            <li>The test machine reaches the internet through a proxy that inspects TLS, so verify ran with <code>--network host</code> and the proxy's certificate, shown here as <code>proxy-ca.crt</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="appfoot">
+  <div class="wrap">Engine <span id="engine-version">0.1.0</span>, knowledge as of <span id="engine-knowledge">2026-09-29</span>, running in this page. Nothing is sent anywhere.</div>
+</footer>
+
+<script src="recordings.v1.js"></script>
+<script src="engine.v1.js"></script>
+<script src="demo.v1.js"></script>
+</body>
+</html>

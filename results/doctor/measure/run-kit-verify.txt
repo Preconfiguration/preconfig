@@ -1,0 +1,321 @@
+Preconfiguration.com demo: preconfig 0.1.0 (knowledge as of 2026-09-29)
+The sample is orders-api, a small Python service with PostgreSQL and Redis, and no setup files for any agent.
+
+== Step 1: Draft the spec from the repository
+detect reads the repository's files and runs nothing. Each line of the draft names the file it came from.
+
+$ preconfig detect --write
+wrote preconfig.yaml from .python-version, pyproject.toml, requirements.txt, compose.yaml, .env.example. Read it before you build from it.
+
+$ cat preconfig.yaml
+# Drafted by preconfig detect from the files in this repository.
+# Read it before you use it: detect guesses from files and runs nothing.
+version: 1
+name: orders-api  # pyproject.toml
+
+runtimes:
+  python: "3.12"  # .python-version
+
+services:
+  postgres:   # compose.yaml (service db)
+    version: "16"
+    user: orders
+    password: orders
+    database: orders
+  redis: "7"  # compose.yaml (service cache)
+
+env:
+  DATABASE_URL: postgres://orders:orders@localhost:5432/orders  # .env.example
+  REDIS_URL: redis://localhost:6379/0                           # .env.example
+
+secrets:
+  - PAYMENTS_API_KEY  # .env.example; the name looks like a secret
+
+setup:
+  - python3 -m venv .venv                      # requirements.txt
+  - .venv/bin/pip install -r requirements.txt  # requirements.txt
+
+ready:
+  - .venv/bin/pytest -q  # pytest in the requirements
+
+== Step 2: Build every platform's files from one spec
+
+$ preconfig build
+wrote     .cursor/Dockerfile
+wrote     .cursor/environment.json
+wrote     .devcontainer/compose.yaml
+wrote     .devcontainer/devcontainer.json
+wrote     .github/workflows/copilot-setup-steps.yml
+wrote     .preconfig/setup.sh
+wrote     cloud-init.yaml
+.github/workflows/copilot-setup-steps.yml: note B001: set PAYMENTS_API_KEY as a secret in the repository's copilot environment (Settings, Environments, copilot)
+.cursor/environment.json: note B002: set PAYMENTS_API_KEY in the Secrets tab of Cursor's cloud agent settings
+.devcontainer/devcontainer.json: note B003: devcontainer.json lists PAYMENTS_API_KEY as a recommended secret; Codespaces asks for it, local containers read it from the environment
+.preconfig/setup.sh: note B004: the setup script expects PAYMENTS_API_KEY in its environment and warns when it is missing
+cloud-init.yaml: note B011: preconfig.yaml has no repo, so cloud-init prepares the machine but doesn't clone or set up the project
+A check right after the build finds nothing to fix.
+
+$ preconfig check
+checked 6 files: 0 errors, 0 warnings
+
+== Step 3: Check setup files written by hand
+The same service, with a Copilot workflow, a Cursor environment and a dev container written separately.
+
+$ preconfig check
+.cursor/Dockerfile: error X001: .cursor/Dockerfile is missing: preconfig.yaml lists the cursor target
+    Run preconfig build to write it.
+.cursor/environment.json:2:3: error K002: unknown key "update": Cursor's schema rejects keys it doesn't define
+    Cursor calls this command "install" in environment.json.
+.cursor/environment.json:2: error X002: environment.json differs from what preconfig.yaml produces (7 lines to add, 2 to remove): it was not written by preconfig
+    Run preconfig build to rewrite it, or move the change into preconfig.yaml.
+.devcontainer/compose.yaml: error X001: .devcontainer/compose.yaml is missing: preconfig.yaml lists the devcontainer target
+    Run preconfig build to write it.
+.devcontainer/devcontainer.json: error X004: devcontainer.json doesn't install PostgreSQL; preconfig.yaml asks for PostgreSQL 16
+    Run preconfig build to rewrite it from preconfig.yaml.
+.devcontainer/devcontainer.json: error X004: devcontainer.json doesn't install Redis; preconfig.yaml asks for Redis 7
+    Run preconfig build to rewrite it from preconfig.yaml.
+.devcontainer/devcontainer.json:1: error X002: devcontainer.json differs from what preconfig.yaml produces (23 lines to add, 2 to remove): it was not written by preconfig
+    Run preconfig build to rewrite it, or move the change into preconfig.yaml.
+.github/workflows/copilot-setup-steps.yml: error X004: copilot-setup-steps.yml doesn't install PostgreSQL; preconfig.yaml asks for PostgreSQL 16
+    Run preconfig build to rewrite it from preconfig.yaml.
+.github/workflows/copilot-setup-steps.yml: error X004: copilot-setup-steps.yml doesn't install Redis; preconfig.yaml asks for Redis 7
+    Run preconfig build to rewrite it from preconfig.yaml.
+.github/workflows/copilot-setup-steps.yml:1: error X002: copilot-setup-steps.yml differs from what preconfig.yaml produces (68 lines to add, 11 to remove): it was not written by preconfig
+    Run preconfig build to rewrite it, or move the change into preconfig.yaml.
+.github/workflows/copilot-setup-steps.yml:2:1: warning C007: changes to this file don't run it, so a broken setup shows up only when Copilot starts a session
+    Add push and pull_request triggers filtered on .github/workflows/copilot-setup-steps.yml, so every change to it is run and checked.
+.github/workflows/copilot-setup-steps.yml:4:3: error C002: no job is named copilot-setup-steps (found: setup), so Copilot stops with an error instead of starting work
+    Rename the job "setup" to copilot-setup-steps.
+.github/workflows/copilot-setup-steps.yml:6:22: error C005: timeout-minutes is 90; Copilot allows at most 59
+    Use 59 or less.
+.github/workflows/copilot-setup-steps.yml:7:5: warning C004: Copilot ignores the job setting "env"
+    Set variables inside a step, or add them to the repository's copilot environment.
+.github/workflows/copilot-setup-steps.yml:13: error X003: copilot-setup-steps.yml installs Python 3.11; preconfig.yaml asks for 3.12
+    Run preconfig build to rewrite it from preconfig.yaml.
+.preconfig/setup.sh: error X001: .preconfig/setup.sh is missing: preconfig.yaml lists the script target
+    Run preconfig build to write it.
+cloud-init.yaml: error X001: cloud-init.yaml is missing: preconfig.yaml lists the cloud-init target
+    Run preconfig build to write it.
+checked 4 files: 15 errors, 2 warnings
+Run with --diff to see the changes, or preconfig build to apply them.
+(exit code 1)
+
+== Step 4: Verify it on a clean machine
+verify starts a fresh Ubuntu 24.04 container, runs the setup script and then the tests. About a minute.
+
+$ preconfig verify --network host --ca-file /root/.ccr/ca-bundle.crt
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    0.7s  step   machine 1/5: system packages
+verify   23.9s  ok     machine 1/5: system packages  (23.3 s)
+verify   23.9s  step   machine 2/5: python 3.12
+verify   32.5s  ok     machine 2/5: python 3.12  (8.6 s)
+verify   32.5s  step   machine 3/5: postgres 16
+verify   44.2s  ok     machine 3/5: postgres 16  (11.7 s)
+verify   44.2s  step   machine 4/5: redis 7
+verify   48.3s  ok     machine 4/5: redis 7  (4.2 s)
+verify   48.3s  step   machine 5/5: environment for login shells
+verify   48.4s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   48.4s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   48.4s  step   services 1/2: postgres 16
+verify   51.0s  ok     services 1/2: postgres 16  (2.6 s)
+verify   51.0s  step   services 2/2: redis 7
+verify   51.0s  ok     services 2/2: redis 7  (0.0 s)
+verify   51.0s  warn   PAYMENTS_API_KEY is not set
+verify   51.0s  step   project 1/2: python3 -m venv .venv
+verify   54.4s  ok     project 1/2: python3 -m venv .venv  (3.4 s)
+verify   54.4s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   59.6s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (5.2 s)
+verify   59.6s  step   ready 1/1: .venv/bin/pytest -q
+verify   60.3s  ok     ready 1/1: .venv/bin/pytest -q  (0.7 s)
+verify   64.5s  READY  4 passed in 0.35s; 10 steps
+
+== Step 5: Catch a missing service before an agent does
+The same repository with Redis left out of the spec:
+
+$ diff preconfig.yaml.bak preconfig.yaml
+15d14
+<   redis: "7"  # compose.yaml (service cache)
+
+$ preconfig build
+preconfig.yaml:18:14: warning S062: REDIS_URL points at Redis on this machine, but services doesn't list redis
+    Add redis under services, or point REDIS_URL somewhere else.
+unchanged .cursor/Dockerfile
+unchanged .cursor/environment.json
+wrote     .devcontainer/compose.yaml
+wrote     .devcontainer/devcontainer.json
+wrote     .github/workflows/copilot-setup-steps.yml
+wrote     .preconfig/setup.sh
+wrote     cloud-init.yaml
+.github/workflows/copilot-setup-steps.yml: note B001: set PAYMENTS_API_KEY as a secret in the repository's copilot environment (Settings, Environments, copilot)
+.cursor/environment.json: note B002: set PAYMENTS_API_KEY in the Secrets tab of Cursor's cloud agent settings
+.devcontainer/devcontainer.json: note B003: devcontainer.json lists PAYMENTS_API_KEY as a recommended secret; Codespaces asks for it, local containers read it from the environment
+.preconfig/setup.sh: note B004: the setup script expects PAYMENTS_API_KEY in its environment and warns when it is missing
+cloud-init.yaml: note B011: preconfig.yaml has no repo, so cloud-init prepares the machine but doesn't clone or set up the project
+
+$ preconfig verify --network host --ca-file /root/.ccr/ca-bundle.crt
+preconfig.yaml:18:14: warning S062: REDIS_URL points at Redis on this machine, but services doesn't list redis
+    Add redis under services, or point REDIS_URL somewhere else.
+verify    0.0s  start  orders-api: python 3.12, postgres 16, on a clean ubuntu:24.04
+verify    2.5s  step   machine 1/4: system packages
+verify   21.2s  ok     machine 1/4: system packages  (18.6 s)
+verify   21.2s  step   machine 2/4: python 3.12
+verify   31.6s  ok     machine 2/4: python 3.12  (10.4 s)
+verify   31.6s  step   machine 3/4: postgres 16
+verify   46.5s  ok     machine 3/4: postgres 16  (14.9 s)
+verify   46.5s  step   machine 4/4: environment for login shells
+verify   46.5s  ok     machine 4/4: environment for login shells  (0.0 s)
+verify   46.5s  have   python 3.12.3, postgres 16.15
+verify   46.5s  step   services 1/1: postgres 16
+verify   49.1s  ok     services 1/1: postgres 16  (2.5 s)
+verify   49.1s  warn   PAYMENTS_API_KEY is not set
+verify   49.1s  step   project 1/2: python3 -m venv .venv
+verify   52.4s  ok     project 1/2: python3 -m venv .venv  (3.3 s)
+verify   52.4s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   56.5s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (4.1 s)
+verify   56.5s  step   ready 1/1: .venv/bin/pytest -q
+verify   58.3s  FAIL   ready 1/1: .venv/bin/pytest -q  (exit code 1)
+verify   62.0s  NOT READY  the setup worked, but the ready check failed (exit 1)
+               the last lines it printed:
+               | E           redis.exceptions.ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+               | E               ConnectionRefusedError: [Errno 111] Connection refused
+               | .venv/lib/python3.12/site-packages/redis/connection.py:1077: ConnectionError
+               | =========================== short test summary info ============================
+               | FAILED tests/test_orders.py::test_place_order_returns_an_id - redis.exception...
+               | FAILED tests/test_orders.py::test_count_is_cached_in_redis - redis.exceptions...
+               | FAILED tests/test_orders.py::test_new_order_clears_the_cached_count - redis.e...
+               | 3 failed, 1 passed in 1.53s
+(exit code 1)
+
+== Step 6: Change one line, and every platform follows
+The team moves to PostgreSQL 17, one line in the spec:
+
+$ diff preconfig.yaml.bak preconfig.yaml
+11c11
+<     version: "16"
+---
+>     version: "17"
+
+$ preconfig check
+.cursor/environment.json: error X003: environment.json installs PostgreSQL 16 (set in .preconfig/setup.sh, line 51); preconfig.yaml asks for 17
+    Run preconfig build to rewrite it from preconfig.yaml.
+.devcontainer/compose.yaml:11: error X002: compose.yaml differs from what preconfig.yaml produces (1 line to add, 1 to remove): it was edited by hand or written from an older preconfig.yaml
+    Run preconfig build to rewrite it, or move the change into preconfig.yaml.
+.devcontainer/devcontainer.json: error X003: devcontainer.json installs PostgreSQL 16 (set in .devcontainer/compose.yaml, line 11); preconfig.yaml asks for 17
+    Run preconfig build to rewrite it from preconfig.yaml.
+.devcontainer/devcontainer.json:2: error X002: devcontainer.json differs from what preconfig.yaml produces (1 line to add, 1 to remove): it was edited by hand or written from an older preconfig.yaml
+    Run preconfig build to rewrite it, or move the change into preconfig.yaml.
+.github/workflows/copilot-setup-steps.yml:26: error X003: copilot-setup-steps.yml installs PostgreSQL 16; preconfig.yaml asks for 17
+    Run preconfig build to rewrite it from preconfig.yaml.
+.github/workflows/copilot-setup-steps.yml:26: error X002: copilot-setup-steps.yml differs from what preconfig.yaml produces (1 line to add, 1 to remove): it was edited by hand or written from an older preconfig.yaml
+    Run preconfig build to rewrite it, or move the change into preconfig.yaml.
+.preconfig/setup.sh:3: error X002: setup.sh differs from what preconfig.yaml produces (13 lines to add, 9 to remove): it was edited by hand or written from an older preconfig.yaml
+    Run preconfig build to rewrite it, or move the change into preconfig.yaml.
+.preconfig/setup.sh:51: error X003: setup.sh installs PostgreSQL 16; preconfig.yaml asks for 17
+    Run preconfig build to rewrite it from preconfig.yaml.
+cloud-init.yaml:3: error X002: cloud-init.yaml differs from what preconfig.yaml produces (14 lines to add, 10 to remove): it was edited by hand or written from an older preconfig.yaml
+    Run preconfig build to rewrite it, or move the change into preconfig.yaml.
+cloud-init.yaml:62: error X003: cloud-init.yaml installs PostgreSQL 16; preconfig.yaml asks for 17
+    Run preconfig build to rewrite it from preconfig.yaml.
+checked 6 files: 10 errors, 0 warnings
+Run with --diff to see the changes, or preconfig build to apply them.
+(exit code 1)
+
+$ preconfig build
+unchanged .cursor/Dockerfile
+unchanged .cursor/environment.json
+wrote     .devcontainer/compose.yaml
+wrote     .devcontainer/devcontainer.json
+wrote     .github/workflows/copilot-setup-steps.yml
+wrote     .preconfig/setup.sh
+wrote     cloud-init.yaml
+.github/workflows/copilot-setup-steps.yml: note B001: set PAYMENTS_API_KEY as a secret in the repository's copilot environment (Settings, Environments, copilot)
+.cursor/environment.json: note B002: set PAYMENTS_API_KEY in the Secrets tab of Cursor's cloud agent settings
+.devcontainer/devcontainer.json: note B003: devcontainer.json lists PAYMENTS_API_KEY as a recommended secret; Codespaces asks for it, local containers read it from the environment
+.preconfig/setup.sh: note B004: the setup script expects PAYMENTS_API_KEY in its environment and warns when it is missing
+cloud-init.yaml: note B011: preconfig.yaml has no repo, so cloud-init prepares the machine but doesn't clone or set up the project
+
+$ preconfig check
+checked 6 files: 0 errors, 0 warnings
+
+== Step 7: Read a failed setup, and fix the spec
+A setup that failed: the Alpha's recorded run with Redis left out of the spec, 1,096 lines.
+preconfig doctor finds the step that broke, the lines that show why, and the change that fixes it.
+
+$ preconfig doctor ../no-redis.log
+doctor: read a setup log of 1096 lines
+  step     ready 1/1: .venv/bin/pytest -q  (exit code 1)
+  cause    The code connects to Redis on localhost:6379, and nothing is listening there: the spec doesn't run Redis. (spec, rule D401)
+  evidence
+      778 | E           redis.exceptions.ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+     1096 | >>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)
+  fix      add redis 7 under services
+  run      preconfig doctor --fix with the same log to apply it, then preconfig verify
+(exit code 1)
+--fix writes the change into preconfig.yaml and rebuilds every platform's file.
+
+$ preconfig doctor --fix ../no-redis.log
+doctor: read a setup log of 1096 lines
+  step     ready 1/1: .venv/bin/pytest -q  (exit code 1)
+  cause    The code connects to Redis on localhost:6379, and nothing is listening there: the spec doesn't run Redis. (spec, rule D401)
+  evidence
+      778 | E           redis.exceptions.ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+     1096 | >>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)
+  fix      add redis 7 under services
+
+changed preconfig.yaml:
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -11,4 +11,5 @@
+     password: orders
+     database: orders
++  redis: "7"
+ 
+ env:
+
+unchanged .cursor/Dockerfile
+unchanged .cursor/environment.json
+wrote     .devcontainer/compose.yaml
+wrote     .devcontainer/devcontainer.json
+wrote     .github/workflows/copilot-setup-steps.yml
+wrote     .preconfig/setup.sh
+wrote     cloud-init.yaml
+.github/workflows/copilot-setup-steps.yml: note B001: set PAYMENTS_API_KEY as a secret in the repository's copilot environment (Settings, Environments, copilot)
+.cursor/environment.json: note B002: set PAYMENTS_API_KEY in the Secrets tab of Cursor's cloud agent settings
+.devcontainer/devcontainer.json: note B003: devcontainer.json lists PAYMENTS_API_KEY as a recommended secret; Codespaces asks for it, local containers read it from the environment
+.preconfig/setup.sh: note B004: the setup script expects PAYMENTS_API_KEY in its environment and warns when it is missing
+cloud-init.yaml: note B011: preconfig.yaml has no repo, so cloud-init prepares the machine but doesn't clone or set up the project
+
+$ preconfig check
+checked 6 files: 0 errors, 0 warnings
+The proof: the fixed spec on a clean machine. About a minute.
+
+$ preconfig verify --network host --ca-file /root/.ccr/ca-bundle.crt
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    3.9s  step   machine 1/5: system packages
+verify   24.8s  ok     machine 1/5: system packages  (20.9 s)
+verify   24.8s  step   machine 2/5: python 3.12
+verify   35.7s  ok     machine 2/5: python 3.12  (10.9 s)
+verify   35.7s  step   machine 3/5: postgres 16
+verify   50.3s  ok     machine 3/5: postgres 16  (14.6 s)
+verify   50.3s  step   machine 4/5: redis 7
+verify   53.7s  ok     machine 4/5: redis 7  (3.4 s)
+verify   53.7s  step   machine 5/5: environment for login shells
+verify   53.7s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   53.7s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   53.7s  step   services 1/2: postgres 16
+verify   56.2s  ok     services 1/2: postgres 16  (2.5 s)
+verify   56.2s  step   services 2/2: redis 7
+verify   56.3s  ok     services 2/2: redis 7  (0.0 s)
+verify   56.3s  warn   PAYMENTS_API_KEY is not set
+verify   56.3s  step   project 1/2: python3 -m venv .venv
+verify   59.6s  ok     project 1/2: python3 -m venv .venv  (3.4 s)
+verify   59.6s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   63.5s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (3.9 s)
+verify   63.5s  step   ready 1/1: .venv/bin/pytest -q
+verify   64.1s  ok     ready 1/1: .venv/bin/pytest -q  (0.6 s)
+verify   67.8s  READY  4 passed in 0.27s; 10 steps
+
+Done. The files preconfig wrote are in work/orders-api and work/doctor. The
+recorded demos, with the engine running in your browser, are browser-demo/index.html
+and browser-doctor/index.html.
+exit 0

@@ -1,0 +1,8 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -20,4 +20,5 @@
+   - libpq-dev
+   - build-essential
++  - python3-dev
+ 
+ secrets:

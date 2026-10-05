@@ -1,0 +1,35 @@
+{
+  "id": "needs-python-3.13",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "A local package in requirements.txt that requires Python 3.13.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "spec",
+    "cause": "newlib requires Python 3.13 or later; the spec installs 3.12",
+    "change": {
+      "op": "set-runtime",
+      "name": "python",
+      "value": "3.13"
+    }
+  },
+  "edits": [
+    [
+      "append",
+      "requirements.txt",
+      "./pkgs/newlib\n"
+    ],
+    [
+      "file",
+      "pkgs/newlib/pyproject.toml",
+      "157 characters"
+    ],
+    [
+      "file",
+      "pkgs/newlib/newlib/__init__.py",
+      "0 characters"
+    ]
+  ],
+  "recorded": "2026-09-30T18:52:53Z"
+}

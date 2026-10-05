@@ -1,0 +1,18 @@
+baseline: all tests pass (0.8 s)
+
+ 1. SURVIVED reader: every failed step reports exit code 1
+ 2. caught   reader: docker's #N prefixes are kept, so the script's markers are missed  [TestDockerAndActionsAndVerifyOutput]
+ 3. caught   reader: the Actions step with an error isn't marked failed  [TestDockerAndActionsAndVerifyOutput]
+ 4. caught by the compiler reader: a log cut off in the middle of a step counts as passing
+ 5. caught   rules: a test failing on its own assertion gets no rule  [TestRules, TestRules/tests_failed]
+ 6. caught   rules: failing tests are blamed on the code before the service rules run  [TestRules, TestRules/refused,_with_asserts_around_it]
+ 7. caught   rules: the compiler is blamed only when build-essential is in the spec  [TestRules, TestRules/compiler]
+ 8. caught   knowledge: Python.h comes from the wrong package  [TestCorpus, TestRules, TestRules/python_headers]
+ 9. caught   rules: Redis is added at a version Ubuntu doesn't ship  [TestCorpus, TestDoctorCommand, TestRules and 3 more]
+10. caught   rules: a secret that isn't set is read as a missing variable  [TestCorpus, TestRules, TestRules/secret_unset]
+11. caught   mask: a short password in a URL is shown  [TestMask, TestRules, TestRules/env_from_service and 3 more]
+12. caught   fix: versions go into the spec unquoted, so 3.10 reads as 3.1  [TestApply, TestApply/add_a_runtime_block, TestApply/add_a_service and 3 more]
+13. caught   versions: >=3.13 leaves out 3.13 itself  [TestCorpus, TestPickVersion, TestRules and 2 more]
+14. caught   command: a passing log exits 1  [TestDoctorCommand]
+
+13 of 14 planted bugs caught

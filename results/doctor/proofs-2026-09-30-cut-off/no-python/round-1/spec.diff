@@ -1,0 +1,10 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -2,4 +2,7 @@
+ name: orders-api
+ 
++runtimes:
++  python: "3.12"
++
+ services:
+   postgres:

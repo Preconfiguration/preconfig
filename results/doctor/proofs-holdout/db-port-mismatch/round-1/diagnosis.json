@@ -1,0 +1,33 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 970,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 1,
+  "rule": "D401",
+  "category": "spec",
+  "cause": "DATABASE_URL points at port 5433, and the spec's PostgreSQL listens on 5432.",
+  "evidence": [
+   {
+    "n": 753,
+    "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5433 failed: Connection refused"
+   },
+   {
+    "n": 970,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "set-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -14,5 +14,5 @@\n \n env:\n-  DATABASE_URL: postgres://orders:orders@localhost:5433/orders\n+  DATABASE_URL: postgres://orders:orders@localhost:5432/orders\n   REDIS_URL: redis://localhost:6379/0\n \n",
+ "fixed": "/tmp/doctor-prove-2us7emkd/db-port-mismatch/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

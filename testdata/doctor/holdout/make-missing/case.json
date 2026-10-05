@@ -1,0 +1,30 @@
+{
+  "id": "make-missing",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "The ready check runs make test, and make isn't installed.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "The ready check runs make, which isn't installed",
+    "change": {
+      "op": "add-package",
+      "value": "make"
+    }
+  },
+  "edits": [
+    [
+      "file",
+      "Makefile",
+      "27 characters"
+    ],
+    [
+      "replace",
+      "preconfig.yaml",
+      "  - .venv/bin/pytest -q\n",
+      "  - make test\n"
+    ]
+  ],
+  "recorded": "2026-09-30T19:21:40Z"
+}

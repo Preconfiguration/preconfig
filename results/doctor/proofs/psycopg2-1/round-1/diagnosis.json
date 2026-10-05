@@ -1,0 +1,32 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 748,
+  "outcome": "failed",
+  "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+  "phase": "project",
+  "exitCode": 1,
+  "rule": "D302",
+  "category": "spec",
+  "cause": "A package is built from source, and the machine has no C compiler.",
+  "evidence": [
+   {
+    "n": 741,
+    "text": "      error: [Errno 2] No such file or directory: 'x86_64-linux-gnu-gcc'"
+   },
+   {
+    "n": 748,
+    "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-package",
+    "value": "build-essential"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -5,4 +5,7 @@\n   python: \"3.12\"\n \n+packages:\n+  - build-essential\n+\n services:\n   postgres:\n",
+ "fixed": "/tmp/doctor-prove-ljpd0a87/psycopg2-1/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

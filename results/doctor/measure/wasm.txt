@@ -1,0 +1,10 @@
+tiny.wasm: 1215382 bytes, 438094 gzipped
+std.wasm: 5239038 bytes, 1417041 gzipped
+/tmp/claude-0/-home-claude/9e3ae912-c650-5e2a-a40a-43a06f6aadb8/scratchpad/wasm-doctor/corpus.json: 112 logs, 38 with a change the command line applied
+TinyGo build:
+112 logs: 112 diagnoses and 38 fixes compared with the command line's, 266 rebuilt files; 0 differ
+start 56.3 ms; the Alpha's 1096-line log: doctor 181.79 ms, fix and rebuild 1.87 ms (medians of 50); every log once: median 4.90 ms, slowest 223.41 ms
+Go build:
+112 logs: 112 diagnoses and 38 fixes compared with the command line's, 266 rebuilt files; 0 differ
+start 87.7 ms; the Alpha's 1096-line log: doctor 110.12 ms, fix and rebuild 1.20 ms (medians of 50); every log once: median 3.81 ms, slowest 160.94 ms
+exit 0

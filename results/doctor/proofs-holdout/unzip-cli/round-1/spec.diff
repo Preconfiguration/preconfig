@@ -1,0 +1,10 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -5,4 +5,7 @@
+   python: "3.12"
+ 
++packages:
++  - unzip
++
+ services:
+   postgres:

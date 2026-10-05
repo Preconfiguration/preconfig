@@ -1,0 +1,32 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 1046,
+  "outcome": "failed",
+  "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+  "phase": "project",
+  "exitCode": 1,
+  "rule": "D303",
+  "category": "spec",
+  "cause": "A package is built from source and needs Python.h, from python3-dev.",
+  "evidence": [
+   {
+    "n": 1025,
+    "text": "      ./psycopg/psycopg.h:35:10: fatal error: Python.h: No such file or directory"
+   },
+   {
+    "n": 1046,
+    "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-package",
+    "value": "python3-dev"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -20,4 +20,5 @@\n   - libpq-dev\n   - build-essential\n+  - python3-dev\n \n secrets:\n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/psycopg2-2/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

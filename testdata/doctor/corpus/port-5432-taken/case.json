@@ -1,0 +1,15 @@
+{
+  "id": "port-5432-taken",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "Another program already listening on port 5432 when the setup starts PostgreSQL.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "services",
+    "category": "platform",
+    "cause": "Another program holds port 5432, so PostgreSQL can't start",
+    "change": null
+  },
+  "edits": [],
+  "recorded": "2026-09-30T19:10:31Z"
+}

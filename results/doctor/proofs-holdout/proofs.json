@@ -1,0 +1,150 @@
+[
+ {
+  "id": "db-port-mismatch",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D401",
+    "changes": [
+     {
+      "op": "set-env",
+      "key": "DATABASE_URL",
+      "value": "postgres://orders:orders@localhost:5432/orders"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 62.0,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "make-missing",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: make test",
+    "category": "spec",
+    "rule": "D306",
+    "changes": [
+     {
+      "op": "add-package",
+      "value": "make"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 63.9,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "missing-redis-url",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D404",
+    "changes": [
+     {
+      "op": "add-env",
+      "key": "REDIS_URL",
+      "value": "redis://localhost:6379/0"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 71.2,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "needs-python-below-3.12",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+    "category": "spec",
+    "rule": "D307",
+    "changes": [
+     {
+      "op": "set-runtime",
+      "key": "python",
+      "value": "3.10"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 85.2,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "unzip-cli",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D306",
+    "changes": [
+     {
+      "op": "add-package",
+      "value": "unzip"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 61.7,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "wrong-db-name",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D403",
+    "changes": [
+     {
+      "op": "set-env",
+      "key": "DATABASE_URL",
+      "value": "postgres://orders:orders@localhost:5432/orders"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 66.3,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ }
+]

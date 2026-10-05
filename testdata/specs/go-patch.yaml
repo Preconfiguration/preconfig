@@ -1,0 +1,11 @@
+version: 1
+name: go-patch
+runtimes:
+  go: "1.25.3"
+services:
+  redis: "8"
+  postgres: "15"
+setup:
+  - go mod download
+ready:
+  - go vet ./... && go test ./...

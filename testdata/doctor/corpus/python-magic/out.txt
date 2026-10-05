@@ -1,0 +1,31 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.3s  step   machine 1/5: system packages
+verify   24.1s  ok     machine 1/5: system packages  (19.8 s)
+verify   24.1s  step   machine 2/5: python 3.12
+verify   34.9s  ok     machine 2/5: python 3.12  (10.7 s)
+verify   34.9s  step   machine 3/5: postgres 16
+verify   49.1s  ok     machine 3/5: postgres 16  (14.2 s)
+verify   49.1s  step   machine 4/5: redis 7
+verify   56.8s  ok     machine 4/5: redis 7  (7.7 s)
+verify   56.8s  step   machine 5/5: environment for login shells
+verify   56.9s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   56.9s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   56.9s  step   services 1/2: postgres 16
+verify   59.4s  ok     services 1/2: postgres 16  (2.5 s)
+verify   59.4s  step   services 2/2: redis 7
+verify   59.4s  ok     services 2/2: redis 7  (0.0 s)
+verify   59.4s  warn   PAYMENTS_API_KEY is not set
+verify   59.4s  step   project 1/2: python3 -m venv .venv
+verify   62.6s  ok     project 1/2: python3 -m venv .venv  (3.2 s)
+verify   62.6s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   68.9s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (6.3 s)
+verify   68.9s  step   ready 1/1: .venv/bin/pytest -q
+verify   69.5s  FAIL   ready 1/1: .venv/bin/pytest -q  (exit code 2)
+verify   74.3s  NOT READY  the setup worked, but the ready check failed (exit 1)
+               the last lines it printed:
+               | E   ImportError: failed to find libmagic.  Check your installation
+               |     raise ImportError('failed to find libmagic.  Check your installation')
+               | =========================== short test summary info ============================
+               | ERROR tests/test_magic.py
+               | !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+               | 1 error in 0.32s

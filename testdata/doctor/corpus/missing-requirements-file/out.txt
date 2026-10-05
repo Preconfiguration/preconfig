@@ -1,0 +1,24 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.5s  step   machine 1/5: system packages
+verify   27.0s  ok     machine 1/5: system packages  (22.5 s)
+verify   27.0s  step   machine 2/5: python 3.12
+verify   37.8s  ok     machine 2/5: python 3.12  (10.9 s)
+verify   37.8s  step   machine 3/5: postgres 16
+verify   57.8s  ok     machine 3/5: postgres 16  (20.0 s)
+verify   57.8s  step   machine 4/5: redis 7
+verify   60.3s  ok     machine 4/5: redis 7  (2.5 s)
+verify   60.3s  step   machine 5/5: environment for login shells
+verify   60.3s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   60.3s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   60.3s  step   services 1/2: postgres 16
+verify   62.9s  ok     services 1/2: postgres 16  (2.5 s)
+verify   62.9s  step   services 2/2: redis 7
+verify   62.9s  ok     services 2/2: redis 7  (0.0 s)
+verify   62.9s  warn   PAYMENTS_API_KEY is not set
+verify   62.9s  step   project 1/2: python3 -m venv .venv
+verify   66.1s  ok     project 1/2: python3 -m venv .venv  (3.2 s)
+verify   66.1s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   66.5s  FAIL   project 2/2: .venv/bin/pip install -r requirements.txt  (exit code 1)
+verify   70.4s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               | ERROR: Could not open requirements file: [Errno 2] No such file or directory: 'requirements-dev.txt'

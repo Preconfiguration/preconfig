@@ -1,0 +1,33 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 41,
+  "outcome": "failed",
+  "step": "machine 1/5: system packages",
+  "phase": "machine",
+  "exitCode": 100,
+  "rule": "D101",
+  "category": "spec",
+  "cause": "Ubuntu 24.04's archive has no package named libpq-devv; libpq-dev is the likely name.",
+  "evidence": [
+   {
+    "n": 40,
+    "text": "E: Unable to locate package libpq-devv"
+   },
+   {
+    "n": 41,
+    "text": ">>> preconfig: FAILED: machine 1/5: system packages (exit code 100)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "replace-package",
+    "value": "libpq-dev",
+    "old": "libpq-devv"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -18,5 +18,5 @@\n \n packages:\n-  - libpq-devv\n+  - libpq-dev\n \n secrets:\n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/typo-package/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

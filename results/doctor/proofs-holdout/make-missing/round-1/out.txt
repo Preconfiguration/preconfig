@@ -1,0 +1,24 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.7s  step   machine 1/5: system packages
+verify   21.4s  ok     machine 1/5: system packages  (16.8 s)
+verify   21.4s  step   machine 2/5: python 3.12
+verify   32.5s  ok     machine 2/5: python 3.12  (11.1 s)
+verify   32.5s  step   machine 3/5: postgres 16
+verify   45.0s  ok     machine 3/5: postgres 16  (12.4 s)
+verify   45.0s  step   machine 4/5: redis 7
+verify   48.8s  ok     machine 4/5: redis 7  (3.9 s)
+verify   48.8s  step   machine 5/5: environment for login shells
+verify   48.9s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   48.9s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   48.9s  step   services 1/2: postgres 16
+verify   51.4s  ok     services 1/2: postgres 16  (2.5 s)
+verify   51.4s  step   services 2/2: redis 7
+verify   51.5s  ok     services 2/2: redis 7  (0.0 s)
+verify   51.5s  warn   PAYMENTS_API_KEY is not set
+verify   51.5s  step   project 1/2: python3 -m venv .venv
+verify   54.9s  ok     project 1/2: python3 -m venv .venv  (3.5 s)
+verify   54.9s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   59.1s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (4.1 s)
+verify   59.1s  step   ready 1/1: make test
+verify   59.8s  ok     ready 1/1: make test  (0.7 s)
+verify   63.9s  READY  4 passed in 0.34s; 10 steps

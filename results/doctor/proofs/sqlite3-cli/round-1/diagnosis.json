@@ -1,0 +1,32 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 882,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 1,
+  "rule": "D306",
+  "category": "spec",
+  "cause": "The step runs sqlite3, and sqlite3 isn't installed.",
+  "evidence": [
+   {
+    "n": 876,
+    "text": "E                   FileNotFoundError: [Errno 2] No such file or directory: 'sqlite3'"
+   },
+   {
+    "n": 882,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-package",
+    "value": "sqlite3"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -5,4 +5,7 @@\n   python: \"3.12\"\n \n+packages:\n+  - sqlite3\n+\n services:\n   postgres:\n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/sqlite3-cli/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

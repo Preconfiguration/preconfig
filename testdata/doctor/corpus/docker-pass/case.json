@@ -1,0 +1,11 @@
+{
+  "id": "docker-pass",
+  "repo": "orders-api",
+  "kind": "docker",
+  "made": "Cursor's Dockerfile for the sample service as it is.",
+  "expect": {
+    "outcome": "passed"
+  },
+  "edits": [],
+  "recorded": "2026-09-30T19:07:58Z"
+}

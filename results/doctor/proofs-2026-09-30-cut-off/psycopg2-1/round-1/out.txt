@@ -1,0 +1,6 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.9s  step   machine 1/5: system packages
+verify   41.8s  ok     machine 1/5: system packages  (36.9 s)
+verify   41.8s  step   machine 2/5: python 3.12
+verify   50.3s  ok     machine 2/5: python 3.12  (8.5 s)
+verify   50.3s  step   machine 3/5: postgres 16

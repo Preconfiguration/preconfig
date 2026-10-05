@@ -1,0 +1,21 @@
+{
+  "id": "missing-secret",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "A test that needs PAYMENTS_API_KEY, a secret the spec names, which isn't set.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "secret",
+    "cause": "PAYMENTS_API_KEY is a secret, and it isn't set where the setup runs",
+    "change": null
+  },
+  "edits": [
+    [
+      "file",
+      "tests/test_payments.py",
+      "111 characters"
+    ]
+  ],
+  "recorded": "2026-09-30T18:58:21Z"
+}

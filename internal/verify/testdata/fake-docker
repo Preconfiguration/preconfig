@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# A stand-in for docker in verify's tests. "run" records its arguments and the
+# setup script it was given, prints FAKE_OUTPUT and exits with FAKE_EXIT;
+# "kill" stops a run that is sleeping. Everything is steered by FAKE_* variables.
+case "$1" in
+version)
+  if [ -n "${FAKE_DOCKER_DOWN:-}" ]; then
+    echo "Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?" >&2
+    exit 1
+  fi
+  echo "28.5.1"
+  ;;
+run)
+  printf '%s\n' "$@" > "$FAKE_DIR/args"
+  for a in "$@"; do
+    case "$a" in
+      *:/preconfig:ro) cp "${a%:/preconfig:ro}/setup.sh" "$FAKE_DIR/setup.sh" ;;
+    esac
+  done
+  [ -n "${FAKE_OUTPUT:-}" ] && cat "$FAKE_OUTPUT"
+  if [ -n "${FAKE_SLEEP:-}" ]; then
+    echo $$ > "$FAKE_DIR/pid"
+    exec sleep "$FAKE_SLEEP"
+  fi
+  exit "${FAKE_EXIT:-0}"
+  ;;
+kill)
+  echo "$2" > "$FAKE_DIR/killed"
+  [ -f "$FAKE_DIR/pid" ] && kill -9 "$(cat "$FAKE_DIR/pid")"
+  ;;
+*)
+  echo "fake docker: unexpected command $1" >&2
+  exit 2
+  ;;
+esac

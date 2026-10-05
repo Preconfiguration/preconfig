@@ -1,0 +1,14 @@
+verify    0.0s  start  ingest-worker: go 1.25, redis 8, on a clean ubuntu:24.04
+verify    2.3s  step   machine 1/4: system packages
+verify   23.6s  ok     machine 1/4: system packages  (21.4 s)
+verify   23.6s  step   machine 2/4: go 1.25
+verify   31.9s  FAIL   machine 2/4: go 1.25  (exit code 1)
+verify   31.9s  FAIL   machine 2/4: go 1.25: go is , not 1.25
+verify   35.5s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               | go: download go1.25.0: golang.org/toolchain@v0.0.1-go1.25.0.linux-amd64: reading https://proxy.golang.org/golang.org/toolchain/@v/v0.0.1-go1.25.0.linux-amd64.zip: 403 Forbidden
+               | 	server response: Host not in allowlist: proxy.golang.org. Add this host to your network egress settings to allow access.
+               | go: downloading go1.25.0 (linux/amd64)
+               | go: download go1.25.0: golang.org/toolchain@v0.0.1-go1.25.0.linux-amd64: reading https://proxy.golang.org/golang.org/toolchain/@v/v0.0.1-go1.25.0.linux-amd64.zip: 403 Forbidden
+               | 	server response: Host not in allowlist: proxy.golang.org. Add this host to your network egress settings to allow access.
+               | go is , not 1.25

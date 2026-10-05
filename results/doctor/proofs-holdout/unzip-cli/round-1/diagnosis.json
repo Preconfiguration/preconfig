@@ -1,0 +1,32 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 881,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 1,
+  "rule": "D306",
+  "category": "spec",
+  "cause": "The step runs unzip, and unzip isn't installed.",
+  "evidence": [
+   {
+    "n": 875,
+    "text": "E                   FileNotFoundError: [Errno 2] No such file or directory: 'unzip'"
+   },
+   {
+    "n": 881,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-package",
+    "value": "unzip"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -5,4 +5,7 @@\n   python: \"3.12\"\n \n+packages:\n+  - unzip\n+\n services:\n   postgres:\n",
+ "fixed": "/tmp/doctor-prove-2us7emkd/unzip-cli/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

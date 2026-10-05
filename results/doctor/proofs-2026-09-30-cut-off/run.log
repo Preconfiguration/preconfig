@@ -1,0 +1,24 @@
+docker-typo-package:
+  round 1: replace-package libpq-dev -> exit 0 in 52.7 s; READY
+locale:
+  round 1: add-package locales-all -> exit 0 in 76.4 s; READY
+needs-python-3.13: skipped, the fix needs a source this machine can't reach
+no-database-url:
+  round 1: add-env postgres://orders:orders@localhost:5432/orders -> exit 0 in 61.1 s; READY
+no-postgres:
+preconfig.yaml:11:17: warning S062: DATABASE_URL points at PostgreSQL on this machine, but services doesn't list postgres
+    Add postgres under services, or point DATABASE_URL somewhere else.
+  round 1: add-service 16 -> exit 0 in 87.9 s; READY
+no-python:
+preconfig.yaml:20:3: warning S083: setup runs python3, but no python runtime is listed
+    Add python under runtimes.
+preconfig.yaml:20:3: warning S083: setup uses a virtual environment, but no python runtime is listed
+    Add python under runtimes.
+preconfig.yaml:24:3: warning S083: ready uses a virtual environment, but no python runtime is listed
+    Add python under runtimes.
+  round 1: set-runtime 3.12 -> exit 0 in 66.0 s; READY
+no-redis:
+preconfig.yaml:16:14: warning S062: REDIS_URL points at Redis on this machine, but services doesn't list redis
+    Add redis under services, or point REDIS_URL somewhere else.
+  round 1: add-service 7 -> exit 0 in 68.7 s; READY
+psycopg2-1:

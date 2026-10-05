@@ -1,0 +1,33 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 970,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 1,
+  "rule": "D402",
+  "category": "spec",
+  "cause": "PostgreSQL refused the password for orders: DATABASE_URL doesn't use the user and password the spec's postgres service creates.",
+  "evidence": [
+   {
+    "n": 753,
+    "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5432 failed: FATAL:  password authentication failed for user \"orders\""
+   },
+   {
+    "n": 970,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "set-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -14,5 +14,5 @@\n \n env:\n-  DATABASE_URL: postgres://orders:secret@localhost:5432/orders\n+  DATABASE_URL: postgres://orders:orders@localhost:5432/orders\n   REDIS_URL: redis://localhost:6379/0\n \n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/wrong-db-password/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

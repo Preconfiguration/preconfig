@@ -1,0 +1,32 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.6s  step   machine 1/5: system packages
+verify   26.9s  ok     machine 1/5: system packages  (22.3 s)
+verify   26.9s  step   machine 2/5: python 3.12
+verify   35.9s  ok     machine 2/5: python 3.12  (9.0 s)
+verify   35.9s  step   machine 3/5: postgres 16
+verify   47.7s  ok     machine 3/5: postgres 16  (11.7 s)
+verify   47.7s  step   machine 4/5: redis 7
+verify   51.3s  ok     machine 4/5: redis 7  (3.7 s)
+verify   51.3s  step   machine 5/5: environment for login shells
+verify   51.4s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   51.4s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   51.4s  step   services 1/2: postgres 16
+verify   54.0s  ok     services 1/2: postgres 16  (2.6 s)
+verify   54.0s  step   services 2/2: redis 7
+verify   54.0s  ok     services 2/2: redis 7  (0.0 s)
+verify   54.0s  warn   PAYMENTS_API_KEY is not set
+verify   54.0s  step   project 1/2: python3 -m venv .venv
+verify   57.3s  ok     project 1/2: python3 -m venv .venv  (3.3 s)
+verify   57.3s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   75.0s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (17.8 s)
+verify   75.0s  step   ready 1/1: .venv/bin/pytest -q
+verify   75.6s  FAIL   ready 1/1: .venv/bin/pytest -q  (exit code 1)
+verify   79.2s  NOT READY  the setup worked, but the ready check failed (exit 1)
+               the last lines it printed:
+               | E   KeyError: 'REDIS_URL'
+               | =========================== short test summary info ============================
+               | ERROR tests/test_orders.py::test_place_order_returns_an_id - KeyError: 'REDIS...
+               | ERROR tests/test_orders.py::test_count_is_cached_in_redis - KeyError: 'REDIS_...
+               | ERROR tests/test_orders.py::test_new_order_clears_the_cached_count - KeyError...
+               | ERROR tests/test_orders.py::test_negative_totals_are_rejected - KeyError: 'RE...
+               | 4 errors in 0.30s

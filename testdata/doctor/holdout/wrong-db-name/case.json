@@ -1,0 +1,26 @@
+{
+  "id": "wrong-db-name",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "DATABASE_URL names a database the spec's service doesn't create.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "DATABASE_URL names the database shop; the service creates orders",
+    "change": {
+      "op": "set-env",
+      "key": "DATABASE_URL",
+      "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "localhost:5432/orders",
+      "localhost:5432/shop"
+    ]
+  ],
+  "recorded": "2026-09-30T19:26:29Z"
+}

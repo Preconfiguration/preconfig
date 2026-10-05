@@ -1,0 +1,36 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 825,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 1,
+  "rule": "D401",
+  "category": "spec",
+  "cause": "The code connects to PostgreSQL on localhost:5432, and nothing is listening there: the spec doesn't run PostgreSQL.",
+  "evidence": [
+   {
+    "n": 608,
+    "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5432 failed: Connection refused"
+   },
+   {
+    "n": 825,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-service",
+    "key": "postgres",
+    "value": "16",
+    "user": "orders",
+    "password": "orders",
+    "database": "orders"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -7,4 +7,9 @@\n services:\n   redis: \"7\"\n+  postgres:\n+    version: \"16\"\n+    user: orders\n+    password: orders\n+    database: orders\n \n env:\n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/no-postgres/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

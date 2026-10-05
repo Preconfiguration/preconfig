@@ -1,0 +1,31 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.5s  step   machine 1/5: system packages
+verify   28.5s  ok     machine 1/5: system packages  (24.0 s)
+verify   28.5s  step   machine 2/5: python 3.12
+verify   38.5s  ok     machine 2/5: python 3.12  (10.0 s)
+verify   38.5s  step   machine 3/5: postgres 16
+verify   55.3s  ok     machine 3/5: postgres 16  (16.8 s)
+verify   55.3s  step   machine 4/5: redis 7
+verify   57.5s  ok     machine 4/5: redis 7  (2.2 s)
+verify   57.5s  step   machine 5/5: environment for login shells
+verify   57.5s  ok     machine 5/5: environment for login shells  (0.1 s)
+verify   57.5s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   57.5s  step   services 1/2: postgres 16
+verify   60.1s  ok     services 1/2: postgres 16  (2.6 s)
+verify   60.1s  step   services 2/2: redis 7
+verify   60.1s  ok     services 2/2: redis 7  (0.0 s)
+verify   60.1s  warn   PAYMENTS_API_KEY is not set
+verify   60.1s  step   project 1/2: python3 -m venv .venv
+verify   64.0s  ok     project 1/2: python3 -m venv .venv  (3.8 s)
+verify   64.0s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   72.2s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (8.2 s)
+verify   72.2s  step   ready 1/1: .venv/bin/pytest -q
+verify   72.8s  FAIL   ready 1/1: .venv/bin/pytest -q  (exit code 1)
+verify   77.2s  NOT READY  the setup worked, but the ready check failed (exit 1)
+               the last lines it printed:
+               | E                   FileNotFoundError: [Errno 2] No such file or directory: 'unzip'
+               | 
+               | /usr/lib/python3.12/subprocess.py:1955: FileNotFoundError
+               | =========================== short test summary info ============================
+               | FAILED tests/test_unzip.py::test_exports_are_zip_files - FileNotFoundError: [...
+               | 1 failed, 4 passed in 0.34s

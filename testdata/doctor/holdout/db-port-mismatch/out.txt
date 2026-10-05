@@ -1,0 +1,33 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.9s  step   machine 1/5: system packages
+verify   26.3s  ok     machine 1/5: system packages  (21.4 s)
+verify   26.3s  step   machine 2/5: python 3.12
+verify   35.7s  ok     machine 2/5: python 3.12  (9.4 s)
+verify   35.7s  step   machine 3/5: postgres 16
+verify   51.8s  ok     machine 3/5: postgres 16  (16.1 s)
+verify   51.8s  step   machine 4/5: redis 7
+verify   54.6s  ok     machine 4/5: redis 7  (2.8 s)
+verify   54.6s  step   machine 5/5: environment for login shells
+verify   54.6s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   54.6s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   54.6s  step   services 1/2: postgres 16
+verify   57.2s  ok     services 1/2: postgres 16  (2.6 s)
+verify   57.2s  step   services 2/2: redis 7
+verify   57.2s  ok     services 2/2: redis 7  (0.0 s)
+verify   57.2s  warn   PAYMENTS_API_KEY is not set
+verify   57.2s  step   project 1/2: python3 -m venv .venv
+verify   61.1s  ok     project 1/2: python3 -m venv .venv  (3.9 s)
+verify   61.1s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   65.5s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (4.4 s)
+verify   65.5s  step   ready 1/1: .venv/bin/pytest -q
+verify   66.1s  FAIL   ready 1/1: .venv/bin/pytest -q  (exit code 1)
+verify   70.5s  NOT READY  the setup worked, but the ready check failed (exit 1)
+               the last lines it printed:
+               | E               psycopg.OperationalError: connection failed: connection to server at "127.0.0.1", port 5433 failed: Connection refused
+               | E               	Is the server running on that host and accepting TCP/IP connections?
+               | =========================== short test summary info ============================
+               | ERROR tests/test_orders.py::test_place_order_returns_an_id - psycopg.Operatio...
+               | ERROR tests/test_orders.py::test_count_is_cached_in_redis - psycopg.Operation...
+               | ERROR tests/test_orders.py::test_new_order_clears_the_cached_count - psycopg....
+               | ERROR tests/test_orders.py::test_negative_totals_are_rejected - psycopg.Opera...
+               | 4 errors in 0.27s

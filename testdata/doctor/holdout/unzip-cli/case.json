@@ -1,0 +1,24 @@
+{
+  "id": "unzip-cli",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "A test that runs unzip, which isn't installed.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "The tests run unzip, which isn't installed",
+    "change": {
+      "op": "add-package",
+      "value": "unzip"
+    }
+  },
+  "edits": [
+    [
+      "file",
+      "tests/test_unzip.py",
+      "173 characters"
+    ]
+  ],
+  "recorded": "2026-09-30T19:16:55Z"
+}

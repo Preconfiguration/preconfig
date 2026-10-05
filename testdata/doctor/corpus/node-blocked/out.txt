@@ -1,0 +1,10 @@
+verify    0.0s  start  web-shop: node 22, pnpm@10, postgres 17, on a clean ubuntu:24.04
+verify    4.5s  step   machine 1/5: system packages
+verify   22.8s  ok     machine 1/5: system packages  (18.3 s)
+verify   22.8s  step   machine 2/5: node 22
+verify   22.9s  FAIL   machine 2/5: node 22  (exit code 2)
+verify   22.9s  FAIL   machine 2/5: node 22  (exit code 2)
+verify   26.1s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               | curl: (22) The requested URL returned error: 403
+               | gpg: no valid OpenPGP data found.

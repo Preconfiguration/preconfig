@@ -1,0 +1,29 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify   19.1s  step   machine 1/5: system packages
+verify   57.7s  ok     machine 1/5: system packages  (38.6 s)
+verify   57.7s  step   machine 2/5: python 3.12
+verify   70.5s  ok     machine 2/5: python 3.12  (12.8 s)
+verify   70.5s  step   machine 3/5: postgres 16
+verify   87.0s  ok     machine 3/5: postgres 16  (16.4 s)
+verify   87.0s  step   machine 4/5: redis 7
+verify   90.4s  ok     machine 4/5: redis 7  (3.4 s)
+verify   90.4s  step   machine 5/5: environment for login shells
+verify   90.4s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   90.4s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   90.4s  step   services 1/2: postgres 16
+verify   93.5s  ok     services 1/2: postgres 16  (3.1 s)
+verify   93.5s  step   services 2/2: redis 7
+verify   93.6s  ok     services 2/2: redis 7  (0.0 s)
+verify   93.6s  warn   PAYMENTS_API_KEY is not set
+verify   93.6s  step   project 1/2: python3 -m venv .venv
+verify   96.6s  ok     project 1/2: python3 -m venv .venv  (3.0 s)
+verify   96.6s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   97.6s  FAIL   project 2/2: .venv/bin/pip install -r requirements.txt  (exit code 1)
+verify  103.2s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               |   Downloading redis-8.1.0-py3-none-any.whl.metadata (16 kB)
+               | Collecting pytest==9.1.1 (from -r requirements.txt (line 3))
+               |   Downloading pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+               | ERROR: Ignored the following yanked versions: 2.32.0, 2.32.1
+               | ERROR: Could not find a version that satisfies the requirement requests==99.0.0 (from versions: 0.2.0, 0.2.1, 0.2.2, 0.2.3, 0.2.4, 0.3.0, 0.3.1, 0.3.2, 0.3.3, 0.3.4, 0.4.0, 0.4.1, 0.5.0, 0.5.1, 0.6.0, 0.6.1, 0.6.2, 0.6.3, 0.6.4, 0.6.5, 0.6.6, 0.7.0, 0.7.1, 0.7.2, 0.7.3, 0.7.4, 0.7.5, 0.7.6, 0.8.0, 0.8.1, 0.8.2, 0.8.3, 0.8.4, 0.8.5, 0.8.6, 0.8.7, 0.8.8, 0.8.9, 0.9.0, 0.9.1, 0.9.2, 0.9.3, 0.10.0, 0.10.1, 0.10.2, 0.10.3, 0.10.4, 0.10.6, 0.10.7, 0.10.8, 0.11.1, 0.11.2, 0.12.0, 0.12.1, 0.13.0, 0.13.1, 0.13.2, 0.13.3, 0.13.4, 0.13.5, 0.13.6, 0.13.7, 0.13.8, 0.13.9, 0.14.0, 0.14.1, 0.14.2, 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.2.0, 1.2.1, 1.2.2, 1.2.3, 2.0.0, 2.0.1, 2.1.0, 2.2.0, 2.2.1, 2.3.0, 2.4.0, 2.4.1, 2.4.2, 2.4.3, 2.5.0, 2.5.1, 2.5.2, 2.5.3, 2.6.0, 2.6.1, 2.6.2, 2.7.0, 2.8.0, 2.8.1, 2.9.0, 2.9.1, 2.9.2, 2.10.0, 2.11.0, 2.11.1, 2.12.0, 2.12.1, 2.12.2, 2.12.3, 2.12.4, 2.12.5, 2.13.0, 2.14.0, 2.14.1, 2.14.2, 2.15.1, 2.16.0, 2.16.1, 2.16.2, 2.16.3, 2.16.4, 2.16.5, 2.17.0, 2.17.1, 2.17.2, 2.17.3, 2.18.0, 2.18.1, 2.18.2, 2.18.3, 2.18.4, 2.19.0, 2.19.1, 2.20.0, 2.20.1, 2.21.0, 2.22.0, 2.23.0, 2.24.0, 2.25.0, 2.25.1, 2.26.0, 2.27.0, 2.27.1, 2.28.0, 2.28.1, 2.28.2, 2.29.0, 2.30.0, 2.31.0, 2.32.2, 2.32.3, 2.32.4, 2.32.5, 2.33.0, 2.33.1, 2.34.0.dev1, 2.34.0, 2.34.1, 2.34.2)
+               | ERROR: No matching distribution found for requests==99.0.0

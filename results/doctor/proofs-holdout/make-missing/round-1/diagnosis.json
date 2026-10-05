@@ -1,0 +1,32 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 687,
+  "outcome": "failed",
+  "step": "ready 1/1: make test",
+  "phase": "ready",
+  "exitCode": 127,
+  "rule": "D306",
+  "category": "spec",
+  "cause": "The step runs make, and make isn't installed.",
+  "evidence": [
+   {
+    "n": 686,
+    "text": "/preconfig/setup.sh: line 105: make: command not found"
+   },
+   {
+    "n": 687,
+    "text": ">>> preconfig: FAILED: ready 1/1: make test (exit code 127)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-package",
+    "value": "make"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -5,4 +5,7 @@\n   python: \"3.12\"\n \n+packages:\n+  - make\n+\n services:\n   postgres:\n",
+ "fixed": "/tmp/doctor-prove-2us7emkd/make-missing/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

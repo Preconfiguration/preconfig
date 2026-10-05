@@ -1,0 +1,27 @@
+version: 1
+name: orders-api
+
+runtimes:
+  python: "3.12"
+
+services:
+  postgres:
+    version: "16"
+    user: orders
+    password: orders
+    database: orders
+  redis: "7"
+
+env:
+  DATABASE_URL: postgres://orders:orders@localhost:5432/orders
+  REDIS_URL: redis://localhost:6379/0
+
+secrets:
+  - PAYMENTS_API_KEY
+
+setup:
+  - python3 -m venv .venv
+  - uv pip install --python .venv/bin/python -r requirements.txt
+
+ready:
+  - .venv/bin/pytest -q

@@ -1,0 +1,29 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    5.1s  step   machine 1/5: system packages
+verify   26.2s  ok     machine 1/5: system packages  (21.0 s)
+verify   26.2s  step   machine 2/5: python 3.12
+verify   35.1s  ok     machine 2/5: python 3.12  (8.9 s)
+verify   35.1s  step   machine 3/5: postgres 16
+verify   51.3s  ok     machine 3/5: postgres 16  (16.2 s)
+verify   51.3s  step   machine 4/5: redis 7
+verify   54.5s  ok     machine 4/5: redis 7  (3.2 s)
+verify   54.5s  step   machine 5/5: environment for login shells
+verify   54.5s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   54.5s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   54.5s  step   services 1/2: postgres 16
+verify   57.0s  ok     services 1/2: postgres 16  (2.5 s)
+verify   57.0s  step   services 2/2: redis 7
+verify   57.0s  ok     services 2/2: redis 7  (0.0 s)
+verify   57.0s  warn   PAYMENTS_API_KEY is not set
+verify   57.0s  step   project 1/2: python3 -m venv .venv
+verify   60.3s  ok     project 1/2: python3 -m venv .venv  (3.3 s)
+verify   60.3s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   64.4s  FAIL   project 2/2: .venv/bin/pip install -r requirements.txt  (exit code 1)
+verify   68.6s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               | Collecting pygments>=2.7.2 (from pytest==9.1.1->-r requirements.txt (line 3))
+               |   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+               | Collecting psycopg-binary==3.3.6 (from psycopg[binary]==3.3.6->-r requirements.txt (line 1))
+               |   Downloading psycopg_binary-3.3.6-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+               | INFO: pip is looking at multiple versions of oldlib to determine which version is compatible with other requirements. This could take a while.
+               | ERROR: Package 'oldlib' requires a different Python: 3.12.3 not in '<3.12,>=3.9'

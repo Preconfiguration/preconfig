@@ -1,0 +1,24 @@
+{
+  "id": "sqlite3-cli",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "A test that runs the sqlite3 command, which isn't installed.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "The tests run sqlite3, which isn't installed",
+    "change": {
+      "op": "add-package",
+      "value": "sqlite3"
+    }
+  },
+  "edits": [
+    [
+      "file",
+      "tests/test_cli.py",
+      "200 characters"
+    ]
+  ],
+  "recorded": "2026-09-30T18:49:23Z"
+}

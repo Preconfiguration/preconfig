@@ -1,0 +1,21 @@
+{"v":1,"ts":"2026-09-29T21:53:32.590838175Z","t":0,"type":"verify.start","fields":{"image":"ubuntu:24.04","name":"orders-api","spec":"python 3.12, postgres 16"}}
+{"v":1,"ts":"2026-09-29T21:53:34.569924016Z","t":2,"type":"step.start","step":"machine 1/4: system packages"}
+{"v":1,"ts":"2026-09-29T21:53:52.122323403Z","t":19.5,"type":"step.end","step":"machine 1/4: system packages","fields":{"ok":true,"seconds":17.6}}
+{"v":1,"ts":"2026-09-29T21:53:52.122361042Z","t":19.5,"type":"step.start","step":"machine 2/4: python 3.12"}
+{"v":1,"ts":"2026-09-29T21:53:59.908466993Z","t":27.3,"type":"step.end","step":"machine 2/4: python 3.12","fields":{"ok":true,"seconds":7.8}}
+{"v":1,"ts":"2026-09-29T21:53:59.908718671Z","t":27.3,"type":"step.start","step":"machine 3/4: postgres 16"}
+{"v":1,"ts":"2026-09-29T21:54:13.493985365Z","t":40.9,"type":"step.end","step":"machine 3/4: postgres 16","fields":{"ok":true,"seconds":13.6}}
+{"v":1,"ts":"2026-09-29T21:54:13.494031517Z","t":40.9,"type":"step.start","step":"machine 4/4: environment for login shells"}
+{"v":1,"ts":"2026-09-29T21:54:13.522521501Z","t":40.9,"type":"step.end","step":"machine 4/4: environment for login shells","fields":{"ok":true,"seconds":0}}
+{"v":1,"ts":"2026-09-29T21:54:13.522543854Z","t":40.9,"type":"machine.ready","fields":{"versions":"python 3.12.3, postgres 16.15"}}
+{"v":1,"ts":"2026-09-29T21:54:13.522551925Z","t":40.9,"type":"step.start","step":"services 1/1: postgres 16"}
+{"v":1,"ts":"2026-09-29T21:54:15.953199938Z","t":43.4,"type":"step.end","step":"services 1/1: postgres 16","fields":{"ok":true,"seconds":2.4}}
+{"v":1,"ts":"2026-09-29T21:54:15.955708761Z","t":43.4,"type":"warning","fields":{"message":"PAYMENTS_API_KEY is not set"}}
+{"v":1,"ts":"2026-09-29T21:54:15.955721455Z","t":43.4,"type":"step.start","step":"project 1/2: python3 -m venv .venv"}
+{"v":1,"ts":"2026-09-29T21:54:18.667254809Z","t":46.1,"type":"step.end","step":"project 1/2: python3 -m venv .venv","fields":{"ok":true,"seconds":2.7}}
+{"v":1,"ts":"2026-09-29T21:54:18.66729475Z","t":46.1,"type":"step.start","step":"project 2/2: .venv/bin/pip install -r requirements.txt"}
+{"v":1,"ts":"2026-09-29T21:54:22.91063127Z","t":50.3,"type":"step.end","step":"project 2/2: .venv/bin/pip install -r requirements.txt","fields":{"ok":true,"seconds":4.2}}
+{"v":1,"ts":"2026-09-29T21:54:22.910658335Z","t":50.3,"type":"step.start","step":"ready 1/1: .venv/bin/pytest -q"}
+{"v":1,"ts":"2026-09-29T21:54:24.363701341Z","t":51.8,"type":"step.end","step":"ready 1/1: .venv/bin/pytest -q","fields":{"ok":false,"seconds":1.5}}
+{"v":1,"ts":"2026-09-29T21:54:24.363779508Z","t":51.8,"type":"step.fail","step":"ready 1/1: .venv/bin/pytest -q","fields":{"exit_code":1}}
+{"v":1,"ts":"2026-09-29T21:54:27.669587916Z","t":55.1,"type":"verify.end","fields":{"code":1,"failed_step":"ready 1/1: .venv/bin/pytest -q","message":"the setup worked, but the ready check failed","steps":8,"versions":"python 3.12.3, postgres 16.15"}}

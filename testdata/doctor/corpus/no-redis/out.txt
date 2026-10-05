@@ -1,0 +1,29 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, on a clean ubuntu:24.04
+verify    2.7s  step   machine 1/4: system packages
+verify   18.6s  ok     machine 1/4: system packages  (15.8 s)
+verify   18.6s  step   machine 2/4: python 3.12
+verify   26.3s  ok     machine 2/4: python 3.12  (7.7 s)
+verify   26.3s  step   machine 3/4: postgres 16
+verify   41.6s  ok     machine 3/4: postgres 16  (15.3 s)
+verify   41.6s  step   machine 4/4: environment for login shells
+verify   41.6s  ok     machine 4/4: environment for login shells  (0.0 s)
+verify   41.6s  have   python 3.12.3, postgres 16.15
+verify   41.6s  step   services 1/1: postgres 16
+verify   44.1s  ok     services 1/1: postgres 16  (2.5 s)
+verify   44.1s  warn   PAYMENTS_API_KEY is not set
+verify   44.1s  step   project 1/2: python3 -m venv .venv
+verify   47.2s  ok     project 1/2: python3 -m venv .venv  (3.1 s)
+verify   47.2s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   50.8s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (3.6 s)
+verify   50.8s  step   ready 1/1: .venv/bin/pytest -q
+verify   52.5s  FAIL   ready 1/1: .venv/bin/pytest -q  (exit code 1)
+verify   56.0s  NOT READY  the setup worked, but the ready check failed (exit 1)
+               the last lines it printed:
+               | E           redis.exceptions.ConnectionError: Error 111 connecting to localhost:6379. Connection refused.
+               | E               ConnectionRefusedError: [Errno 111] Connection refused
+               | .venv/lib/python3.12/site-packages/redis/connection.py:1077: ConnectionError
+               | =========================== short test summary info ============================
+               | FAILED tests/test_orders.py::test_place_order_returns_an_id - redis.exception...
+               | FAILED tests/test_orders.py::test_count_is_cached_in_redis - redis.exceptions...
+               | FAILED tests/test_orders.py::test_new_order_clears_the_cached_count - redis.e...
+               | 3 failed, 1 passed in 1.46s

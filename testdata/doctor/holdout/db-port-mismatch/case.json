@@ -1,0 +1,26 @@
+{
+  "id": "db-port-mismatch",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "DATABASE_URL points at port 5433; the spec's PostgreSQL listens on 5432.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "DATABASE_URL points at the wrong port",
+    "change": {
+      "op": "set-env",
+      "key": "DATABASE_URL",
+      "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "localhost:5432/orders",
+      "localhost:5433/orders"
+    ]
+  ],
+  "recorded": "2026-09-30T19:25:19Z"
+}

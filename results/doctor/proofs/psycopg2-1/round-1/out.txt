@@ -1,0 +1,29 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.7s  step   machine 1/5: system packages
+verify   46.2s  ok     machine 1/5: system packages  (41.5 s)
+verify   46.2s  step   machine 2/5: python 3.12
+verify   54.5s  ok     machine 2/5: python 3.12  (8.4 s)
+verify   54.5s  step   machine 3/5: postgres 16
+verify   67.5s  ok     machine 3/5: postgres 16  (13.0 s)
+verify   67.5s  step   machine 4/5: redis 7
+verify   70.4s  ok     machine 4/5: redis 7  (2.8 s)
+verify   70.4s  step   machine 5/5: environment for login shells
+verify   70.4s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   70.4s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   70.4s  step   services 1/2: postgres 16
+verify   72.9s  ok     services 1/2: postgres 16  (2.5 s)
+verify   72.9s  step   services 2/2: redis 7
+verify   72.9s  ok     services 2/2: redis 7  (0.0 s)
+verify   72.9s  warn   PAYMENTS_API_KEY is not set
+verify   72.9s  step   project 1/2: python3 -m venv .venv
+verify   76.2s  ok     project 1/2: python3 -m venv .venv  (3.3 s)
+verify   76.2s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   80.6s  FAIL   project 2/2: .venv/bin/pip install -r requirements.txt  (exit code 1)
+verify   85.4s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               |       [end of output]
+               |   
+               |   note: This error originates from a subprocess, and is likely not a problem with pip.
+               |   ERROR: Failed building wheel for psycopg2
+               | Failed to build psycopg2
+               | ERROR: Could not build wheels for psycopg2, which is required to install pyproject.toml-based projects

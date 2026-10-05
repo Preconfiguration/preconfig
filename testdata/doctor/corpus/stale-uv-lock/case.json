@@ -1,0 +1,44 @@
+{
+  "id": "stale-uv-lock",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "uv.lock written before requests was added to pyproject.toml; the setup runs uv sync --locked.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "repository",
+    "cause": "uv.lock is out of date with pyproject.toml",
+    "change": null
+  },
+  "edits": [
+    [
+      "file",
+      "pyproject.toml",
+      "337 characters"
+    ],
+    [
+      "copy",
+      "uv/uv.lock",
+      "uv.lock"
+    ],
+    [
+      "replace",
+      "preconfig.yaml",
+      "secrets:\n",
+      "tools:\n  - uv\n\nsecrets:\n"
+    ],
+    [
+      "replace",
+      "preconfig.yaml",
+      "setup:\n  - python3 -m venv .venv\n  - .venv/bin/pip install -r requirements.txt\n",
+      "setup:\n  - uv sync --locked\n"
+    ],
+    [
+      "replace",
+      "preconfig.yaml",
+      "  - .venv/bin/pytest -q\n",
+      "  - uv run --locked pytest -q\n"
+    ]
+  ],
+  "recorded": "2026-09-30T18:57:07Z"
+}

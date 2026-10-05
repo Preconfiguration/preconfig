@@ -1,0 +1,16 @@
+{
+  "id": "go-blocked",
+  "repo": "ingest-worker",
+  "kind": "verify",
+  "made": "The ingest-worker sample as it is: Go 1.25 is downloaded by the go command, and this machine can't reach Go's downloads.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "machine",
+    "category": "network",
+    "cause": "The machine can't download the Go 1.25 toolchain",
+    "change": null,
+    "host": "golang.org"
+  },
+  "edits": [],
+  "recorded": "2026-09-30T19:06:52Z"
+}

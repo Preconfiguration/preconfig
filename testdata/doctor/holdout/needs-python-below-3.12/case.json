@@ -1,0 +1,35 @@
+{
+  "id": "needs-python-below-3.12",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "A local package in requirements.txt that needs Python older than 3.12.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "spec",
+    "cause": "oldlib needs Python below 3.12; the spec installs 3.12",
+    "change": {
+      "op": "set-runtime",
+      "name": "python",
+      "value": "3.10"
+    }
+  },
+  "edits": [
+    [
+      "append",
+      "requirements.txt",
+      "./pkgs/oldlib\n"
+    ],
+    [
+      "file",
+      "pkgs/oldlib/pyproject.toml",
+      "162 characters"
+    ],
+    [
+      "file",
+      "pkgs/oldlib/oldlib/__init__.py",
+      "0 characters"
+    ]
+  ],
+  "recorded": "2026-09-30T19:27:37Z"
+}

@@ -1,0 +1,31 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.6s  step   machine 1/5: system packages
+verify   27.6s  ok     machine 1/5: system packages  (22.9 s)
+verify   27.6s  step   machine 2/5: python 3.12
+verify   37.9s  ok     machine 2/5: python 3.12  (10.4 s)
+verify   37.9s  step   machine 3/5: postgres 16
+verify   50.4s  ok     machine 3/5: postgres 16  (12.5 s)
+verify   50.4s  step   machine 4/5: redis 7
+verify   53.2s  ok     machine 4/5: redis 7  (2.8 s)
+verify   53.2s  step   machine 5/5: environment for login shells
+verify   53.3s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   53.3s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   53.3s  step   services 1/2: postgres 16
+verify   55.8s  ok     services 1/2: postgres 16  (2.5 s)
+verify   55.8s  step   services 2/2: redis 7
+verify   55.8s  ok     services 2/2: redis 7  (0.0 s)
+verify   55.8s  warn   PAYMENTS_API_KEY is not set
+verify   55.8s  step   project 1/2: python3 -m venv .venv
+verify   59.1s  ok     project 1/2: python3 -m venv .venv  (3.3 s)
+verify   59.1s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify   63.6s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (4.5 s)
+verify   63.6s  step   ready 1/1: .venv/bin/pytest -q
+verify   64.3s  FAIL   ready 1/1: .venv/bin/pytest -q  (exit code 1)
+verify   68.2s  NOT READY  the setup worked, but the ready check failed (exit 1)
+               the last lines it printed:
+               | E                   FileNotFoundError: [Errno 2] No such file or directory: 'sqlite3'
+               | 
+               | /usr/lib/python3.12/subprocess.py:1955: FileNotFoundError
+               | =========================== short test summary info ============================
+               | FAILED tests/test_cli.py::test_exports_open_in_sqlite - FileNotFoundError: [E...
+               | 1 failed, 4 passed in 0.36s

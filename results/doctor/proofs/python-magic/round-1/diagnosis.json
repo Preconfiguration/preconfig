@@ -1,0 +1,32 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 710,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 2,
+  "rule": "D305",
+  "category": "spec",
+  "cause": "A program needs the shared library libmagic, from libmagic1t64.",
+  "evidence": [
+   {
+    "n": 705,
+    "text": "E   ImportError: failed to find libmagic.  Check your installation"
+   },
+   {
+    "n": 710,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 2)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-package",
+    "value": "libmagic1t64"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -5,4 +5,7 @@\n   python: \"3.12\"\n \n+packages:\n+  - libmagic1t64\n+\n services:\n   postgres:\n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/python-magic/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

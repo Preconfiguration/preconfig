@@ -1,0 +1,32 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 721,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 1,
+  "rule": "D405",
+  "category": "spec",
+  "cause": "The code asks for a locale that a clean Ubuntu doesn't have; it ships only C.UTF-8.",
+  "evidence": [
+   {
+    "n": 715,
+    "text": "E       locale.Error: unsupported locale setting"
+   },
+   {
+    "n": 721,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-package",
+    "value": "locales-all"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -5,4 +5,7 @@\n   python: \"3.12\"\n \n+packages:\n+  - locales-all\n+\n services:\n   postgres:\n",
+ "fixed": "/tmp/doctor-prove-1esm2jfm/locale/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

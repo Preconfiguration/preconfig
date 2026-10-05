@@ -1,0 +1,26 @@
+{
+  "id": "typo-package",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "A system package misspelled in the spec: libpq-devv.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "machine",
+    "category": "spec",
+    "cause": "Ubuntu 24.04 has no package named libpq-devv",
+    "change": {
+      "op": "replace-package",
+      "old": "libpq-devv",
+      "value": "libpq-dev"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "secrets:\n",
+      "packages:\n  - libpq-devv\n\nsecrets:\n"
+    ]
+  ],
+  "recorded": "2026-09-30T18:42:57Z"
+}

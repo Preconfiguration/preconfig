@@ -1,0 +1,20 @@
+verify    0.0s  start  orders-api: postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.8s  step   machine 1/4: system packages
+verify   43.7s  ok     machine 1/4: system packages  (38.9 s)
+verify   43.7s  step   machine 2/4: postgres 16
+verify   69.3s  ok     machine 2/4: postgres 16  (25.6 s)
+verify   69.3s  step   machine 3/4: redis 7
+verify   72.8s  ok     machine 3/4: redis 7  (3.5 s)
+verify   72.8s  step   machine 4/4: environment for login shells
+verify   72.8s  ok     machine 4/4: environment for login shells  (0.0 s)
+verify   72.8s  have   postgres 16.15, redis 7.0.15
+verify   72.8s  step   services 1/2: postgres 16
+verify   75.3s  ok     services 1/2: postgres 16  (2.5 s)
+verify   75.3s  step   services 2/2: redis 7
+verify   75.3s  ok     services 2/2: redis 7  (0.0 s)
+verify   75.3s  warn   PAYMENTS_API_KEY is not set
+verify   75.3s  step   project 1/2: python3 -m venv .venv
+verify   75.3s  FAIL   project 1/2: python3 -m venv .venv  (exit code 127)
+verify   78.8s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               | /preconfig/setup.sh: line 93: python3: command not found

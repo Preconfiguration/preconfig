@@ -1,0 +1,6 @@
+preconfig.yaml:20:3: warning S083: setup runs python3, but no python runtime is listed
+    Add python under runtimes.
+preconfig.yaml:20:3: warning S083: setup uses a virtual environment, but no python runtime is listed
+    Add python under runtimes.
+preconfig.yaml:24:3: warning S083: ready uses a virtual environment, but no python runtime is listed
+    Add python under runtimes.

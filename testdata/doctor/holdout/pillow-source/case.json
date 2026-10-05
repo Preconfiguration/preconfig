@@ -1,0 +1,35 @@
+{
+  "id": "pillow-source",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "Pillow built from source, with a compiler and Python headers in the spec but no image libraries.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "spec",
+    "cause": "Pillow's build needs libjpeg's headers, from libjpeg-dev",
+    "change": {
+      "op": "add-package",
+      "value": [
+        "libjpeg-dev",
+        "libjpeg8-dev",
+        "libjpeg-turbo8-dev"
+      ]
+    }
+  },
+  "note": "Designed expecting zlib's headers to be missing first. python3-dev brings zlib1g-dev with it, so Pillow's build stopped on libjpeg instead; any of Ubuntu's three names for its headers is right. Label set from the log.",
+  "edits": [
+    [
+      "append",
+      "requirements.txt",
+      "--no-binary pillow\npillow==11.3.0\n"
+    ],
+    [
+      "replace",
+      "preconfig.yaml",
+      "secrets:\n",
+      "packages:\n  - build-essential\n  - python3-dev\n\nsecrets:\n"
+    ]
+  ],
+  "recorded": "2026-09-30T19:19:07Z"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "private-index",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "requirements.txt installs from a company index this machine can't reach.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "network",
+    "cause": "The machine can't reach the package index pypi.internal.example",
+    "change": null,
+    "host": "pypi.internal.example"
+  },
+  "edits": [
+    [
+      "replace",
+      "requirements.txt",
+      "psycopg[binary]",
+      "--index-url https://pypi.internal.example/simple\npsycopg[binary]"
+    ]
+  ],
+  "recorded": "2026-09-30T19:22:47Z"
+}

@@ -1,0 +1,37 @@
+{
+ "diagnosis": {
+  "log": "setup",
+  "lines": 778,
+  "outcome": "failed",
+  "step": "ready 1/1: .venv/bin/pytest -q",
+  "phase": "ready",
+  "exitCode": 1,
+  "rule": "D404",
+  "category": "spec",
+  "cause": "The code reads DATABASE_URL, and the spec doesn't set it; the spec's service says what it should be.",
+  "evidence": [
+   {
+    "n": 706,
+    "text": "E   KeyError: 'DATABASE_URL'"
+   },
+   {
+    "n": 727,
+    "text": "E   KeyError: 'DATABASE_URL'"
+   },
+   {
+    "n": 778,
+    "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+   }
+  ],
+  "changes": [
+   {
+    "op": "add-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  ]
+ },
+ "diff": "--- a/preconfig.yaml\n+++ b/preconfig.yaml\n@@ -15,4 +15,5 @@\n env:\n   REDIS_URL: redis://localhost:6379/0\n+  DATABASE_URL: postgres://orders:orders@localhost:5432/orders\n \n secrets:\n",
+ "fixed": "/tmp/doctor-prove-d4o19nfq/no-database-url/preconfig.yaml",
+ "tool": "preconfig doctor 0.1.0"
+}

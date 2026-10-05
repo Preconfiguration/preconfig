@@ -1,0 +1,24 @@
+{"v":1,"ts":"2026-09-29T21:52:42.995431243Z","t":0,"type":"verify.start","fields":{"image":"ubuntu:24.04","name":"orders-api","spec":"python 3.12, postgres 16, redis 7"}}
+{"v":1,"ts":"2026-09-29T21:52:43.757796892Z","t":0.8,"type":"step.start","step":"machine 1/5: system packages"}
+{"v":1,"ts":"2026-09-29T21:52:58.600122155Z","t":15.6,"type":"step.end","step":"machine 1/5: system packages","fields":{"ok":true,"seconds":14.8}}
+{"v":1,"ts":"2026-09-29T21:52:58.600156328Z","t":15.6,"type":"step.start","step":"machine 2/5: python 3.12"}
+{"v":1,"ts":"2026-09-29T21:53:05.424891474Z","t":22.4,"type":"step.end","step":"machine 2/5: python 3.12","fields":{"ok":true,"seconds":6.8}}
+{"v":1,"ts":"2026-09-29T21:53:05.424914481Z","t":22.4,"type":"step.start","step":"machine 3/5: postgres 16"}
+{"v":1,"ts":"2026-09-29T21:53:15.280615978Z","t":32.3,"type":"step.end","step":"machine 3/5: postgres 16","fields":{"ok":true,"seconds":9.9}}
+{"v":1,"ts":"2026-09-29T21:53:15.280757909Z","t":32.3,"type":"step.start","step":"machine 4/5: redis 7"}
+{"v":1,"ts":"2026-09-29T21:53:18.904537682Z","t":35.9,"type":"step.end","step":"machine 4/5: redis 7","fields":{"ok":true,"seconds":3.6}}
+{"v":1,"ts":"2026-09-29T21:53:18.904799963Z","t":35.9,"type":"step.start","step":"machine 5/5: environment for login shells"}
+{"v":1,"ts":"2026-09-29T21:53:18.949472247Z","t":36,"type":"step.end","step":"machine 5/5: environment for login shells","fields":{"ok":true,"seconds":0}}
+{"v":1,"ts":"2026-09-29T21:53:18.949495393Z","t":36,"type":"machine.ready","fields":{"versions":"python 3.12.3, postgres 16.15, redis 7.0.15"}}
+{"v":1,"ts":"2026-09-29T21:53:18.949504888Z","t":36,"type":"step.start","step":"services 1/2: postgres 16"}
+{"v":1,"ts":"2026-09-29T21:53:21.525194603Z","t":38.5,"type":"step.end","step":"services 1/2: postgres 16","fields":{"ok":true,"seconds":2.6}}
+{"v":1,"ts":"2026-09-29T21:53:21.525226027Z","t":38.5,"type":"step.start","step":"services 2/2: redis 7"}
+{"v":1,"ts":"2026-09-29T21:53:21.550839592Z","t":38.6,"type":"step.end","step":"services 2/2: redis 7","fields":{"ok":true,"seconds":0}}
+{"v":1,"ts":"2026-09-29T21:53:21.551107816Z","t":38.6,"type":"warning","fields":{"message":"PAYMENTS_API_KEY is not set"}}
+{"v":1,"ts":"2026-09-29T21:53:21.551243804Z","t":38.6,"type":"step.start","step":"project 1/2: python3 -m venv .venv"}
+{"v":1,"ts":"2026-09-29T21:53:24.468837606Z","t":41.5,"type":"step.end","step":"project 1/2: python3 -m venv .venv","fields":{"ok":true,"seconds":2.9}}
+{"v":1,"ts":"2026-09-29T21:53:24.46886046Z","t":41.5,"type":"step.start","step":"project 2/2: .venv/bin/pip install -r requirements.txt"}
+{"v":1,"ts":"2026-09-29T21:53:28.46536304Z","t":45.5,"type":"step.end","step":"project 2/2: .venv/bin/pip install -r requirements.txt","fields":{"ok":true,"seconds":4}}
+{"v":1,"ts":"2026-09-29T21:53:28.465394879Z","t":45.5,"type":"step.start","step":"ready 1/1: .venv/bin/pytest -q"}
+{"v":1,"ts":"2026-09-29T21:53:28.970057463Z","t":46,"type":"step.end","step":"ready 1/1: .venv/bin/pytest -q","fields":{"ok":true,"seconds":0.5}}
+{"v":1,"ts":"2026-09-29T21:53:32.578850798Z","t":49.6,"type":"verify.end","fields":{"code":0,"message":"4 passed in 0.25s","steps":10,"versions":"python 3.12.3, postgres 16.15, redis 7.0.15"}}

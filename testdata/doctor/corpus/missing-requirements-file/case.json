@@ -1,0 +1,21 @@
+{
+  "id": "missing-requirements-file",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "requirements.txt includes a file that isn't in the repository.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "repository",
+    "cause": "requirements.txt includes requirements-dev.txt, which doesn't exist",
+    "change": null
+  },
+  "edits": [
+    [
+      "append",
+      "requirements.txt",
+      "-r requirements-dev.txt\n"
+    ]
+  ],
+  "recorded": "2026-09-30T18:55:47Z"
+}

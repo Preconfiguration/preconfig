@@ -1,0 +1,10 @@
+# Doctor's rules, frozen before the holdout corpus was recorded
+frozen: 2026-09-30T19:14:08Z
+
+dbea1c0abb7cd3744be3d4911af23a5938a0f6f9d572eb415d35adf39d0c935b  internal/doctor/doctor.go
+82622896a5745444a155a970797f658059251ae0e15e9856a37284ebd85a2461  internal/doctor/fix.go
+5a37e1dd27a1b84e97bf9e11654634d245d57419b952849c82e7c12c5a2e55df  internal/doctor/knowledge.go
+8ea3e6908e5df4d7eb3fb368a6122a8692e9b61d9e81436e98552fc01a430447  internal/doctor/mask.go
+d63f5e5850c5de441641670c169e58afdbe6c69e700c71fa5a110eb6d843a250  internal/doctor/read.go
+f67ece549b7aec02a53d73380589b90386df346cc96ac8e6e58470fd87ed1ec5  internal/doctor/rules.go
+0c34eb2c0bd00cdbc67c56f7b8ab09647f63fc1e3a834457f975281fe330f6f2  cmd/preconfig/doctor.go

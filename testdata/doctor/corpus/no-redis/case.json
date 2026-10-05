@@ -1,0 +1,26 @@
+{
+  "id": "no-redis",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "Redis left out of the spec's services.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "Redis isn't running: the tests can't connect to localhost:6379",
+    "change": {
+      "op": "add-service",
+      "name": "redis",
+      "version": "7"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "  redis: \"7\"\n",
+      ""
+    ]
+  ],
+  "recorded": "2026-09-30T18:40:53Z"
+}

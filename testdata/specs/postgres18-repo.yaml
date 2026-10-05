@@ -1,0 +1,13 @@
+version: 1
+name: pg18
+services:
+  postgres: "18"
+packages: [libpq-dev, build-essential]
+env:
+  QUOTED: "it's \"x\""
+  URL: https://x.y/z?a=b&c=d
+  EMPTY: ""
+secrets: [NPM_TOKEN]
+repo: https://github.com/acme/app.git
+ready:
+  - pg_isready -h localhost

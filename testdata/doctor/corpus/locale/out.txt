@@ -1,0 +1,31 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.6s  step   machine 1/5: system packages
+verify   32.8s  ok     machine 1/5: system packages  (28.2 s)
+verify   32.8s  step   machine 2/5: python 3.12
+verify   41.9s  ok     machine 2/5: python 3.12  (9.1 s)
+verify   41.9s  step   machine 3/5: postgres 16
+verify   59.7s  ok     machine 3/5: postgres 16  (17.8 s)
+verify   59.7s  step   machine 4/5: redis 7
+verify   83.3s  ok     machine 4/5: redis 7  (23.5 s)
+verify   83.3s  step   machine 5/5: environment for login shells
+verify   83.3s  ok     machine 5/5: environment for login shells  (0.0 s)
+verify   83.3s  have   python 3.12.3, postgres 16.15, redis 7.0.15
+verify   83.3s  step   services 1/2: postgres 16
+verify   86.8s  ok     services 1/2: postgres 16  (3.5 s)
+verify   86.8s  step   services 2/2: redis 7
+verify   87.2s  ok     services 2/2: redis 7  (0.5 s)
+verify   87.2s  warn   PAYMENTS_API_KEY is not set
+verify   87.2s  step   project 1/2: python3 -m venv .venv
+verify   92.4s  ok     project 1/2: python3 -m venv .venv  (5.2 s)
+verify   92.4s  step   project 2/2: .venv/bin/pip install -r requirements.txt
+verify  106.5s  ok     project 2/2: .venv/bin/pip install -r requirements.txt  (14.1 s)
+verify  106.5s  step   ready 1/1: .venv/bin/pytest -q
+verify  107.1s  FAIL   ready 1/1: .venv/bin/pytest -q  (exit code 1)
+verify  111.3s  NOT READY  the setup worked, but the ready check failed (exit 1)
+               the last lines it printed:
+               | E       locale.Error: unsupported locale setting
+               | 
+               | /usr/lib/python3.12/locale.py:615: Error
+               | =========================== short test summary info ============================
+               | FAILED tests/test_locale.py::test_german_number_format - locale.Error: unsupp...
+               | 1 failed, 4 passed in 0.32s

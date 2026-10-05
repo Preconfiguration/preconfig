@@ -1,0 +1,1 @@
+ok  	preconfiguration.com/preconfig/internal/doctor	0.331s	coverage: 84.1% of statements

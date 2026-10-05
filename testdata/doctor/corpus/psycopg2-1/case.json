@@ -1,0 +1,25 @@
+{
+  "id": "psycopg2-1",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "psycopg2 built from source, on a machine with no compiler, no Python headers and no libpq-dev.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "spec",
+    "cause": "The build needs a C compiler, from build-essential",
+    "change": {
+      "op": "add-package",
+      "value": "build-essential"
+    }
+  },
+  "note": "Designed expecting pg_config to be missing first. postgresql-common, installed with the PostgreSQL service, provides a pg_config, so the build got as far as the compiler. Label set from the log before Doctor read it.",
+  "edits": [
+    [
+      "append",
+      "requirements.txt",
+      "psycopg2==2.9.10\n"
+    ]
+  ],
+  "recorded": "2026-09-30T18:43:55Z"
+}

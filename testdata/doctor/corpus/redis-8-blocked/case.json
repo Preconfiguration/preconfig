@@ -1,0 +1,23 @@
+{
+  "id": "redis-8-blocked",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "Redis 8, from Redis's own packages, which this machine can't reach.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "machine",
+    "category": "network",
+    "cause": "The machine can't reach Redis's packages",
+    "change": null,
+    "host": "packages.redis.io"
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "  redis: \"7\"\n",
+      "  redis: \"8\"\n"
+    ]
+  ],
+  "recorded": "2026-09-30T19:05:50Z"
+}

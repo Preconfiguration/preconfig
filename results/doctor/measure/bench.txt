@@ -1,0 +1,11 @@
+goos: linux
+goarch: amd64
+pkg: preconfiguration.com/preconfig/internal/doctor
+cpu: Intel(R) Xeon(R) Processor @ 2.80GHz
+BenchmarkDiagnose-2   	      37	  32530282 ns/op	  168757 B/op	     215 allocs/op
+BenchmarkDiagnose-2   	      37	  30433967 ns/op	  166752 B/op	     214 allocs/op
+BenchmarkDiagnose-2   	      42	  29321982 ns/op	  166627 B/op	     214 allocs/op
+BenchmarkDiagnose-2   	      34	  32038088 ns/op	  167940 B/op	     215 allocs/op
+BenchmarkDiagnose-2   	      42	  30857210 ns/op	  167507 B/op	     214 allocs/op
+PASS
+ok  	preconfiguration.com/preconfig/internal/doctor	6.120s

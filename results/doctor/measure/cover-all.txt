@@ -1,0 +1,12 @@
+ok  	preconfiguration.com/preconfig/cmd/preconfig	0.316s	coverage: 91.5% of statements
+ok  	preconfiguration.com/preconfig/internal/check	0.061s	coverage: 97.9% of statements
+ok  	preconfiguration.com/preconfig/internal/detect	0.010s	coverage: 99.7% of statements
+ok  	preconfiguration.com/preconfig/internal/doctor	0.334s	coverage: 83.9% of statements
+ok  	preconfiguration.com/preconfig/internal/gen	0.814s	coverage: 97.3% of statements
+ok  	preconfiguration.com/preconfig/internal/jsonc	0.004s	coverage: 81.6% of statements
+	preconfiguration.com/preconfig/internal/kb		coverage: 0.0% of statements
+ok  	preconfiguration.com/preconfig/internal/spec	0.004s	coverage: 88.0% of statements
+ok  	preconfiguration.com/preconfig/internal/textdiff	0.005s	coverage: 92.5% of statements
+ok  	preconfiguration.com/preconfig/internal/tree	0.005s	coverage: 94.1% of statements
+ok  	preconfiguration.com/preconfig/internal/verify	1.530s	coverage: 82.2% of statements
+ok  	preconfiguration.com/preconfig/internal/yaml	0.005s	coverage: 83.3% of statements

@@ -1,0 +1,25 @@
+{
+  "id": "uv-missing",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "The setup installs with uv, and the spec doesn't list uv under tools.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "spec",
+    "cause": "The setup runs uv, and uv isn't installed",
+    "change": {
+      "op": "add-tool",
+      "value": "uv"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "  - .venv/bin/pip install -r requirements.txt\n",
+      "  - uv pip install --python .venv/bin/python -r requirements.txt\n"
+    ]
+  ],
+  "recorded": "2026-09-30T18:50:28Z"
+}

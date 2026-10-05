@@ -1,0 +1,21 @@
+9 recorded cases
+  1280px  alpha-no-redis         ok   D401    diff with an added line, 7 files Proven on a clean machine. With this change, preconfig verif
+  1280px  typo-package           ok   D101    diff with an added line, 7 files Proven on a clean machine. With this change, preconfig verif
+  1280px  psycopg2-1             ok   D302    diff with an added line, 7 files Proven on a clean machine, in 3 rounds. Each run on October 
+  1280px  locale                 ok   D405    diff with an added line, 7 files Proven on a clean machine. With this change, preconfig verif
+  1280px  no-database-url        ok   D404    diff with an added line, 7 files Proven on a clean machine. With this change, preconfig verif
+  1280px  node-blocked           ok   D102                           
+  1280px  missing-secret         ok   D404                           
+  1280px  code-failure           ok   D408                           
+  1280px  docker-typo-package    ok   D101    diff with an added line, 7 files Proven on a clean machine. With this change, Cursor's Docker
+   390px  alpha-no-redis         ok   D401    diff with an added line, 7 files Proven on a clean machine. With this change, preconfig verif
+   390px  typo-package           ok   D101    diff with an added line, 7 files Proven on a clean machine. With this change, preconfig verif
+   390px  psycopg2-1             ok   D302    diff with an added line, 7 files Proven on a clean machine, in 3 rounds. Each run on October 
+   390px  locale                 ok   D405    diff with an added line, 7 files Proven on a clean machine. With this change, preconfig verif
+   390px  no-database-url        ok   D404    diff with an added line, 7 files Proven on a clean machine. With this change, preconfig verif
+   390px  node-blocked           ok   D102                           
+   390px  missing-secret         ok   D404                           
+   390px  code-failure           ok   D408                           
+   390px  docker-typo-package    ok   D101    diff with an added line, 7 files Proven on a clean machine. With this change, Cursor's Docker
+
+all checks passed

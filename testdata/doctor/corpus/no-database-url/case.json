@@ -1,0 +1,26 @@
+{
+  "id": "no-database-url",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "DATABASE_URL left out of the spec's env; the code reads it.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "The tests read DATABASE_URL, and the spec doesn't set it",
+    "change": {
+      "op": "add-env",
+      "key": "DATABASE_URL",
+      "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "  DATABASE_URL: postgres://orders:orders@localhost:5432/orders\n",
+      ""
+    ]
+  ],
+  "recorded": "2026-09-30T18:42:44Z"
+}

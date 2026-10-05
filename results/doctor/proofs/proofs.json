@@ -1,0 +1,383 @@
+[
+ {
+  "id": "docker-typo-package",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "machine 1/5: system packages",
+    "category": "spec",
+    "rule": "D101",
+    "changes": [
+     {
+      "op": "replace-package",
+      "value": "libpq-dev",
+      "old": "libpq-devv"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 54.3,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "locale",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D405",
+    "changes": [
+     {
+      "op": "add-package",
+      "value": "locales-all"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 56.8,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "needs-python-3.13",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+    "category": "spec",
+    "rule": "D307",
+    "changes": [
+     {
+      "op": "set-runtime",
+      "key": "python",
+      "value": "3.13"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 77.0,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "no-database-url",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D404",
+    "changes": [
+     {
+      "op": "add-env",
+      "key": "DATABASE_URL",
+      "value": "postgres://orders:orders@localhost:5432/orders"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 72.3,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "no-postgres",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D401",
+    "changes": [
+     {
+      "op": "add-service",
+      "key": "postgres",
+      "value": "16",
+      "user": "orders",
+      "password": "orders",
+      "database": "orders"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 65.6,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "no-python",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "project 1/2: python3 -m venv .venv",
+    "category": "spec",
+    "rule": "D306",
+    "changes": [
+     {
+      "op": "set-runtime",
+      "key": "python",
+      "value": "3.12"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 69.9,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "no-redis",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D401",
+    "changes": [
+     {
+      "op": "add-service",
+      "key": "redis",
+      "value": "7"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 65.1,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "psycopg2-1",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+    "category": "spec",
+    "rule": "D302",
+    "changes": [
+     {
+      "op": "add-package",
+      "value": "build-essential"
+     }
+    ],
+    "fixed": true,
+    "exit": 2,
+    "seconds": 85.4,
+    "next": "project 2/2: .venv/bin/pip install -r requirements.txt: D303",
+    "failure_gone": true
+   },
+   {
+    "round": 2,
+    "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+    "category": "spec",
+    "rule": "D303",
+    "changes": [
+     {
+      "op": "add-package",
+      "value": "python3-dev"
+     }
+    ],
+    "fixed": true,
+    "exit": 2,
+    "seconds": 75.2,
+    "next": "project 2/2: .venv/bin/pip install -r requirements.txt: D303",
+    "failure_gone": true
+   },
+   {
+    "round": 3,
+    "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+    "category": "spec",
+    "rule": "D303",
+    "changes": [
+     {
+      "op": "add-package",
+      "value": "libpq-dev"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 86.5,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "psycopg2-2",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+    "category": "spec",
+    "rule": "D303",
+    "changes": [
+     {
+      "op": "add-package",
+      "value": "python3-dev"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 105.9,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "python-magic",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D305",
+    "changes": [
+     {
+      "op": "add-package",
+      "value": "libmagic1t64"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 62.6,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "sqlite3-cli",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D306",
+    "changes": [
+     {
+      "op": "add-package",
+      "value": "sqlite3"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 66.0,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "typo-package",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "machine 1/5: system packages",
+    "category": "spec",
+    "rule": "D101",
+    "changes": [
+     {
+      "op": "replace-package",
+      "value": "libpq-dev",
+      "old": "libpq-devv"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 73.2,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "uv-missing",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "project 2/2: uv pip install --python .venv/bin/python -r requirements.txt",
+    "category": "spec",
+    "rule": "D306",
+    "changes": [
+     {
+      "op": "add-tool",
+      "value": "uv"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 78.7,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ },
+ {
+  "id": "wrong-db-password",
+  "rounds": [
+   {
+    "round": 1,
+    "step": "ready 1/1: .venv/bin/pytest -q",
+    "category": "spec",
+    "rule": "D402",
+    "changes": [
+     {
+      "op": "set-env",
+      "key": "DATABASE_URL",
+      "value": "postgres://orders:orders@localhost:5432/orders"
+     }
+    ],
+    "fixed": true,
+    "exit": 0,
+    "seconds": 63.7,
+    "next": "passed",
+    "failure_gone": true
+   }
+  ],
+  "ready": true,
+  "first_fix_proven": true
+ }
+]

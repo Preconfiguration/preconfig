@@ -1,0 +1,9 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -3,5 +3,5 @@
+ 
+ runtimes:
+-  python: "3.12"
++  python: "3.10"
+ 
+ services:

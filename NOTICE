@@ -1,0 +1,17 @@
+Preconfiguration
+Copyright Preconfiguration.com 2026
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+Third-party material
+--------------------
+
+The binaries in bin/ include the Go standard library and runtime (BSD-style
+license, Copyright 2009 The Go Authors); bin/THIRD-PARTY-LICENSES.txt has its
+text. The browser engines in demo/app/ and demo/doctor/ also include TinyGo's
+runtime and loader and parts of wasi-libc; demo/app/THIRD-PARTY-LICENSES.txt
+and demo/doctor/THIRD-PARTY-LICENSES.txt have their texts. The platform
+schemas that tools/validate.py uses are not included; tools/schemas/fetch.sh
+downloads them from their publishers.
+
+Contact: info@preconfiguration.com

@@ -1,0 +1,14 @@
+[project]
+name = "orders-api"
+version = "0.1.0"
+description = "Orders service: PostgreSQL for orders, Redis for cached counts."
+requires-python = ">=3.12"
+dependencies = [
+    "psycopg[binary]==3.3.6",
+    "redis==8.1.0",
+    "pytest==9.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

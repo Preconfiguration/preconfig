@@ -1,0 +1,2 @@
+preconfig.yaml:20:5: error S030: unknown tool "pnmp"
+    Did you mean "pnpm"?

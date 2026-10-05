@@ -1,0 +1,12 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -7,4 +7,9 @@
+ services:
+   redis: "7"
++  postgres:
++    version: "16"
++    user: orders
++    password: orders
++    database: orders
+ 
+ env:

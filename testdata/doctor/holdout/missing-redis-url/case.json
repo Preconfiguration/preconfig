@@ -1,0 +1,26 @@
+{
+  "id": "missing-redis-url",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "REDIS_URL left out of the spec's env; the code reads it.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "The tests read REDIS_URL, and the spec doesn't set it",
+    "change": {
+      "op": "add-env",
+      "key": "REDIS_URL",
+      "value": "redis://localhost:6379/0"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "  REDIS_URL: redis://localhost:6379/0\n",
+      ""
+    ]
+  ],
+  "recorded": "2026-09-30T19:20:26Z"
+}

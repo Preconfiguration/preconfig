@@ -1,0 +1,9 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -18,5 +18,5 @@
+ 
+ packages:
+-  - libpq-devv
++  - libpq-dev
+ 
+ secrets:

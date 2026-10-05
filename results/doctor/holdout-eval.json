@@ -1,0 +1,938 @@
+[
+ {
+  "set": "holdout",
+  "id": "db-port-mismatch",
+  "form": "log",
+  "lines": 1285,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "DATABASE_URL points at the wrong port",
+   "change": {
+    "op": "set-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 22.7,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 970,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D401",
+   "category": "spec",
+   "cause": "DATABASE_URL points at port 5433, and the spec's PostgreSQL listens on 5432.",
+   "evidence": [
+    {
+     "n": 753,
+     "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5433 failed: Connection refused"
+    },
+    {
+     "n": 970,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-env",
+     "key": "DATABASE_URL",
+     "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "db-port-mismatch",
+  "form": "terminal",
+  "lines": 33,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "DATABASE_URL points at the wrong port",
+   "change": {
+    "op": "set-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 6.4,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 33,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D401",
+   "category": "spec",
+   "cause": "DATABASE_URL points at port 5433, and the spec's PostgreSQL listens on 5432.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5433 failed: Connection refused"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-env",
+     "key": "DATABASE_URL",
+     "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "github-requirement",
+  "form": "log",
+  "lines": 1037,
+  "expect": {
+   "outcome": "passed"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 5.8,
+  "exit": 0,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 722,
+   "outcome": "passed"
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "github-requirement",
+  "form": "terminal",
+  "lines": 24,
+  "expect": {
+   "outcome": "passed"
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 5.2,
+  "exit": 0,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 24,
+   "outcome": "passed"
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "lxml-source",
+  "form": "log",
+  "lines": 1339,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "lxml's build needs the development packages of libxml2 and libxslt: libxml2-dev and libxslt1-dev",
+   "change": [
+    {
+     "op": "add-package",
+     "value": "libxml2-dev"
+    },
+    {
+     "op": "add-package",
+     "value": "libxslt1-dev"
+    }
+   ]
+  },
+  "verdict": "unknown",
+  "why": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+  "ms": 8.2,
+  "exit": 2,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 961,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "category": "unknown",
+   "cause": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+   "evidence": [
+    {
+     "n": 942,
+     "text": "  Getting requirements to build wheel: finished with status 'error'"
+    },
+    {
+     "n": 943,
+     "text": "  error: subprocess-exited-with-error"
+    },
+    {
+     "n": 950,
+     "text": "      Error: Please make sure the libxml2 and libxslt development packages are installed."
+    },
+    {
+     "n": 954,
+     "text": "error: subprocess-exited-with-error"
+    },
+    {
+     "n": 961,
+     "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+    }
+   ],
+   "advice": "These are the lines that look like errors. Doctor doesn't guess: nothing in preconfig.yaml is changed."
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "lxml-source",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "lxml's build needs the development packages of libxml2 and libxslt: libxml2-dev and libxslt1-dev",
+   "change": [
+    {
+     "op": "add-package",
+     "value": "libxml2-dev"
+    },
+    {
+     "op": "add-package",
+     "value": "libxslt1-dev"
+    }
+   ]
+  },
+  "verdict": "unknown",
+  "why": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+  "ms": 6.2,
+  "exit": 2,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "category": "unknown",
+   "cause": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+   "evidence": [
+    {
+     "n": 22,
+     "text": "verify   80.3s  NOT READY  a setup step failed (exit 2)"
+    }
+   ],
+   "advice": "These are the lines that look like errors. Doctor doesn't guess: nothing in preconfig.yaml is changed."
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "make-missing",
+  "form": "log",
+  "lines": 1002,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The ready check runs make, which isn't installed",
+   "change": {
+    "op": "add-package",
+    "value": "make"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 6.0,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 687,
+   "outcome": "failed",
+   "step": "ready 1/1: make test",
+   "phase": "ready",
+   "exitCode": 127,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs make, and make isn't installed.",
+   "evidence": [
+    {
+     "n": 686,
+     "text": "/preconfig/setup.sh: line 105: make: command not found"
+    },
+    {
+     "n": 687,
+     "text": ">>> preconfig: FAILED: ready 1/1: make test (exit code 127)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "make"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "make-missing",
+  "form": "terminal",
+  "lines": 26,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The ready check runs make, which isn't installed",
+   "change": {
+    "op": "add-package",
+    "value": "make"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 5.2,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 26,
+   "outcome": "failed",
+   "step": "ready 1/1: make test",
+   "phase": "ready",
+   "exitCode": 127,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs make, and make isn't installed.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "/preconfig/setup.sh: line 105: make: command not found"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "make"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "missing-redis-url",
+  "form": "log",
+  "lines": 1093,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The tests read REDIS_URL, and the spec doesn't set it",
+   "change": {
+    "op": "add-env",
+    "key": "REDIS_URL",
+    "value": "redis://localhost:6379/0"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 11.4,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 778,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D404",
+   "category": "spec",
+   "cause": "The code reads REDIS_URL, and the spec doesn't set it; the spec's service says what it should be.",
+   "evidence": [
+    {
+     "n": 706,
+     "text": "E   KeyError: 'REDIS_URL'"
+    },
+    {
+     "n": 727,
+     "text": "E   KeyError: 'REDIS_URL'"
+    },
+    {
+     "n": 778,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-env",
+     "key": "REDIS_URL",
+     "value": "redis://localhost:6379/0"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "missing-redis-url",
+  "form": "terminal",
+  "lines": 32,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The tests read REDIS_URL, and the spec doesn't set it",
+   "change": {
+    "op": "add-env",
+    "key": "REDIS_URL",
+    "value": "redis://localhost:6379/0"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 6.4,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 32,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D404",
+   "category": "spec",
+   "cause": "The code reads REDIS_URL, and the spec doesn't set it; the spec's service says what it should be.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E   KeyError: 'REDIS_URL'"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-env",
+     "key": "REDIS_URL",
+     "value": "redis://localhost:6379/0"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "needs-python-below-3.12",
+  "form": "log",
+  "lines": 991,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "oldlib needs Python below 3.12; the spec installs 3.12",
+   "change": {
+    "op": "set-runtime",
+    "name": "python",
+    "value": "3.10"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 6.5,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 676,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D307",
+   "category": "spec",
+   "cause": "A package needs Python <3.12,>=3.9, and the machine has 3.12.3.",
+   "evidence": [
+    {
+     "n": 675,
+     "text": "ERROR: Package 'oldlib' requires a different Python: 3.12.3 not in '<3.12,>=3.9'"
+    },
+    {
+     "n": 676,
+     "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-runtime",
+     "key": "python",
+     "value": "3.10"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "needs-python-below-3.12",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "oldlib needs Python below 3.12; the spec installs 3.12",
+   "change": {
+    "op": "set-runtime",
+    "name": "python",
+    "value": "3.10"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 5.0,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D307",
+   "category": "spec",
+   "cause": "A package needs Python <3.12,>=3.9, and the machine has 3.12.3.",
+   "evidence": [
+    {
+     "n": 29,
+     "text": "ERROR: Package 'oldlib' requires a different Python: 3.12.3 not in '<3.12,>=3.9'"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-runtime",
+     "key": "python",
+     "value": "3.10"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "pillow-source",
+  "form": "log",
+  "lines": 1666,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "Pillow's build needs libjpeg's headers, from libjpeg-dev",
+   "change": {
+    "op": "add-package",
+    "value": [
+     "libjpeg-dev",
+     "libjpeg8-dev",
+     "libjpeg-turbo8-dev"
+    ]
+   }
+  },
+  "verdict": "unknown",
+  "why": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+  "ms": 35.1,
+  "exit": 2,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 1267,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "category": "unknown",
+   "cause": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+   "evidence": [
+    {
+     "n": 1036,
+     "text": "  Building wheel for pillow (pyproject.toml): finished with status 'error'"
+    },
+    {
+     "n": 1037,
+     "text": "  error: subprocess-exited-with-error"
+    },
+    {
+     "n": 1264,
+     "text": "  ERROR: Failed building wheel for pillow"
+    },
+    {
+     "n": 1265,
+     "text": "Failed to build pillow"
+    },
+    {
+     "n": 1266,
+     "text": "ERROR: Could not build wheels for pillow, which is required to install pyproject.toml-based projects"
+    },
+    {
+     "n": 1267,
+     "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+    }
+   ],
+   "advice": "These are the lines that look like errors. Doctor doesn't guess: nothing in preconfig.yaml is changed."
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "pillow-source",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "spec",
+   "cause": "Pillow's build needs libjpeg's headers, from libjpeg-dev",
+   "change": {
+    "op": "add-package",
+    "value": [
+     "libjpeg-dev",
+     "libjpeg8-dev",
+     "libjpeg-turbo8-dev"
+    ]
+   }
+  },
+  "verdict": "unknown",
+  "why": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+  "ms": 6.4,
+  "exit": 2,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "category": "unknown",
+   "cause": "The step \"project 2/2: .venv/bin/pip install -r requirements.txt\" failed with exit code 1, and no rule of Doctor's explains it.",
+   "evidence": [
+    {
+     "n": 22,
+     "text": "verify  131.8s  NOT READY  a setup step failed (exit 2)"
+    },
+    {
+     "n": 27,
+     "text": "  ERROR: Failed building wheel for pillow"
+    },
+    {
+     "n": 28,
+     "text": "Failed to build pillow"
+    },
+    {
+     "n": 29,
+     "text": "ERROR: Could not build wheels for pillow, which is required to install pyproject.toml-based projects"
+    }
+   ],
+   "advice": "These are the lines that look like errors. Doctor doesn't guess: nothing in preconfig.yaml is changed."
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "private-index",
+  "form": "log",
+  "lines": 972,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "network",
+   "cause": "The machine can't reach the package index pypi.internal.example",
+   "change": null,
+   "host": "pypi.internal.example"
+  },
+  "verdict": "wrong",
+  "why": "host pypi.internal.example not named",
+  "ms": 6.9,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 657,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach a download source.",
+   "evidence": [
+    {
+     "n": 650,
+     "text": "WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fc28f50>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/"
+    },
+    {
+     "n": 651,
+     "text": "WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fb822d0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/"
+    },
+    {
+     "n": 654,
+     "text": "WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fb828a0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/"
+    },
+    {
+     "n": 657,
+     "text": ">>> preconfig: FAILED: project 2/2: .venv/bin/pip install -r requirements.txt (exit code 1)"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks a source this step needs. Allow it from the machine, or use a mirror."
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "private-index",
+  "form": "terminal",
+  "lines": 29,
+  "expect": {
+   "outcome": "failed",
+   "phase": "project",
+   "category": "network",
+   "cause": "The machine can't reach the package index pypi.internal.example",
+   "change": null,
+   "host": "pypi.internal.example"
+  },
+  "verdict": "wrong",
+  "why": "host pypi.internal.example not named",
+  "ms": 6.6,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 29,
+   "outcome": "failed",
+   "step": "project 2/2: .venv/bin/pip install -r requirements.txt",
+   "phase": "project",
+   "exitCode": 1,
+   "rule": "D102",
+   "category": "network",
+   "cause": "The machine couldn't reach a download source.",
+   "evidence": [
+    {
+     "n": 24,
+     "text": "WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fb822d0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/"
+    },
+    {
+     "n": 25,
+     "text": "WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fb82480>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/"
+    },
+    {
+     "n": 27,
+     "text": "WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x7f6b2fb828a0>: Failed to establish a new connection: [Errno -2] Name or service not known')': /simple/psycopg/"
+    }
+   ],
+   "advice": "Nothing in preconfig.yaml is wrong: the network blocks a source this step needs. Allow it from the machine, or use a mirror."
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "spec-error",
+  "form": "stderr",
+  "lines": 2,
+  "expect": {
+   "outcome": "failed",
+   "phase": "",
+   "category": "spec",
+   "cause": "preconfig.yaml has errors",
+   "change": null
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 4.7,
+  "exit": 1,
+  "diagnosis": {
+   "log": "text",
+   "lines": 2,
+   "outcome": "failed",
+   "rule": "D002",
+   "category": "spec",
+   "cause": "preconfig.yaml has errors, so nothing ran.",
+   "evidence": [
+    {
+     "n": 1,
+     "text": "preconfig.yaml:20:5: error S030: unknown tool \"pnmp\""
+    }
+   ],
+   "advice": "Fix the errors listed; preconfig check shows each one with its line and a hint."
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "unzip-cli",
+  "form": "log",
+  "lines": 1196,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The tests run unzip, which isn't installed",
+   "change": {
+    "op": "add-package",
+    "value": "unzip"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 16.2,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 881,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs unzip, and unzip isn't installed.",
+   "evidence": [
+    {
+     "n": 875,
+     "text": "E                   FileNotFoundError: [Errno 2] No such file or directory: 'unzip'"
+    },
+    {
+     "n": 881,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "unzip"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "unzip-cli",
+  "form": "terminal",
+  "lines": 31,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "The tests run unzip, which isn't installed",
+   "change": {
+    "op": "add-package",
+    "value": "unzip"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.3,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 31,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D306",
+   "category": "spec",
+   "cause": "The step runs unzip, and unzip isn't installed.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E                   FileNotFoundError: [Errno 2] No such file or directory: 'unzip'"
+    }
+   ],
+   "changes": [
+    {
+     "op": "add-package",
+     "value": "unzip"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "wrong-db-name",
+  "form": "log",
+  "lines": 1281,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "DATABASE_URL names the database shop; the service creates orders",
+   "change": {
+    "op": "set-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 39.0,
+  "exit": 1,
+  "diagnosis": {
+   "log": "setup",
+   "lines": 966,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D403",
+   "category": "spec",
+   "cause": "DATABASE_URL names the database shop, and the spec's postgres service creates orders.",
+   "evidence": [
+    {
+     "n": 753,
+     "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5432 failed: FATAL:  database \"shop\" does not exist"
+    },
+    {
+     "n": 966,
+     "text": ">>> preconfig: FAILED: ready 1/1: .venv/bin/pytest -q (exit code 1)"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-env",
+     "key": "DATABASE_URL",
+     "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+   ]
+  }
+ },
+ {
+  "set": "holdout",
+  "id": "wrong-db-name",
+  "form": "terminal",
+  "lines": 32,
+  "expect": {
+   "outcome": "failed",
+   "phase": "ready",
+   "category": "spec",
+   "cause": "DATABASE_URL names the database shop; the service creates orders",
+   "change": {
+    "op": "set-env",
+    "key": "DATABASE_URL",
+    "value": "postgres://orders:orders@localhost:5432/orders"
+   }
+  },
+  "verdict": "right",
+  "why": "",
+  "ms": 9.0,
+  "exit": 1,
+  "diagnosis": {
+   "log": "verify",
+   "lines": 32,
+   "outcome": "failed",
+   "step": "ready 1/1: .venv/bin/pytest -q",
+   "phase": "ready",
+   "exitCode": 1,
+   "rule": "D403",
+   "category": "spec",
+   "cause": "DATABASE_URL names the database shop, and the spec's postgres service creates orders.",
+   "evidence": [
+    {
+     "n": 26,
+     "text": "E               psycopg.OperationalError: connection failed: connection to server at \"127.0.0.1\", port 5432 failed: FATAL:  database \"shop\" does not exist"
+    }
+   ],
+   "changes": [
+    {
+     "op": "set-env",
+     "key": "DATABASE_URL",
+     "value": "postgres://orders:orders@localhost:5432/orders"
+    }
+   ]
+  }
+ }
+]

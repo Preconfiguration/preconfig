@@ -1,0 +1,14 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 8, on a clean ubuntu:24.04
+verify    5.1s  step   machine 1/5: system packages
+verify   26.8s  ok     machine 1/5: system packages  (21.7 s)
+verify   26.8s  step   machine 2/5: python 3.12
+verify   36.2s  ok     machine 2/5: python 3.12  (9.4 s)
+verify   36.2s  step   machine 3/5: postgres 16
+verify   49.1s  ok     machine 3/5: postgres 16  (12.9 s)
+verify   49.1s  step   machine 4/5: redis 8
+verify   49.1s  FAIL   machine 4/5: redis 8  (exit code 2)
+verify   49.1s  FAIL   machine 4/5: redis 8  (exit code 2)
+verify   53.0s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               | curl: (22) The requested URL returned error: 403
+               | gpg: no valid OpenPGP data found.

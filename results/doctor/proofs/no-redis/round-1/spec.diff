@@ -1,0 +1,8 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -11,4 +11,5 @@
+     password: orders
+     database: orders
++  redis: "7"
+ 
+ env:

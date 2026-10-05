@@ -1,0 +1,29 @@
+{
+  "id": "no-postgres",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "PostgreSQL left out of the spec's services; DATABASE_URL still points at it.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "ready",
+    "category": "spec",
+    "cause": "PostgreSQL isn't running: the tests can't connect to localhost:5432",
+    "change": {
+      "op": "add-service",
+      "name": "postgres",
+      "version": "16",
+      "user": "orders",
+      "password": "orders",
+      "database": "orders"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "  postgres:\n    version: \"16\"\n    user: orders\n    password: orders\n    database: orders\n",
+      ""
+    ]
+  ],
+  "recorded": "2026-09-30T18:41:42Z"
+}

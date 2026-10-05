@@ -1,0 +1,128 @@
+=== RUN   TestCorpus
+--- PASS: TestCorpus (0.34s)
+=== RUN   TestKinds
+--- PASS: TestKinds (0.00s)
+=== RUN   TestSteps
+--- PASS: TestSteps (0.00s)
+=== RUN   TestCutOffLogIsUnclear
+--- PASS: TestCutOffLogIsUnclear (0.00s)
+=== RUN   TestPassingLogGetsNoDiagnosis
+--- PASS: TestPassingLogGetsNoDiagnosis (0.00s)
+=== RUN   TestRules
+=== RUN   TestRules/apt_unknown_package
+=== RUN   TestRules/network_nodesource
+=== RUN   TestRules/go_toolchain_blocked
+=== RUN   TestRules/network_by_name
+=== RUN   TestRules/tls
+=== RUN   TestRules/compiler
+=== RUN   TestRules/header
+=== RUN   TestRules/unknown_header
+=== RUN   TestRules/pg_config
+=== RUN   TestRules/python_version
+=== RUN   TestRules/python_version_below
+=== RUN   TestRules/no_such_version
+=== RUN   TestRules/requirements_file
+=== RUN   TestRules/hashes
+=== RUN   TestRules/uv_lock
+=== RUN   TestRules/pnpm_lock
+=== RUN   TestRules/node_engine
+=== RUN   TestRules/go_version
+=== RUN   TestRules/uv_missing
+=== RUN   TestRules/python_missing
+=== RUN   TestRules/cli_missing
+=== RUN   TestRules/shared_library
+=== RUN   TestRules/shared_object
+=== RUN   TestRules/locale
+=== RUN   TestRules/redis_refused
+=== RUN   TestRules/refused,_with_asserts_around_it
+=== RUN   TestRules/python_headers
+=== RUN   TestRules/postgres_refused
+=== RUN   TestRules/postgres_refused,_running
+=== RUN   TestRules/wrong_port
+=== RUN   TestRules/node_refused
+=== RUN   TestRules/pg_auth
+=== RUN   TestRules/pg_database
+=== RUN   TestRules/env_from_service
+=== RUN   TestRules/secret_unset
+=== RUN   TestRules/unknown_variable
+=== RUN   TestRules/registry_auth
+=== RUN   TestRules/port_taken
+=== RUN   TestRules/apt_busy
+=== RUN   TestRules/disk_full
+=== RUN   TestRules/tests_failed
+=== RUN   TestRules/image_missing
+--- PASS: TestRules (0.02s)
+=== RUN   TestUnknownIsNeverAFix
+--- PASS: TestUnknownIsNeverAFix (0.00s)
+=== RUN   TestDockerAndActionsAndVerifyOutput
+--- PASS: TestDockerAndActionsAndVerifyOutput (0.00s)
+=== RUN   TestEventsNameTheStep
+--- PASS: TestEventsNameTheStep (0.00s)
+=== RUN   TestMask
+--- PASS: TestMask (0.00s)
+=== RUN   TestPickVersion
+--- PASS: TestPickVersion (0.00s)
+=== RUN   TestApply
+=== RUN   TestApply/add_a_package_to_a_new_block
+=== RUN   TestApply/add_a_package_to_a_block_list
+=== RUN   TestApply/add_a_package_to_a_flow_list
+=== RUN   TestApply/replace_a_package
+=== RUN   TestApply/add_a_tool
+=== RUN   TestApply/add_a_service
+=== RUN   TestApply/add_postgres_with_its_user
+=== RUN   TestApply/set_a_runtime
+=== RUN   TestApply/add_a_runtime_block
+=== RUN   TestApply/add_a_variable
+=== RUN   TestApply/set_a_variable
+=== RUN   TestApply/set_a_quoted_variable
+=== RUN   TestApply/add_a_secret
+--- PASS: TestApply (0.00s)
+=== RUN   TestApplyRefuses
+=== RUN   TestApplyRefuses/replace_a_package_that_isn't_there
+=== RUN   TestApplyRefuses/an_unknown_operation
+=== RUN   TestApplyRefuses/a_version_the_spec_doesn't_accept
+=== RUN   TestApplyRefuses/a_service_that_is_there
+=== RUN   TestApplyRefuses/a_broken_spec
+--- PASS: TestApplyRefuses (0.00s)
+=== RUN   TestApplyKeepsEverythingElse
+--- PASS: TestApplyKeepsEverythingElse (0.00s)
+=== RUN   FuzzDiagnose
+=== RUN   FuzzDiagnose/seed#0
+=== RUN   FuzzDiagnose/seed#1
+=== RUN   FuzzDiagnose/seed#2
+=== RUN   FuzzDiagnose/seed#3
+=== RUN   FuzzDiagnose/seed#4
+=== RUN   FuzzDiagnose/seed#5
+=== RUN   FuzzDiagnose/seed#6
+--- PASS: FuzzDiagnose (0.00s)
+=== RUN   FuzzApply
+=== RUN   FuzzApply/seed#0
+=== RUN   FuzzApply/seed#1
+=== RUN   FuzzApply/seed#2
+=== RUN   FuzzApply/seed#3
+=== RUN   FuzzApply/seed#4
+--- PASS: FuzzApply (0.00s)
+=== RUN   TestDoctorCommand
+--- PASS: TestDoctorCommand (0.14s)
+=== RUN   TestUsage
+--- PASS: TestUsage (0.00s)
+=== RUN   TestBuild
+--- PASS: TestBuild (0.01s)
+=== RUN   TestBuildDryRunAndJSON
+--- PASS: TestBuildDryRunAndJSON (0.00s)
+=== RUN   TestBuildWithABrokenSpec
+--- PASS: TestBuildWithABrokenSpec (0.00s)
+=== RUN   TestCheck
+--- PASS: TestCheck (0.01s)
+=== RUN   TestCheckExitCodes
+--- PASS: TestCheckExitCodes (0.00s)
+=== RUN   TestDetect
+--- PASS: TestDetect (0.00s)
+=== RUN   TestVerify
+--- PASS: TestVerify (0.05s)
+=== RUN   TestVerifyNotReady
+--- PASS: TestVerifyNotReady (0.02s)
+=== RUN   TestVerifyExitCodes
+--- PASS: TestVerifyExitCodes (0.02s)
+=== RUN   TestVerifyPassesSecrets
+--- PASS: TestVerifyPassesSecrets (0.02s)

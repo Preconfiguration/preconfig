@@ -1,0 +1,2 @@
+preconfig.yaml:16:14: warning S062: REDIS_URL points at Redis on this machine, but services doesn't list redis
+    Add redis under services, or point REDIS_URL somewhere else.

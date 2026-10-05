@@ -1,0 +1,2 @@
+preconfig.yaml:23:3: warning S082: setup runs uv, but tools doesn't list it
+    Add uv under tools so every target installs it.

@@ -1,0 +1,11 @@
+verify    0.0s  start  orders-api: python 3.12, postgres 16, redis 7, on a clean ubuntu:24.04
+verify    4.6s  step   machine 1/5: system packages
+verify   12.8s  FAIL   machine 1/5: system packages  (exit code 100)
+verify   13.2s  NOT READY  a setup step failed (exit 2)
+               the last lines it printed:
+               | Get:34 http://archive.ubuntu.com/ubuntu noble-backports/multiverse Translation-en [340 B]
+               | Fetched 34.7 MB in 7s (5230 kB/s)
+               | Reading package lists...
+               | Reading package lists...
+               | Building dependency tree...
+               | E: Unable to locate package libpq-devv

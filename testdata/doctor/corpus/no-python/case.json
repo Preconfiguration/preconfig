@@ -1,0 +1,26 @@
+{
+  "id": "no-python",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "The python runtime left out of the spec.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "spec",
+    "cause": "The setup runs python3, and no Python is installed",
+    "change": {
+      "op": "set-runtime",
+      "name": "python",
+      "value": "3.12"
+    }
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "runtimes:\n  python: \"3.12\"\n\n",
+      ""
+    ]
+  ],
+  "recorded": "2026-09-30T18:51:47Z"
+}

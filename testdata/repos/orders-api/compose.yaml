@@ -1,0 +1,14 @@
+# Local services for development.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: orders
+      POSTGRES_PASSWORD: orders
+      POSTGRES_DB: orders
+    ports:
+      - "5432:5432"
+  cache:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"

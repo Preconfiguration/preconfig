@@ -1,0 +1,30 @@
+{
+  "id": "psycopg2-2",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "psycopg2 from source, with libpq-dev and a compiler but no Python headers.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "project",
+    "category": "spec",
+    "cause": "The build needs Python.h, from python3-dev",
+    "change": {
+      "op": "add-package",
+      "value": "python3-dev"
+    }
+  },
+  "edits": [
+    [
+      "append",
+      "requirements.txt",
+      "psycopg2==2.9.10\n"
+    ],
+    [
+      "replace",
+      "preconfig.yaml",
+      "secrets:\n",
+      "packages:\n  - libpq-dev\n  - build-essential\n\nsecrets:\n"
+    ]
+  ],
+  "recorded": "2026-09-30T18:45:09Z"
+}

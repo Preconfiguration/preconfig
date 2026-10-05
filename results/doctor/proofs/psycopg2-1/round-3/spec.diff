@@ -1,0 +1,8 @@
+--- a/preconfig.yaml
++++ b/preconfig.yaml
+@@ -8,4 +8,5 @@
+   - build-essential
+   - python3-dev
++  - libpq-dev
+ 
+ services:

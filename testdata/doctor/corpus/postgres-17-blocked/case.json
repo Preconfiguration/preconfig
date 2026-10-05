@@ -1,0 +1,23 @@
+{
+  "id": "postgres-17-blocked",
+  "repo": "orders-api",
+  "kind": "verify",
+  "made": "PostgreSQL 17, from the PostgreSQL project's archive, which this machine can't reach.",
+  "expect": {
+    "outcome": "failed",
+    "phase": "machine",
+    "category": "network",
+    "cause": "The machine can't reach the PostgreSQL project's archive",
+    "change": null,
+    "host": "postgresql.org"
+  },
+  "edits": [
+    [
+      "replace",
+      "preconfig.yaml",
+      "    version: \"16\"\n",
+      "    version: \"17\"\n"
+    ]
+  ],
+  "recorded": "2026-09-30T19:04:57Z"
+}

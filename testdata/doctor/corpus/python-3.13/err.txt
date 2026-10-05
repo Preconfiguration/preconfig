@@ -1,0 +1,1 @@
+preconfig.yaml:5:11: note S024: Ubuntu 24.04 ships Python 3.12; the shell targets install 3.13 with uv

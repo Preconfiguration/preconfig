@@ -1,0 +1,150 @@
+[
+  {
+    "n": 1,
+    "bug": "reader: every failed step reports exit code 1",
+    "file": "internal/doctor/read.go",
+    "result": "SURVIVED",
+    "failed_tests": []
+  },
+  {
+    "n": 2,
+    "bug": "reader: docker's #N prefixes are kept, so the script's markers are missed",
+    "file": "internal/doctor/read.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestDockerAndActionsAndVerifyOutput"
+    ]
+  },
+  {
+    "n": 3,
+    "bug": "reader: the Actions step with an error isn't marked failed",
+    "file": "internal/doctor/read.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestDockerAndActionsAndVerifyOutput"
+    ]
+  },
+  {
+    "n": 4,
+    "bug": "reader: a log cut off in the middle of a step counts as passing",
+    "file": "internal/doctor/read.go",
+    "result": "caught by the compiler",
+    "failed_tests": []
+  },
+  {
+    "n": 5,
+    "bug": "rules: a test failing on its own assertion gets no rule",
+    "file": "internal/doctor/rules.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestRules",
+      "TestRules/tests_failed"
+    ]
+  },
+  {
+    "n": 6,
+    "bug": "rules: failing tests are blamed on the code before the service rules run",
+    "file": "internal/doctor/rules.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestRules",
+      "TestRules/refused,_with_asserts_around_it"
+    ]
+  },
+  {
+    "n": 7,
+    "bug": "rules: the compiler is blamed only when build-essential is in the spec",
+    "file": "internal/doctor/rules.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestRules",
+      "TestRules/compiler"
+    ]
+  },
+  {
+    "n": 8,
+    "bug": "knowledge: Python.h comes from the wrong package",
+    "file": "internal/doctor/knowledge.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCorpus",
+      "TestRules",
+      "TestRules/python_headers"
+    ]
+  },
+  {
+    "n": 9,
+    "bug": "rules: Redis is added at a version Ubuntu doesn't ship",
+    "file": "internal/doctor/rules.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCorpus",
+      "TestDoctorCommand",
+      "TestRules",
+      "TestRules/node_refused",
+      "TestRules/redis_refused",
+      "TestRules/refused,_with_asserts_around_it"
+    ]
+  },
+  {
+    "n": 10,
+    "bug": "rules: a secret that isn't set is read as a missing variable",
+    "file": "internal/doctor/rules.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCorpus",
+      "TestRules",
+      "TestRules/secret_unset"
+    ]
+  },
+  {
+    "n": 11,
+    "bug": "mask: a short password in a URL is shown",
+    "file": "internal/doctor/mask.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestMask",
+      "TestRules",
+      "TestRules/env_from_service",
+      "TestRules/pg_auth",
+      "TestRules/pg_database",
+      "TestRules/wrong_port"
+    ]
+  },
+  {
+    "n": 12,
+    "bug": "fix: versions go into the spec unquoted, so 3.10 reads as 3.1",
+    "file": "internal/doctor/fix.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestApply",
+      "TestApply/add_a_runtime_block",
+      "TestApply/add_a_service",
+      "TestApply/add_postgres_with_its_user",
+      "TestApply/set_a_runtime",
+      "TestDoctorCommand"
+    ]
+  },
+  {
+    "n": 13,
+    "bug": "versions: >=3.13 leaves out 3.13 itself",
+    "file": "internal/doctor/rules.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestCorpus",
+      "TestPickVersion",
+      "TestRules",
+      "TestRules/node_engine",
+      "TestRules/python_version"
+    ]
+  },
+  {
+    "n": 14,
+    "bug": "command: a passing log exits 1",
+    "file": "cmd/preconfig/doctor.go",
+    "result": "caught",
+    "failed_tests": [
+      "TestDoctorCommand"
+    ]
+  }
+]
