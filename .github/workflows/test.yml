@@ -1,0 +1,28 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: "1.24.7"
+      - run: go vet ./...
+      - run: go test -count=1 ./...
+      - name: Build this machine's binary and smoke-test it
+        run: |
+          go build -trimpath -buildvcs=false -o preconfig-local ./cmd/preconfig
+          sh tools/smoke.sh ./preconfig-local

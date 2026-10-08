@@ -98,8 +98,19 @@ sha256sum -c SHA256SUMS.txt          # Linux, in bin/
 shasum -a 256 -c SHA256SUMS.txt      # macOS, in bin/
 ```
 
-So far the Linux x86-64 binary is the one that has run; the others compile
-but haven't been run.
+The same binaries come with each release on GitHub, packed with the license
+files, at `releases/latest/download/preconfig_{linux,darwin}_{amd64,arm64}.tar.gz`
+and `preconfig_windows_amd64.zip`, with a `SHA256SUMS`. Before a release goes
+out, `tools/smoke.sh` runs each binary on its own system: Linux on x86-64 and
+Arm, macOS on Apple silicon (and Intel where the runner can), and Windows.
+
+## Releases
+
+Releases go out on their own. Raise `Version` in `internal/kb/kb.go` on main;
+when the tests pass on that commit, `.github/workflows/release.yml` builds the
+binaries with `tools/build.sh`, smoke-tests them, tags the commit `vX.Y.Z` and
+publishes the release. Nothing is published unless every build and check
+passes.
 
 ## Test and reproduce the figures
 
