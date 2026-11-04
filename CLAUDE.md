@@ -62,6 +62,10 @@ Steps:
 3. [x] the four targets, checks, tests, README; the hook's command run in
        this Claude Code cloud session (results/platforms/), which found
        the image's python3 is 3.13 (fixed in setup.sh)
-4. [ ] independent review (two rounds), fixes; release 0.2.0; site post,
+4. [x] independent review, two rounds (12 findings, then 1 should-fix and
+       5 minor; env moved from settings.json to CLAUDE_ENV_FILE, quoted
+       $ENVRC, failures on the hook's stdout, duplicate keys as JSON.parse
+       reads them), fixes with tests; release 0.2.0
+5. [ ] after the release: assets checked, site post and pages,
        softdevstudio note, softdev-plan.md
-5. [ ] Phase B the same way, as 0.3.0
+6. [ ] Phase B the same way, as 0.3.0

@@ -206,10 +206,27 @@ func TestClaudeHook(t *testing.T) {
 	if strings.Count(out, "boom-machine") != 1 {
 		t.Errorf("the log kept an earlier run: %q", out)
 	}
+	// sha256sum failing: no stamps compared against nothing, a message.
+	os.WriteFile(filepath.Join(dir, kb.ScriptPath), []byte("echo ran >> "+calls+"\n"), 0o755)
+	bin := filepath.Join(dir, "bin")
+	os.MkdirAll(bin, 0o755)
+	os.WriteFile(filepath.Join(bin, "sha256sum"), []byte("#!/bin/sh\nexit 1\n"), 0o755)
+	os.Setenv("PATH", bin+string(os.PathListSeparator)+os.Getenv("PATH"))
+	out, code = run(true)
+	os.Setenv("PATH", strings.TrimPrefix(os.Getenv("PATH"), bin+string(os.PathListSeparator)))
+	if code != 0 || !strings.Contains(out, "couldn't fingerprint") || strings.Contains(out, "is set up") {
+		t.Errorf("sha256sum failing: %d %q", code, out)
+	}
 	// No setup script: a message, not a crash.
 	os.Remove(filepath.Join(dir, kb.ScriptPath))
 	if out, code := run(true); code != 0 || !strings.Contains(out, "missing") {
 		t.Errorf("no setup script: %d %q", code, out)
+	}
+	// A project folder that doesn't exist says so.
+	cmd := exec.Command("bash", filepath.Join(dir, kb.ClaudeScriptPath))
+	cmd.Env = append(os.Environ(), "CLAUDE_CODE_REMOTE=true", "CLAUDE_PROJECT_DIR="+filepath.Join(dir, "nope"))
+	if b, err := cmd.Output(); err != nil || !strings.Contains(string(b), "can't enter the project folder") {
+		t.Errorf("missing project folder: %v %q", err, b)
 	}
 }
 
@@ -233,6 +250,16 @@ func TestClaudeHookEnv(t *testing.T) {
 	cmd.Env = append(os.Environ(), "CLAUDE_CODE_REMOTE=true", "CLAUDE_PROJECT_DIR="+dir, "XDG_STATE_HOME="+dir+"/state", "CLAUDE_ENV_FILE="+envFile)
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("%v %s", err, out)
+	}
+	// A failing setup still hands over the environment.
+	os.WriteFile(filepath.Join(dir, kb.ScriptPath), []byte("exit 1\n"), 0o755)
+	os.RemoveAll(filepath.Join(dir, "state"))
+	envFile2 := filepath.Join(dir, "env2.sh")
+	cmd = exec.Command("bash", filepath.Join(dir, kb.ClaudeScriptPath))
+	cmd.Env = append(os.Environ(), "CLAUDE_CODE_REMOTE=true", "CLAUDE_PROJECT_DIR="+dir, "XDG_STATE_HOME="+dir+"/state", "CLAUDE_ENV_FILE="+envFile2)
+	cmd.Run()
+	if b, _ := os.ReadFile(envFile2); !strings.Contains(string(b), "JAVA_OPTS") {
+		t.Errorf("env file after a failed step: %q", b)
 	}
 	out, err := exec.Command("bash", "-c", `. "$1"; printf '%s|%s|%s' "$JAVA_OPTS" "$ODD" "$GOTOOLCHAIN"`, "_", envFile).Output()
 	if err != nil || string(out) != "-Xmx1g -Dx=1|it's $HOME `x` \\n|go1.24.0+auto" {

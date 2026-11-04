@@ -44,16 +44,35 @@ func claudeCode(s *spec.Spec) []File {
 	b.line(`if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then`)
 	b.line("  exit 0")
 	b.line("fi")
-	b.line(`cd "${CLAUDE_PROJECT_DIR:-$(dirname "$0")/..}"`)
-	b.line(`state="${XDG_STATE_HOME:-$HOME/.local/state}/preconfig/$(pwd | sha256sum | cut -c1-16)"`)
-	b.line(`log="$state/claude-code.log"`)
-	b.line(`mkdir -p "$state"`)
-	b.line(`: >"$log"`)
+	b.line(`project="${CLAUDE_PROJECT_DIR:-$(dirname "$0")/..}"`)
+	b.line(`if ! cd "$project"; then`)
+	b.line(`  echo "preconfig: can't enter the project folder $project, so the machine wasn't set up"`)
+	b.line(`  exit 0`)
+	b.line(`fi`)
+	if envs := sessionEnv(s); len(envs) > 0 {
+		b.line(`# The project's environment, for Claude's later commands in this session.`)
+		b.line(`if [ -n "${CLAUDE_ENV_FILE:-}" ]; then`)
+		b.line(`  {`)
+		for _, e := range envs {
+			b.line(`    echo %s`, sh("export "+e.Key+"="+sh(e.Value)))
+		}
+		b.line(`  } >>"$CLAUDE_ENV_FILE"`)
+		b.line(`fi`)
+	}
 	b.line(`if [ ! -f %s ]; then`, kb.ScriptPath)
 	b.line(`  echo "preconfig: %s is missing, so the machine wasn't set up; run preconfig build"`, kb.ScriptPath)
 	b.line(`  exit 0`)
 	b.line(`fi`)
 	b.line(`sum=$(sha256sum %s | cut -d' ' -f1)`, kb.ScriptPath)
+	b.line(`dirsum=$(pwd | sha256sum | cut -c1-16)`)
+	b.line(`if [ -z "$sum" ] || [ -z "$dirsum" ]; then`)
+	b.line(`  echo "preconfig: couldn't fingerprint %s (sha256sum failed), so the machine wasn't set up"`, kb.ScriptPath)
+	b.line(`  exit 0`)
+	b.line(`fi`)
+	b.line(`state="${XDG_STATE_HOME:-${HOME:-/tmp}/.local/state}/preconfig/$dirsum"`)
+	b.line(`log="$state/claude-code.log"`)
+	b.line(`mkdir -p "$state"`)
+	b.line(`: >"$log"`)
 	b.line(`step() {`)
 	b.line(`  if ! bash %s "$1" >>"$log" 2>&1; then`, kb.ScriptPath)
 	b.line(`    echo "preconfig: the $1 step of %s failed, so the machine isn't fully set up. The end of $log:"`, kb.ScriptPath)
@@ -67,16 +86,6 @@ func claudeCode(s *spec.Spec) []File {
 	b.line(`    echo "$sum" >"$state/$phase"`)
 	b.line(`  fi`)
 	b.line(`done`)
-	if envs := sessionEnv(s); len(envs) > 0 {
-		b.line(`# The project's environment, for Claude's later commands in this session.`)
-		b.line(`if [ -n "${CLAUDE_ENV_FILE:-}" ]; then`)
-		b.line(`  {`)
-		for _, e := range envs {
-			b.line(`    echo %s`, sh("export "+e.Key+"="+sh(e.Value)))
-		}
-		b.line(`  } >>"$CLAUDE_ENV_FILE"`)
-		b.line(`fi`)
-	}
 	if len(s.Services) > 0 {
 		b.line(`step services`)
 	}

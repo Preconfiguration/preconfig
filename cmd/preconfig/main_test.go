@@ -340,6 +340,9 @@ func TestBuildMergesClaudeSettings(t *testing.T) {
 		t.Errorf("written: %s", got)
 	}
 	os.WriteFile(filepath.Join(dir, kb.ClaudeSettingsPath), []byte(`[1]`), 0o644)
+	if code, out, _ := runCLI("build", "--dir", dir, "--dry-run", "--json"); code == exitOK || !strings.Contains(out, `"error"`) {
+		t.Errorf("merge error in JSON: %d %q", code, out)
+	}
 	if code, _, errOut := runCLI("build", "--dir", dir, "--dry-run"); code == exitOK || !strings.Contains(errOut, "settings.json") {
 		t.Errorf("unmergeable file in a dry run: %d %q", code, errOut)
 	}

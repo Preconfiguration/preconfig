@@ -20,13 +20,13 @@ import (
 // ---- Claude Code ----
 
 func (c *checker) claudeSettings(p, text string) {
-	opts := jsonc.Options{Comments: true, TrailingCommas: true}
+	// Read as Claude Code reads it: a key that appears twice keeps its last
+	// value, and each repeat is reported.
+	opts := jsonc.Options{Comments: true, TrailingCommas: true, LastDuplicate: true,
+		OnDuplicate: func(key string, line, col int) {
+			c.add(p, &tree.Node{Line: line, Col: col}, spec.Warning, "A005", "Keep one; Claude Code uses the last, and the earlier one is lost.", "the key %q appears twice in the same object", key)
+		}}
 	root, err := jsonc.Parse(text, opts)
-	if je, ok := err.(*jsonc.Error); ok && strings.Contains(je.Msg, "appears twice") {
-		c.add(p, &tree.Node{Line: je.Line, Col: je.Col}, spec.Warning, "A005", "Keep one; Claude Code uses the last.", "%s", je.Msg)
-		opts.LastDuplicate = true
-		root, err = jsonc.Parse(text, opts)
-	}
 	if err != nil {
 		je := err.(*jsonc.Error)
 		c.add(p, &tree.Node{Line: je.Line, Col: je.Col}, spec.Error, "A001", "Claude Code skips a settings file it can't read, hooks and all.", "settings.json can't be read: %s", je.Msg)

@@ -149,11 +149,13 @@ func cmdBuild(args []string, stdout, stderr io.Writer) int {
 		if err == nil {
 			t := string(b)
 			olds[i] = &t
+		} else if f.Merge != "" && !errors.Is(err, os.ErrNotExist) {
+			// A file preconfig merges into must be read, not taken as absent.
+			return buildFailed(stdout, stderr, *asJSON, ds, err)
 		}
 		content, merr := f.Expected(string(b), err == nil)
 		if merr != nil {
-			fmt.Fprintf(stderr, "preconfig: %v\n", merr)
-			return exitFindings
+			return buildFailed(stdout, stderr, *asJSON, ds, merr)
 		}
 		res.Files[i].Content = content
 	}
@@ -200,6 +202,15 @@ func cmdBuild(args []string, stdout, stderr io.Writer) int {
 		}
 	}
 	return exitOK
+}
+
+// buildFailed reports a file build couldn't prepare, in JSON too.
+func buildFailed(stdout, stderr io.Writer, asJSON bool, ds []spec.Diagnostic, err error) int {
+	if asJSON {
+		printJSON(stdout, map[string]any{"error": err.Error(), "diagnostics": ds})
+	}
+	fmt.Fprintf(stderr, "preconfig: %v\n", err)
+	return exitFindings
 }
 
 // readFiles reads the given repository-relative paths that exist.

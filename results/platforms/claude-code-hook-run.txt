@@ -1,4 +1,4 @@
-# Hook command from .claude/settings.json, run in a Claude Code cloud session (CLAUDE_CODE_REMOTE=true, Ubuntu 24.04.5 LTS, uid 0; python3 was Python 3.13.18 via update-alternatives), 2026-11-04T13:14:30Z
+# preconfig 0.2.0: the hook command from .claude/settings.json, run in a Claude Code cloud session (CLAUDE_CODE_REMOTE=true, Ubuntu 24.04.5 LTS, uid 0; python3 was Python 3.13.18 via update-alternatives), 2026-11-04T13:23:46Z
 ## first session start
 preconfig: orders-api is set up (python 3.12, postgres 16, redis 7); ready check: .venv/bin/pytest -q
 exit 0 after 15s
@@ -11,7 +11,7 @@ exit 0 after 0s
 ## ready check, with that environment
 >>> preconfig: ready 1/1: .venv/bin/pytest -q
 ....                                                                     [100%]
-4 passed in 0.67s
+4 passed in 0.83s
 >>> preconfig: ready: passed
 ready exit 0
 ## outside the cloud (CLAUDE_CODE_REMOTE unset)

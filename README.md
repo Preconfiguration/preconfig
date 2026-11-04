@@ -142,7 +142,7 @@ results/platforms/   recorded runs on the agent platforms
 ```
 
 Go 1.24 or later, standard library only. Core (cmd/preconfig and internal/
-apart from Doctor) is 7,609 lines in 20 files, with 3,470 lines of tests.
+apart from Doctor) is 7,679 lines in 20 files, with 3,619 lines of tests.
 Doctor adds 2,999 lines, with 820 lines of tests.
 
 ## Build
@@ -185,8 +185,8 @@ passes.
 
 | Command | What it reproduces |
 |---|---|
-| `go test ./...` | 134 test functions, Core's 119 and Doctor's 15; the golden files; the setup script and the Claude Code hook run under bash |
-| `go test -coverpkg=<Core's packages> ./cmd/preconfig ./internal/...` | Coverage: 92.6% of Core's statements; Doctor's own package 84.1% |
+| `go test ./...` | 137 test functions, Core's 122 and Doctor's 15; the golden files; the setup script and the Claude Code hook run under bash |
+| `go test -coverpkg=<Core's packages> ./cmd/preconfig ./internal/...` | Coverage: 92.8% of Core's statements; Doctor's own package 84.1% |
 | `go test -run '^$' -bench . ./internal/...` | The speed of build, check and detect |
 | `go test ./internal/<package> -fuzz <target>` | Fuzzing: FuzzLoad (spec), FuzzParse (yaml, jsonc), FuzzCheck (check), FuzzDetect and FuzzYamlStr (detect) |
 | `python3 tools/mutate.py`, `python3 tools/doctor/mutate.py` | Planted bugs, one at a time, with the source put back after each: 32 in Core, 14 in Doctor |

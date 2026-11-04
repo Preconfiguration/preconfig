@@ -132,4 +132,15 @@ func TestClaudeSettingsDrift(t *testing.T) {
 	if !hasCode(r, "A005") || hasCode(r, "A001") || hasCode(r, "X003") {
 		t.Errorf("duplicate key: %v", codes(r))
 	}
+	// Every repeated key is named, not only the first.
+	r = checkOne(kb.ClaudeSettingsPath, `{"model": "a", "hooks": {}, "model": "b", "hooks": {}}`)
+	n := 0
+	for _, d := range r.Findings {
+		if d.Code == "A005" {
+			n++
+		}
+	}
+	if n != 2 {
+		t.Errorf("two repeated keys gave %d warnings: %v", n, r.Findings)
+	}
 }
