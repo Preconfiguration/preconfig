@@ -44,6 +44,9 @@ func (d Diagnostic) String() string {
 		}
 	}
 	s := fmt.Sprintf("%s: %s %s: %s", loc, d.Severity, d.Code, d.Message)
+	if loc == "" {
+		s = fmt.Sprintf("%s %s: %s", d.Severity, d.Code, d.Message)
+	}
 	if d.Hint != "" {
 		s += "\n    " + d.Hint
 	}

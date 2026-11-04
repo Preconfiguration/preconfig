@@ -128,13 +128,20 @@ jobs:
 ```
 
 The action downloads the preconfig release for the runner, checks it against
-the release's SHA256SUMS, and runs `preconfig check`: each finding becomes an
-annotation on the line it's about, and a table goes to the job summary. When
-the pull request changes `preconfig.yaml` or `.preconfig/setup.sh`, it also
-runs `preconfig verify`, which runs the setup and the ready check in a clean
+the release's SHA256SUMS, and runs `preconfig check`: findings become
+annotations on the lines they're about (GitHub shows the first 10 errors and
+10 warnings of a step) and all of them go to a table in the job summary. In a
+repository with `preconfig.yaml`, it also runs `preconfig verify` when a
+pull request or push changes `preconfig.yaml` or `.preconfig/setup.sh` (and
+on events with nothing to compare against, such as a branch's first push or
+a manual run), which runs the setup and the ready check in a clean
 Ubuntu container (Linux runners have the Docker it needs). If the setup
 isn't ready, Preconfig Doctor's reading of the log goes into the summary.
 The step fails when check finds an error or verify isn't ready.
+
+It doesn't run verify on `pull_request_target` or `workflow_run`, which give
+a pull request's code the repository's secrets; use `pull_request`. Pinning
+the action by commit SHA needs `version` too.
 
 Inputs: `version` (default: the action's own tag, or the latest release),
 `dir` (the folder with preconfig.yaml), `verify` (`auto`, `true` or `false`),
@@ -143,9 +150,15 @@ step's `env`), `check-args`. Outputs: `check-exit-code` and `verify` (`ready`,
 `not-ready`, `setup-failed`, `error` or `skipped`).
 
 Outside GitHub, the same output is `preconfig check --format github` and
-`--summary FILE` (Markdown). check also warns (P001) once the knowledge base
+`--summary FILE` (Markdown), with `--path-prefix` when the folder isn't the
+repository's root. check also warns (P001) once the knowledge base
 is more than 60 days old, since the platforms change their formats often;
 `--max-age DAYS` changes the limit and 0 turns it off.
+
+Finding codes added in 0.2 and 0.3: A001 to A005 for `.claude/settings.json`,
+O001 to O008 for Ona's files, V001 to V005 for Devin's blueprint, X020 for a
+settings.json preconfig can't add its hook to (0.2.0 reported it as X003,
+which belongs to a version mismatch), P001 for the knowledge base's age.
 
 ## Layout
 

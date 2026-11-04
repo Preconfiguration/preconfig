@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"strings"
 	"time"
 
@@ -20,7 +21,7 @@ var now = time.Now
 const DefaultMaxAge = 60
 
 // knowledgeAge is a warning when kb.Date is more than maxDays old, or nil.
-func knowledgeAge(maxDays int) *spec.Diagnostic {
+func knowledgeAge(maxDays int, hasSpec bool) *spec.Diagnostic {
 	if maxDays <= 0 {
 		return nil
 	}
@@ -32,7 +33,11 @@ func knowledgeAge(maxDays int) *spec.Diagnostic {
 	if days <= maxDays {
 		return nil
 	}
-	return &spec.Diagnostic{File: kb.SpecPath, Severity: spec.Warning, Code: "P001",
+	file := ""
+	if hasSpec {
+		file = kb.SpecPath
+	}
+	return &spec.Diagnostic{File: file, Severity: spec.Warning, Code: "P001",
 		Hint:    "Update preconfig: a newer release may know of format changes. --max-age 0 turns this off.",
 		Message: fmt.Sprintf("preconfig %s knows the platforms' setup formats as of %s, %d days ago (more than %d)", kb.Version, kb.Date, days, maxDays)}
 }
@@ -49,7 +54,7 @@ func ghProp(s string) string {
 
 // writeGitHub prints a finding per workflow command: errors as errors,
 // warnings as warnings, notes as notices.
-func writeGitHub(w io.Writer, rep check.Report) {
+func writeGitHub(w io.Writer, rep check.Report, prefix string) {
 	for _, d := range rep.Findings {
 		cmd := "notice"
 		switch d.Severity {
@@ -58,14 +63,17 @@ func writeGitHub(w io.Writer, rep check.Report) {
 		case spec.Warning:
 			cmd = "warning"
 		}
-		props := "file=" + ghProp(d.File)
-		if d.Line > 0 {
-			props += fmt.Sprintf(",line=%d", d.Line)
-			if d.Col > 0 {
-				props += fmt.Sprintf(",col=%d", d.Col)
+		props := ""
+		if d.File != "" {
+			props = "file=" + ghProp(path.Join(prefix, d.File)) + ","
+			if d.Line > 0 {
+				props += fmt.Sprintf("line=%d,", d.Line)
+				if d.Col > 0 {
+					props += fmt.Sprintf("col=%d,", d.Col)
+				}
 			}
 		}
-		props += ",title=" + ghProp("preconfig "+d.Code)
+		props += "title=" + ghProp("preconfig "+d.Code)
 		msg := d.Message
 		if d.Hint != "" {
 			msg += "\n" + d.Hint
@@ -77,7 +85,7 @@ func writeGitHub(w io.Writer, rep check.Report) {
 
 // mdCell makes text safe in a Markdown table cell.
 func mdCell(s string) string {
-	s = strings.NewReplacer("|", `\|`, "\r", " ", "\n", " ", "<", "&lt;", ">", "&gt;", "`", "'").Replace(s)
+	s = strings.NewReplacer(`\`, `\\`, "|", `\|`, "\r", " ", "\n", " ", "<", "&lt;", ">", "&gt;", "`", "'").Replace(s)
 	return s
 }
 

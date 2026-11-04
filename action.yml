@@ -7,7 +7,7 @@ branding:
 
 inputs:
   version:
-    description: The preconfig release to use, such as v0.3.0. Empty uses the tag this action was referenced by, or the latest release when referenced by a branch.
+    description: The preconfig release to use, such as v0.3.0. Empty uses the tag this action was referenced by, or the latest release when referenced by a branch. Required when the action is pinned by commit SHA.
     default: ""
   dir:
     description: The repository's root folder, the one with preconfig.yaml.
@@ -62,12 +62,28 @@ runs:
           esac
           case "$RUNNER_ARCH" in
             X64) arch=amd64 ;;
-            ARM64) arch=arm64 ;;
+            ARM64)
+              arch=arm64
+              # No Windows Arm build; Windows on Arm runs x86-64 programs.
+              if [ "$os" = windows ]; then arch=amd64; fi
+              ;;
             *) echo "::error title=preconfig::no preconfig build for $RUNNER_ARCH"; exit 1 ;;
           esac
           v="$VERSION"
           if [ -z "$v" ] && [[ "$ACTION_REF" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then v="$ACTION_REF"; fi
-          if [ -z "$v" ]; then base="https://github.com/Preconfiguration/preconfig/releases/latest/download"; else base="https://github.com/Preconfiguration/preconfig/releases/download/$v"; fi
+          if [ -z "$v" ] && [[ "$ACTION_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error title=preconfig::the action is pinned by commit SHA, so say which release to run with the version input, such as version: v0.3.0"
+            exit 1
+          fi
+          if [ -z "$v" ]; then
+            # The latest release, resolved once, so the archive and its
+            # checksums come from the same release.
+            url=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/Preconfiguration/preconfig/releases/latest)
+            v=${url##*/}
+            [[ "$v" =~ ^v[0-9] ]] || { echo "::error title=preconfig::couldn't find the latest release ($url)"; exit 1; }
+            echo "Latest release: $v"
+          fi
+          base="https://github.com/Preconfiguration/preconfig/releases/download/$v"
           if [ "$os" = windows ]; then file="preconfig_${os}_${arch}.zip"; else file="preconfig_${os}_${arch}.tar.gz"; fi
           cd "$RUNNER_TEMP"
           curl -fsSL --retry 3 -o "$file" "$base/$file"
@@ -88,7 +104,9 @@ runs:
         ARGS: ${{ inputs.check-args }}
       run: |
         set +e
-        preconfig check --format github --summary "$GITHUB_STEP_SUMMARY" $ARGS
+        # Annotations need paths from the repository's root.
+        prefix=$(git rev-parse --show-prefix 2>/dev/null)
+        preconfig check --format github --summary "$GITHUB_STEP_SUMMARY" --path-prefix "$prefix" $ARGS
         code=$?
         echo "exit-code=$code" >> "$GITHUB_OUTPUT"
         exit 0
@@ -106,12 +124,24 @@ runs:
       run: |
         set +e
         run=false
+        if [ ! -f preconfig.yaml ] && [ "$MODE" != true ]; then
+          echo "result=skipped" >> "$GITHUB_OUTPUT"
+          echo "verify skipped: no preconfig.yaml here."
+          exit 0
+        fi
+        if [ "$EVENT" = pull_request_target ] || [ "$EVENT" = workflow_run ]; then
+          # These runs have the base repository's secrets; verify would run
+          # a pull request's setup with them.
+          echo "::warning title=preconfig::verify doesn't run on $EVENT, which carries secrets into code from pull requests; use pull_request"
+          echo "result=skipped" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
         case "$MODE" in
           true) run=true ;;
           false) run=false ;;
           auto)
             base=""
-            if [ "$EVENT" = pull_request ] || [ "$EVENT" = pull_request_target ]; then base="$BASE_SHA"; else base="$BEFORE"; fi
+            if [ "$EVENT" = pull_request ]; then base="$BASE_SHA"; else base="$BEFORE"; fi
             if [ -z "$base" ] || [ "$base" = 0000000000000000000000000000000000000000 ]; then
               run=true
             else
@@ -134,7 +164,7 @@ runs:
           exit 0
         fi
         log="$RUNNER_TEMP/preconfig-verify.log"
-        preconfig verify --log "$log" $ARGS
+        preconfig verify $ARGS --log "$log"
         code=$?
         case $code in
           0) result=ready ;;

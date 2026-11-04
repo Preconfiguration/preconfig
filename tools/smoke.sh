@@ -39,14 +39,14 @@ esac
 
 # 3. check, detect, build and check again, on a sample repository
 cp -R "$root/testdata/repos/orders-api" repo
-(cd repo && "$bin" check) || fail "check failed on orders-api as shipped"
+(cd repo && "$bin" check --max-age 0) || fail "check failed on orders-api as shipped"
 cp repo/preconfig.yaml spec.yaml
 rm repo/preconfig.yaml
 (cd repo && "$bin" detect --write) || fail "detect --write failed"
 [ -s repo/preconfig.yaml ] || fail "detect --write wrote no preconfig.yaml"
 cp spec.yaml repo/preconfig.yaml
 (cd repo && "$bin" build) > /dev/null || fail "build failed"
-out=$(cd repo && "$bin" check) || fail "check failed after build"
+out=$(cd repo && "$bin" check --max-age 0) || fail "check failed after build"
 case "$out" in
 *" 0 errors, 0 warnings"*) ;;
 *) fail "check after build: $out" ;;

@@ -236,6 +236,7 @@ func cmdCheck(args []string, stdout, stderr io.Writer) int {
 	format := fs.String("format", "text", "text, json, or github (workflow annotations)")
 	summary := fs.String("summary", "", "also append a Markdown report to this file, such as $GITHUB_STEP_SUMMARY")
 	maxAge := fs.Int("max-age", DefaultMaxAge, "warn when preconfig's knowledge of the platforms is older than this many days; 0 turns it off")
+	prefix := fs.String("path-prefix", "", "with --format github, put this before every file path, such as the folder's path in the repository")
 	if fs.Parse(args) != nil {
 		return exitUsage
 	}
@@ -256,7 +257,7 @@ func cmdCheck(args []string, stdout, stderr io.Writer) int {
 		return err == nil
 	}
 	rep := check.Check(check.Input{Files: files, Exists: exists})
-	if age := knowledgeAge(*maxAge); age != nil && len(rep.Checked) > 0 {
+	if age := knowledgeAge(*maxAge, rep.HasSpec); age != nil && len(rep.Checked) > 0 {
 		rep.Findings = append(rep.Findings, *age)
 		rep.Warnings++
 	}
@@ -272,7 +273,7 @@ func cmdCheck(args []string, stdout, stderr io.Writer) int {
 			fmt.Fprintf(stdout, "::warning title=preconfig::No setup files and no preconfig.yaml in %s\n", ghEscape(*dir))
 			return exitOK
 		}
-		writeGitHub(stdout, rep)
+		writeGitHub(stdout, rep, filepath.ToSlash(*prefix))
 	} else {
 		if len(rep.Checked) == 0 {
 			fmt.Fprintf(stdout, "No setup files and no preconfig.yaml in %s. Draft a spec with: preconfig detect --write\n", *dir)

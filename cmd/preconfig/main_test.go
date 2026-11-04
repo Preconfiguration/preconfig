@@ -14,6 +14,14 @@ import (
 	"preconfiguration.com/preconfig/internal/kb"
 )
 
+// TestMain pins the clock to the knowledge base's date, so that the
+// knowledge-age warning (P001) only shows where a test asks for it.
+func TestMain(m *testing.M) {
+	day, _ := time.Parse("2006-01-02", kb.Date)
+	now = func() time.Time { return day }
+	os.Exit(m.Run())
+}
+
 func runCLI(args ...string) (int, string, string) {
 	var out, errOut bytes.Buffer
 	code := run(args, &out, &errOut)
@@ -351,7 +359,8 @@ func TestBuildMergesClaudeSettings(t *testing.T) {
 
 // check warns once preconfig's platform knowledge is older than --max-age.
 func TestKnowledgeAge(t *testing.T) {
-	defer func() { now = time.Now }()
+	saved := now
+	defer func() { now = saved }()
 	day, _ := time.Parse("2006-01-02", kb.Date)
 	dir := copyRepo(t, "orders-api", false)
 	now = func() time.Time { return day.AddDate(0, 0, DefaultMaxAge) }
@@ -399,5 +408,32 @@ func TestCheckGitHub(t *testing.T) {
 	}
 	if code, _, _ := runCLI("check", "--dir", dir, "--format", "xml"); code != exitUsage {
 		t.Errorf("bad format: %d", code)
+	}
+	// In a subfolder of the repository, annotations need the folder's path.
+	_, out, _ = runCLI("check", "--dir", dir, "--format", "github", "--path-prefix", "services/orders")
+	if !strings.Contains(out, "::error file=services/orders/.cursor/environment.json") {
+		t.Errorf("--path-prefix:\n%s", out)
+	}
+	if mdCell(`a\|b`) != `a\\\|b` {
+		t.Errorf("mdCell: %q", mdCell(`a\|b`))
+	}
+}
+
+// Without preconfig.yaml, the knowledge-age warning names no file, so it
+// isn't annotated on a file that doesn't exist.
+func TestKnowledgeAgeWithoutSpec(t *testing.T) {
+	saved := now
+	defer func() { now = saved }()
+	day, _ := time.Parse("2006-01-02", kb.Date)
+	now = func() time.Time { return day.AddDate(0, 0, DefaultMaxAge+1) }
+	if d := knowledgeAge(DefaultMaxAge, false); d == nil || d.File != "" {
+		t.Errorf("no spec: %+v", d)
+	}
+	if d := knowledgeAge(DefaultMaxAge, true); d == nil || d.File != kb.SpecPath {
+		t.Errorf("spec: %+v", d)
+	}
+	_, out, _ := runCLI("check", "--dir", t.TempDir(), "--format", "github")
+	if strings.Contains(out, "file=preconfig.yaml") {
+		t.Errorf("P001 annotated on a missing file:\n%s", out)
 	}
 }
