@@ -18,7 +18,7 @@ release builds its own with the current stable Go.
 
 ## Start here
 
-- Latest release: v0.2.0 (November 4 2026). In progress: item 11 of
+- Latest release: v0.3.0 (November 4 2026). In progress: item 11 of
   softdev-plan.md (photozeitgeist/jollyroger.biz), approved by YK on
   2026-11-04 ("Go"): Phase 0 and Phase A as 0.2.0, Phase B as 0.3.0.
   Phase C (real runs on Copilot and Cursor) needs YK and isn't started.
@@ -70,4 +70,13 @@ Steps:
        Linux binary checked against SHA256SUMS and run on web-shop with
        the four new targets; preconfiguration.com 2b01c14 (post, About,
        Roadmap); softdevstudio note 2944e55; softdev-plan.md ae431fd
-6. [ ] Phase B the same way, as 0.3.0
+6. [x] Phase B: `check --format github|json`, `--summary`, `--path-prefix`,
+       `--max-age` (P001, default 60 days); action.yml (download checked
+       against SHA256SUMS, check annotations and job summary, verify when
+       the spec or setup script changes, Doctor's reading on failure);
+       action-test.yml (check on three OSes, verify ready and not-ready).
+       Review two rounds (10 findings, then 1 should-fix and 5 minor:
+       subfolder paths, verify without a spec, SHA pins, secrets on
+       pull_request_target, releases before 0.3.0), fixed with tests
+7. [ ] release 0.3.0; download job; site post and pages; softdevstudio
+       note; softdev-plan.md

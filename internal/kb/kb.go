@@ -14,7 +14,7 @@ import (
 const Date = "2026-11-04"
 
 // Version of the engine.
-const Version = "0.2.0"
+const Version = "0.3.0"
 
 // Base describes an operating system image that every target starts from.
 type Base struct {
