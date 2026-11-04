@@ -1,0 +1,174 @@
+name: preconfig
+description: Check an AI coding agent's setup files on every pull request, and prove the setup on a clean machine when it changes.
+author: Preconfiguration.com
+branding:
+  icon: check-square
+  color: green
+
+inputs:
+  version:
+    description: The preconfig release to use, such as v0.3.0. Empty uses the tag this action was referenced by, or the latest release when referenced by a branch.
+    default: ""
+  dir:
+    description: The repository's root folder, the one with preconfig.yaml.
+    default: "."
+  verify:
+    description: >-
+      Run preconfig verify, which runs the setup and the ready check in a clean
+      Ubuntu container (Linux runners, which have Docker). auto runs it when
+      preconfig.yaml or .preconfig/setup.sh changed in the pull request or push;
+      true always; false never.
+    default: auto
+  verify-args:
+    description: More flags for preconfig verify, such as --pass-env PAYMENTS_API_KEY or --timeout 20m.
+    default: ""
+  check-args:
+    description: More flags for preconfig check, such as --max-age 90.
+    default: ""
+  preconfig-path:
+    description: A folder holding a preconfig binary to use instead of downloading one (for testing this action).
+    default: ""
+
+outputs:
+  check-exit-code:
+    description: preconfig check's exit code (0 clean, 1 problems, 4 preconfig.yaml has errors).
+    value: ${{ steps.check.outputs.exit-code }}
+  verify:
+    description: "What verify did: ready, not-ready, setup-failed, error or skipped."
+    value: ${{ steps.verify.outputs.result }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install preconfig
+      id: install
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+        ACTION_REF: ${{ github.action_ref }}
+        LOCAL: ${{ inputs.preconfig-path }}
+      run: |
+        set -euo pipefail
+        dest="$RUNNER_TEMP/preconfig-bin"
+        mkdir -p "$dest"
+        if [ -n "$LOCAL" ]; then
+          cp "$LOCAL"/preconfig* "$dest/"
+        else
+          case "$RUNNER_OS" in
+            Linux) os=linux ;;
+            macOS) os=darwin ;;
+            Windows) os=windows ;;
+            *) echo "::error title=preconfig::no preconfig build for $RUNNER_OS"; exit 1 ;;
+          esac
+          case "$RUNNER_ARCH" in
+            X64) arch=amd64 ;;
+            ARM64) arch=arm64 ;;
+            *) echo "::error title=preconfig::no preconfig build for $RUNNER_ARCH"; exit 1 ;;
+          esac
+          v="$VERSION"
+          if [ -z "$v" ] && [[ "$ACTION_REF" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then v="$ACTION_REF"; fi
+          if [ -z "$v" ]; then base="https://github.com/Preconfiguration/preconfig/releases/latest/download"; else base="https://github.com/Preconfiguration/preconfig/releases/download/$v"; fi
+          if [ "$os" = windows ]; then file="preconfig_${os}_${arch}.zip"; else file="preconfig_${os}_${arch}.tar.gz"; fi
+          cd "$RUNNER_TEMP"
+          curl -fsSL --retry 3 -o "$file" "$base/$file"
+          curl -fsSL --retry 3 -o SHA256SUMS "$base/SHA256SUMS"
+          grep " $file\$" SHA256SUMS > sum.txt || { echo "::error title=preconfig::$file isn't in the release's SHA256SUMS"; exit 1; }
+          if command -v sha256sum >/dev/null; then sha256sum -c sum.txt; else shasum -a 256 -c sum.txt; fi
+          if [ "$os" = windows ]; then unzip -q -o "$file" -d "$dest"; else tar -xzf "$file" -C "$dest"; fi
+        fi
+        chmod +x "$dest"/preconfig* 2>/dev/null || true
+        echo "$dest" >> "$GITHUB_PATH"
+        "$dest"/preconfig version
+
+    - name: preconfig check
+      id: check
+      shell: bash
+      working-directory: ${{ inputs.dir }}
+      env:
+        ARGS: ${{ inputs.check-args }}
+      run: |
+        set +e
+        preconfig check --format github --summary "$GITHUB_STEP_SUMMARY" $ARGS
+        code=$?
+        echo "exit-code=$code" >> "$GITHUB_OUTPUT"
+        exit 0
+
+    - name: preconfig verify
+      id: verify
+      shell: bash
+      working-directory: ${{ inputs.dir }}
+      env:
+        MODE: ${{ inputs.verify }}
+        ARGS: ${{ inputs.verify-args }}
+        EVENT: ${{ github.event_name }}
+        BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        BEFORE: ${{ github.event.before }}
+      run: |
+        set +e
+        run=false
+        case "$MODE" in
+          true) run=true ;;
+          false) run=false ;;
+          auto)
+            base=""
+            if [ "$EVENT" = pull_request ] || [ "$EVENT" = pull_request_target ]; then base="$BASE_SHA"; else base="$BEFORE"; fi
+            if [ -z "$base" ] || [ "$base" = 0000000000000000000000000000000000000000 ]; then
+              run=true
+            else
+              git fetch -q --depth=1 origin "$base" 2>/dev/null
+              changed=$(git diff --name-only "$base" HEAD -- preconfig.yaml .preconfig/setup.sh 2>/dev/null)
+              status=$?
+              if [ $status -ne 0 ] || [ -n "$changed" ]; then run=true; fi
+            fi
+            ;;
+          *) echo "::error title=preconfig::verify is auto, true or false, not $MODE"; exit 1 ;;
+        esac
+        if [ "$run" != true ]; then
+          echo "result=skipped" >> "$GITHUB_OUTPUT"
+          echo "verify skipped: preconfig.yaml and the setup script didn't change."
+          exit 0
+        fi
+        if [ "$RUNNER_OS" != Linux ] || ! command -v docker >/dev/null; then
+          echo "::warning title=preconfig::verify needs Docker, which this runner doesn't have; skipped"
+          echo "result=skipped" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        log="$RUNNER_TEMP/preconfig-verify.log"
+        preconfig verify --log "$log" $ARGS
+        code=$?
+        case $code in
+          0) result=ready ;;
+          1) result=not-ready ;;
+          2) result=setup-failed ;;
+          *) result=error ;;
+        esac
+        echo "result=$result" >> "$GITHUB_OUTPUT"
+        {
+          echo "### preconfig verify: $result"
+          echo
+        } >> "$GITHUB_STEP_SUMMARY"
+        if [ $code -eq 1 ] || [ $code -eq 2 ]; then
+          echo "::error title=preconfig verify::the setup isn't ready on a clean machine ($result); Preconfig Doctor's reading follows"
+          {
+            echo "Preconfig Doctor on the log:"
+            echo
+            echo '```'
+            preconfig doctor "$log" 2>&1 | sed 's/```/'"'''"'/g'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+        fi
+        exit 0
+
+    - name: Result
+      shell: bash
+      env:
+        CHECK: ${{ steps.check.outputs.exit-code }}
+        VERIFY: ${{ steps.verify.outputs.result }}
+      run: |
+        fail=0
+        if [ "$CHECK" != 0 ]; then echo "preconfig check found problems (exit $CHECK)"; fail=1; fi
+        case "$VERIFY" in
+          ready|skipped) ;;
+          *) echo "preconfig verify: $VERIFY"; fail=1 ;;
+        esac
+        exit $fail

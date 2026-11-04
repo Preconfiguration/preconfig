@@ -477,7 +477,7 @@ func (c *checker) drift(s *spec.Spec) {
 		}
 		want, err := f.Expected(actual, true)
 		if err != nil {
-			c.add(f.Path, nil, spec.Error, "X003", "Fix the file by hand, then run preconfig build.", "%v", err)
+			c.add(f.Path, nil, spec.Error, "X020", "Fix the file by hand, then run preconfig build.", "%v", err)
 			continue
 		}
 		f.Content = want

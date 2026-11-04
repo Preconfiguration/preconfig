@@ -45,6 +45,8 @@ Usage:
   preconfig version
 
 detect, build, check, verify and doctor take --json for machine-readable output.
+check also takes --format github (annotations), --summary FILE (Markdown) and
+--max-age DAYS (warn when preconfig's platform knowledge is older; default 60).
 Exit codes: 0 ok, 1 problems found (check) or not ready (verify), 2 a setup step
 failed (verify), 3 verify couldn't start a machine, 4 preconfig.yaml has errors,
 64 wrong usage.
@@ -231,7 +233,19 @@ func cmdCheck(args []string, stdout, stderr io.Writer) int {
 	dir := fs.String("dir", ".", "the repository's root folder")
 	showDiff := fs.Bool("diff", false, "show how each out-of-date file differs from a fresh build")
 	asJSON := fs.Bool("json", false, "print the report as JSON")
+	format := fs.String("format", "text", "text, json, or github (workflow annotations)")
+	summary := fs.String("summary", "", "also append a Markdown report to this file, such as $GITHUB_STEP_SUMMARY")
+	maxAge := fs.Int("max-age", DefaultMaxAge, "warn when preconfig's knowledge of the platforms is older than this many days; 0 turns it off")
 	if fs.Parse(args) != nil {
+		return exitUsage
+	}
+	if *asJSON {
+		*format = "json"
+	}
+	switch *format {
+	case "text", "json", "github":
+	default:
+		fmt.Fprintf(stderr, "preconfig check: --format is text, json or github, not %q\n", *format)
 		return exitUsage
 	}
 	files := map[string]string{}
@@ -242,8 +256,23 @@ func cmdCheck(args []string, stdout, stderr io.Writer) int {
 		return err == nil
 	}
 	rep := check.Check(check.Input{Files: files, Exists: exists})
-	if *asJSON {
+	if age := knowledgeAge(*maxAge); age != nil && len(rep.Checked) > 0 {
+		rep.Findings = append(rep.Findings, *age)
+		rep.Warnings++
+	}
+	if *summary != "" && len(rep.Checked) > 0 {
+		if err := appendSummary(*summary, rep); err != nil {
+			fmt.Fprintf(stderr, "preconfig: %v\n", err)
+		}
+	}
+	if *format == "json" {
 		printJSON(stdout, rep)
+	} else if *format == "github" {
+		if len(rep.Checked) == 0 {
+			fmt.Fprintf(stdout, "::warning title=preconfig::No setup files and no preconfig.yaml in %s\n", ghEscape(*dir))
+			return exitOK
+		}
+		writeGitHub(stdout, rep)
 	} else {
 		if len(rep.Checked) == 0 {
 			fmt.Fprintf(stdout, "No setup files and no preconfig.yaml in %s. Draft a spec with: preconfig detect --write\n", *dir)

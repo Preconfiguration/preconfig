@@ -122,14 +122,14 @@ func TestClaudeSettingsDrift(t *testing.T) {
 		t.Errorf("older hook: %v", r.Findings)
 	}
 	files[kb.ClaudeSettingsPath] = "[]"
-	if r := Check(Input{Files: files}); !hasCode(r, "X003") {
+	if r := Check(Input{Files: files}); !hasCode(r, "X020") {
 		t.Errorf("settings.json that can't take the hook: %v", codes(r))
 	}
 	// A key twice is a warning, not an unreadable file (build would write
 	// it back once, so it's drift too).
 	files[kb.ClaudeSettingsPath] = strings.Replace(merged, "{", `{"model": "a", "model": "b",`, 1)
 	r = Check(Input{Files: files})
-	if !hasCode(r, "A005") || hasCode(r, "A001") || hasCode(r, "X003") {
+	if !hasCode(r, "A005") || hasCode(r, "A001") || hasCode(r, "X020") {
 		t.Errorf("duplicate key: %v", codes(r))
 	}
 	// Every repeated key is named, not only the first.

@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"preconfiguration.com/preconfig/internal/check"
 	"preconfiguration.com/preconfig/internal/kb"
@@ -345,5 +346,58 @@ func TestBuildMergesClaudeSettings(t *testing.T) {
 	}
 	if code, _, errOut := runCLI("build", "--dir", dir, "--dry-run"); code == exitOK || !strings.Contains(errOut, "settings.json") {
 		t.Errorf("unmergeable file in a dry run: %d %q", code, errOut)
+	}
+}
+
+// check warns once preconfig's platform knowledge is older than --max-age.
+func TestKnowledgeAge(t *testing.T) {
+	defer func() { now = time.Now }()
+	day, _ := time.Parse("2006-01-02", kb.Date)
+	dir := copyRepo(t, "orders-api", false)
+	now = func() time.Time { return day.AddDate(0, 0, DefaultMaxAge) }
+	if code, out, _ := runCLI("check", "--dir", dir); code != exitOK || strings.Contains(out, "P001") {
+		t.Errorf("at the limit: %d %s", code, out)
+	}
+	now = func() time.Time { return day.AddDate(0, 0, DefaultMaxAge+1) }
+	code, out, _ := runCLI("check", "--dir", dir)
+	if code != exitOK || !strings.Contains(out, "warning P001") || !strings.Contains(out, "61 days ago") {
+		t.Errorf("past the limit: %d %s", code, out)
+	}
+	if _, out, _ := runCLI("check", "--dir", dir, "--max-age", "0"); strings.Contains(out, "P001") {
+		t.Errorf("--max-age 0: %s", out)
+	}
+	if _, out, _ := runCLI("check", "--dir", dir, "--max-age", "90"); strings.Contains(out, "P001") {
+		t.Errorf("--max-age 90: %s", out)
+	}
+}
+
+// --format github writes one workflow command per finding, escaped so a
+// message can't end the command or start another; --summary appends
+// Markdown.
+func TestCheckGitHub(t *testing.T) {
+	dir := copyRepo(t, "orders-api", false)
+	os.WriteFile(filepath.Join(dir, kb.CursorEnvPath), []byte("{\"name\": \"x\",\n \"bogus\": 1}\n"), 0o644)
+	summary := filepath.Join(t.TempDir(), "summary.md")
+	code, out, _ := runCLI("check", "--dir", dir, "--format", "github", "--summary", summary)
+	if code != exitFindings {
+		t.Fatalf("exit %d\n%s", code, out)
+	}
+	for _, l := range strings.Split(strings.TrimSpace(out), "\n") {
+		if !strings.HasPrefix(l, "::") && !strings.HasPrefix(l, "preconfig check:") {
+			t.Errorf("a line that isn't a workflow command: %q", l)
+		}
+	}
+	if !strings.Contains(out, "::error file=.cursor/environment.json") || !strings.Contains(out, ",title=preconfig ") {
+		t.Errorf("annotations:\n%s", out)
+	}
+	b, _ := os.ReadFile(summary)
+	if !strings.Contains(string(b), "### preconfig check failed") || !strings.Contains(string(b), "| .cursor/environment.json |") {
+		t.Errorf("summary:\n%s", b)
+	}
+	if ghEscape("a\nb%c") != "a%0Ab%25c" || ghProp("a:b,c") != "a%3Ab%2Cc" {
+		t.Error("escaping")
+	}
+	if code, _, _ := runCLI("check", "--dir", dir, "--format", "xml"); code != exitUsage {
+		t.Errorf("bad format: %d", code)
 	}
 }

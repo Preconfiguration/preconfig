@@ -1,0 +1,117 @@
+name: action-test
+
+# Tests action.yml with a preconfig built from this commit: a broken setup
+# fails the check, a clean one passes, verify proves orders-api on a clean
+# machine and catches the missing Redis in testdata/verify/no-redis, with
+# Doctor's reading in the summary. Run by hand, it also tests the download
+# of the latest release on Linux, macOS and Windows.
+
+on:
+  push:
+    branches: [main]
+    paths: [action.yml, .github/workflows/action-test.yml, cmd/preconfig/**, internal/**]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+          cache: false
+      - name: Build preconfig
+        run: |
+          mkdir -p "$RUNNER_TEMP/pc"
+          go build -o "$RUNNER_TEMP/pc/preconfig$( [ "$RUNNER_OS" = Windows ] && echo .exe )" ./cmd/preconfig
+          echo "PC=$RUNNER_TEMP/pc" >> "$GITHUB_ENV"
+      - name: A clean setup passes
+        id: clean
+        uses: ./
+        with:
+          dir: testdata/repos/orders-api
+          verify: "false"
+          preconfig-path: ${{ env.PC }}
+      - name: A broken setup fails
+        id: broken
+        continue-on-error: true
+        uses: ./
+        with:
+          dir: testdata/check/broken
+          verify: "false"
+          preconfig-path: ${{ env.PC }}
+      - name: Check the outcomes
+        env:
+          CLEAN: ${{ steps.clean.outputs.check-exit-code }}
+          BROKEN: ${{ steps.broken.outputs.check-exit-code }}
+          BROKEN_OUTCOME: ${{ steps.broken.outcome }}
+        run: |
+          [ "$CLEAN" = 0 ] || { echo "::error::the clean setup's check exited $CLEAN"; exit 1; }
+          [ "$BROKEN" = 1 ] || { echo "::error::the broken setup's check exited $BROKEN, want 1"; exit 1; }
+          [ "$BROKEN_OUTCOME" = failure ] || { echo "::error::the broken setup's step didn't fail"; exit 1; }
+
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+          cache: false
+      - name: Build preconfig
+        run: |
+          mkdir -p "$RUNNER_TEMP/pc"
+          go build -o "$RUNNER_TEMP/pc/preconfig" ./cmd/preconfig
+          echo "PC=$RUNNER_TEMP/pc" >> "$GITHUB_ENV"
+      - name: orders-api is ready on a clean machine
+        id: ready
+        uses: ./
+        with:
+          dir: testdata/repos/orders-api
+          verify: "true"
+          preconfig-path: ${{ env.PC }}
+      - name: A missing Redis is caught
+        id: noredis
+        continue-on-error: true
+        uses: ./
+        with:
+          dir: testdata/verify/no-redis
+          verify: "true"
+          check-args: --max-age 0
+          preconfig-path: ${{ env.PC }}
+      - name: Check the outcomes
+        env:
+          READY: ${{ steps.ready.outputs.verify }}
+          NOREDIS: ${{ steps.noredis.outputs.verify }}
+          NOREDIS_OUTCOME: ${{ steps.noredis.outcome }}
+        run: |
+          [ "$READY" = ready ] || { echo "::error::orders-api verify: $READY, want ready"; exit 1; }
+          [ "$NOREDIS" = not-ready ] || { echo "::error::no-redis verify: $NOREDIS, want not-ready"; exit 1; }
+          [ "$NOREDIS_OUTCOME" = failure ] || { echo "::error::no-redis didn't fail the step"; exit 1; }
+
+  download:
+    if: github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: The latest release, downloaded and checked
+        uses: ./
+        with:
+          dir: testdata/repos/orders-api
+          verify: "false"

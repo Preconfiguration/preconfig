@@ -114,6 +114,39 @@ because nothing runs at a Devin session's start. check applies the
 blueprint reference's rules (run or uses, no uses in maintenance, no
 post-build in a repository). Devin documents no validator. Not run on Devin.
 
+## On every pull request: the GitHub Action
+
+```yaml
+# .github/workflows/preconfig.yml
+on: [pull_request]
+jobs:
+  preconfig:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: Preconfiguration/preconfig@v0.3.0
+```
+
+The action downloads the preconfig release for the runner, checks it against
+the release's SHA256SUMS, and runs `preconfig check`: each finding becomes an
+annotation on the line it's about, and a table goes to the job summary. When
+the pull request changes `preconfig.yaml` or `.preconfig/setup.sh`, it also
+runs `preconfig verify`, which runs the setup and the ready check in a clean
+Ubuntu container (Linux runners have the Docker it needs). If the setup
+isn't ready, Preconfig Doctor's reading of the log goes into the summary.
+The step fails when check finds an error or verify isn't ready.
+
+Inputs: `version` (default: the action's own tag, or the latest release),
+`dir` (the folder with preconfig.yaml), `verify` (`auto`, `true` or `false`),
+`verify-args` (such as `--pass-env PAYMENTS_API_KEY`, with the secret in the
+step's `env`), `check-args`. Outputs: `check-exit-code` and `verify` (`ready`,
+`not-ready`, `setup-failed`, `error` or `skipped`).
+
+Outside GitHub, the same output is `preconfig check --format github` and
+`--summary FILE` (Markdown). check also warns (P001) once the knowledge base
+is more than 60 days old, since the platforms change their formats often;
+`--max-age DAYS` changes the limit and 0 turns it off.
+
 ## Layout
 
 ```
@@ -139,6 +172,7 @@ results/doctor/      Doctor's measured results: scores, proofs, the freeze
 demo/app/            the Core live demo: open index.html in a browser
 demo/doctor/         the Doctor live demo
 results/platforms/   recorded runs on the agent platforms
+action.yml           the GitHub Action
 ```
 
 Go 1.24 or later, standard library only. Core (cmd/preconfig and internal/
