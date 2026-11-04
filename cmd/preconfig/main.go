@@ -362,6 +362,11 @@ func cmdVerify(args []string, stdout, stderr io.Writer) int {
 	if fs.Parse(args) != nil {
 		return exitUsage
 	}
+	if fs.NArg() > 0 {
+		// Flags after a stray word would be ignored without a word.
+		fmt.Fprintf(stderr, "preconfig verify: unexpected argument %q\n", fs.Arg(0))
+		return exitUsage
+	}
 	s, _, code := loadSpec(*dir, *file, stderr, false)
 	if s == nil {
 		return code

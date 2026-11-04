@@ -78,10 +78,15 @@ runs:
           if [ -z "$v" ]; then
             # The latest release, resolved once, so the archive and its
             # checksums come from the same release.
-            url=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/Preconfiguration/preconfig/releases/latest)
+            url=$(curl -fsSLI --retry 3 -o /dev/null -w '%{url_effective}' https://github.com/Preconfiguration/preconfig/releases/latest) || { echo "::error title=preconfig::couldn't reach GitHub to find the latest release"; exit 1; }
             v=${url##*/}
             [[ "$v" =~ ^v[0-9] ]] || { echo "::error title=preconfig::couldn't find the latest release ($url)"; exit 1; }
             echo "Latest release: $v"
+          fi
+          # The flags this action passes came in 0.3.0.
+          if [[ "$v" =~ ^v0\.[0-2]\. ]]; then
+            echo "::error title=preconfig::this action needs preconfig v0.3.0 or later, not $v"
+            exit 1
           fi
           base="https://github.com/Preconfiguration/preconfig/releases/download/$v"
           if [ "$os" = windows ]; then file="preconfig_${os}_${arch}.zip"; else file="preconfig_${os}_${arch}.tar.gz"; fi
@@ -106,6 +111,16 @@ runs:
         set +e
         # Annotations need paths from the repository's root.
         prefix=$(git rev-parse --show-prefix 2>/dev/null)
+        if [ $? -ne 0 ]; then
+          # Not a checkout git will read (container jobs can trip its
+          # ownership check): work it out from the workspace.
+          here=$(pwd -P); ws=$(cd "${GITHUB_WORKSPACE:-.}" && pwd -P)
+          case "$here" in
+            "$ws") prefix="" ;;
+            "$ws"/*) prefix="${here#"$ws"/}" ;;
+            *) prefix=""; echo "::warning title=preconfig::couldn't tell where $PWD is in the repository; annotations may point at the wrong files" ;;
+          esac
+        fi
         preconfig check --format github --summary "$GITHUB_STEP_SUMMARY" --path-prefix "$prefix" $ARGS
         code=$?
         echo "exit-code=$code" >> "$GITHUB_OUTPUT"
@@ -124,7 +139,15 @@ runs:
       run: |
         set +e
         run=false
-        if [ ! -f preconfig.yaml ] && [ "$MODE" != true ]; then
+        case "$MODE" in
+          auto|true|false) ;;
+          *) echo "::error title=preconfig::verify is auto, true or false, not $MODE"; exit 1 ;;
+        esac
+        if [ "$MODE" = false ]; then
+          echo "result=skipped" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        if [ "$MODE" = auto ] && [ ! -f preconfig.yaml ] && [[ " $ARGS " != *" --spec"* ]]; then
           echo "result=skipped" >> "$GITHUB_OUTPUT"
           echo "verify skipped: no preconfig.yaml here."
           exit 0
@@ -138,7 +161,6 @@ runs:
         fi
         case "$MODE" in
           true) run=true ;;
-          false) run=false ;;
           auto)
             base=""
             if [ "$EVENT" = pull_request ]; then base="$BASE_SHA"; else base="$BEFORE"; fi
@@ -151,7 +173,6 @@ runs:
               if [ $status -ne 0 ] || [ -n "$changed" ]; then run=true; fi
             fi
             ;;
-          *) echo "::error title=preconfig::verify is auto, true or false, not $MODE"; exit 1 ;;
         esac
         if [ "$run" != true ]; then
           echo "result=skipped" >> "$GITHUB_OUTPUT"

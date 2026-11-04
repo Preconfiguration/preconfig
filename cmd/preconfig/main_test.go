@@ -295,6 +295,12 @@ func TestVerifyNotReady(t *testing.T) {
 	}
 }
 
+func TestVerifyStrayArgument(t *testing.T) {
+	if code, _, errOut := runCLI("verify", "stray", "--log", "x"); code != exitUsage || !strings.Contains(errOut, "unexpected argument") {
+		t.Errorf("exit %d: %s", code, errOut)
+	}
+}
+
 func TestVerifyExitCodes(t *testing.T) {
 	dir := copyRepo(t, "orders-api", false)
 	fakeDocker(t, ">>> preconfig: machine 1/1: system packages\n>>> preconfig: FAILED: machine 1/1: system packages (exit code 100)\n", "100")
