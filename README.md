@@ -10,7 +10,7 @@ When a setup fails, Preconfig Doctor reads its log, names the cause and, when
 the cause is in the spec, writes the change to `preconfig.yaml` that fixes it.
 
 This repository holds the engine, its tests, the tools that measured it and the
-live demos' source. preconfig 0.3.0, knowledge base dated 2026-11-04, with
+live demos' source. preconfig 0.3.1, knowledge base dated 2026-11-04, with
 Preconfig Doctor, its knowledge dated 2026-09-30. Releases, with binaries for
 Linux, macOS and Windows, are on GitHub.
 
@@ -189,7 +189,7 @@ action.yml           the GitHub Action
 ```
 
 Go 1.24 or later, standard library only. Core (cmd/preconfig and internal/
-apart from Doctor) is 7,846 lines in 21 files, with 3,715 lines of tests.
+apart from Doctor) is 7,849 lines in 21 files, with 3,727 lines of tests.
 Doctor adds 2,955 lines, with 820 lines of tests.
 
 ## Build
@@ -232,7 +232,7 @@ passes.
 
 | Command | What it reproduces |
 |---|---|
-| `go test ./...` | 141 test functions, Core's 126 and Doctor's 15; the golden files; the setup script and the Claude Code hook run under bash |
+| `go test ./...` | 142 test functions, Core's 127 and Doctor's 15; the golden files; the setup script and the Claude Code hook run under bash |
 | `go test -coverpkg=<Core's packages> ./cmd/preconfig ./internal/...` | Coverage: 92.9% of Core's statements; Doctor's own package 84.1% |
 | `go test -run '^$' -bench . ./internal/...` | The speed of build, check and detect |
 | `go test ./internal/<package> -fuzz <target>` | Fuzzing: FuzzLoad (spec), FuzzParse (yaml, jsonc), FuzzCheck (check), FuzzDetect and FuzzYamlStr (detect) |

@@ -18,7 +18,7 @@ release builds its own with the current stable Go.
 
 ## Start here
 
-- Latest release: v0.3.0 (November 4 2026). In progress: item 11 of
+- Latest release: v0.3.1 (November 4 2026). In progress: item 11 of
   softdev-plan.md (photozeitgeist/jollyroger.biz), approved by YK on
   2026-11-04 ("Go"): Phase 0 and Phase A as 0.2.0, Phase B as 0.3.0.
   Phase C (real runs on Copilot and Cursor) needs YK and isn't started.
@@ -78,5 +78,8 @@ Steps:
        Review two rounds (10 findings, then 1 should-fix and 5 minor:
        subfolder paths, verify without a spec, SHA pins, secrets on
        pull_request_target, releases before 0.3.0), fixed with tests
-7. [ ] release 0.3.0; download job; site post and pages; softdevstudio
+7. [ ] release 0.3.0 (tag on dd7d675; six assets, Linux binary checked
+       and run). The download job failed on Windows: a CRLF checkout read as
+       drift in every file; fixed in f2289df (with a test), released as
+       0.3.1. Then: download job; site post and pages; softdevstudio
        note; softdev-plan.md
