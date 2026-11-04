@@ -60,6 +60,17 @@ var KnownPaths = []string{
 	kb.ComposePath,
 	kb.CloudInitPath,
 	kb.ScriptPath,
+	kb.ClaudeSettingsPath,
+	kb.ClaudeScriptPath,
+	kb.CodexPath,
+	kb.OnaConfigPath,
+	".ona/config.yml",
+	".ona/automations.yaml",
+	".ona/automations.yml",
+	".gitpod/automations.yaml",
+	".gitpod/automations.yml",
+	".gitpod.yml",
+	kb.DevinPath,
 }
 
 // Referenced returns further files that the known files point at, such as the
@@ -162,6 +173,21 @@ func Check(in Input) Report {
 		case p == kb.ScriptPath:
 			rep.Checked = append(rep.Checked, p)
 			facts = append(facts, scriptFacts(p, text))
+		case p == kb.ClaudeSettingsPath:
+			rep.Checked = append(rep.Checked, p)
+			c.claudeSettings(p, text)
+		case p == kb.OnaConfigPath || contains(kb.OnaOtherConfigPaths, p):
+			rep.Checked = append(rep.Checked, p)
+			c.onaConfig(p, text)
+			if first := onaConfigInUse(in.Files); first != "" && first != p {
+				c.add(p, nil, spec.Warning, "O007", "Delete one, or set the project's config path in Ona.", "Ona reads %s and ignores this file", first)
+			}
+		case p == ".gitpod.yml":
+			rep.Checked = append(rep.Checked, p)
+			c.add(p, nil, spec.Warning, "O008", "Ona's own tool (gitpod env migrate, in Gitpod's CLI) converts it to a dev container and .ona/config.yaml.", ".gitpod.yml is Gitpod Classic's file; Ona's docs no longer list it")
+		case p == kb.DevinPath:
+			rep.Checked = append(rep.Checked, p)
+			c.devinBlueprint(p, text)
 		}
 	}
 
@@ -190,6 +216,17 @@ func Check(in Input) Report {
 		rep.Checked = []string{}
 	}
 	return *rep
+}
+
+// onaConfigInUse is the tasks and services file Ona reads: the first that
+// exists, in Ona's order.
+func onaConfigInUse(files map[string]string) string {
+	for _, p := range append([]string{kb.OnaConfigPath}, kb.OnaOtherConfigPaths...) {
+		if _, ok := files[p]; ok {
+			return p
+		}
+	}
+	return ""
 }
 
 func finish(rep *Report) {

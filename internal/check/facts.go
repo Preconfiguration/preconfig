@@ -475,6 +475,12 @@ func (c *checker) drift(s *spec.Spec) {
 				"%s is missing: preconfig.yaml lists the %s target", f.Path, f.Target)
 			continue
 		}
+		want, err := f.Expected(actual, true)
+		if err != nil {
+			c.add(f.Path, nil, spec.Error, "X003", "Fix the file by hand, then run preconfig build.", "%v", err)
+			continue
+		}
+		f.Content = want
 		if actual == f.Content {
 			continue
 		}
@@ -482,7 +488,10 @@ func (c *checker) drift(s *spec.Spec) {
 		line := firstDifference(actual, f.Content)
 		what := "was edited by hand or written from an older preconfig.yaml"
 		marker := generatedTag
-		if !strings.Contains(f.Content, generatedTag) {
+		if f.Path == kb.ClaudeSettingsPath {
+			// preconfig owns only its hook in this file.
+			marker = kb.ClaudeScriptPath
+		} else if !strings.Contains(f.Content, generatedTag) {
 			// A format with no room for a comment, such as environment.json:
 			// the file preconfig writes always runs its setup script.
 			marker = kb.ScriptPath

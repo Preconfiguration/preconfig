@@ -69,7 +69,7 @@ func TestUsage(t *testing.T) {
 		t.Errorf("a bad flag gave %d", code)
 	}
 	code, out, _ := runCLI("targets")
-	if code != exitOK || strings.Count(out, "\n") != 6 || !strings.Contains(out, kb.CopilotWorkflowPath) {
+	if code != exitOK || strings.Count(out, "\n") != 11 || !strings.Contains(out, kb.CopilotWorkflowPath) || !strings.Contains(out, kb.DevinPath) {
 		t.Errorf("targets: %d %q", code, out)
 	}
 }

@@ -11,7 +11,7 @@ import (
 )
 
 // Date is the day this knowledge was last checked against the platforms.
-const Date = "2026-09-29"
+const Date = "2026-11-04"
 
 // Version of the engine.
 const Version = "0.1.0"
@@ -98,6 +98,71 @@ var CursorKeys = []string{
 // CursorBuildKeys are the keys allowed inside "build".
 var CursorBuildKeys = []string{"dockerfile", "dockerfileContents", "context"}
 
+// Claude Code cloud sessions, from "Configure cloud environments"
+// (code.claude.com/docs/en/cloud-environments). The environment itself
+// (network level, env vars, setup script) is set in the app, not in the
+// repository; a repository reaches a cloud session through .claude/settings.json,
+// whose SessionStart hooks run "on every session including resumed", in cloud
+// and local sessions alike. CLAUDE_CODE_REMOTE is "true" in cloud sessions.
+// Sessions run on Ubuntu 24.04 as root, with the repository cloned.
+const (
+	ClaudeSettingsPath = ".claude/settings.json"
+	ClaudeScriptPath   = ".preconfig/claude-code.sh"
+	ClaudeHookMatcher  = "startup|resume"
+	// ClaudeHookTimeout in seconds: hooks are cancelled after 600 by default,
+	// and the first session installs the machine.
+	ClaudeHookTimeout = 1800
+)
+
+// ClaudeTrustedHosts are hosts on the Trusted network level's default
+// allowlist that the setup script reaches. Hosts it needs that aren't on the
+// list (NodeSource, the PostgreSQL and Redis apt repositories) need the
+// Custom level with the default list included.
+var ClaudeTrustedHosts = []string{"archive.ubuntu.com", "security.ubuntu.com", "ppa.launchpad.net", "pypi.org", "files.pythonhosted.org", "registry.npmjs.org", "proxy.golang.org", "github.com"}
+
+// OpenAI Codex cloud environments, from "Cloud environments" on
+// learn.chatgpt.com (and the legacy page it replaced). Everything is set in
+// the Codex app: Codex works out the setup with you and records an install
+// script and a start skill; env vars, secrets and network access are
+// environment settings. No repository file configures it, so the codex
+// target writes the text to paste.
+const CodexPath = ".preconfig/codex.md"
+
+// Ona (formerly Gitpod), from ona.com/docs: the dev container comes from
+// .devcontainer/devcontainer.json, tasks and services from .ona/config.yaml
+// (earlier names .ona/automations.yaml and .gitpod/automations.yaml are still
+// read, in that order after it). Docker Compose dev containers must set
+// network_mode: host on every service.
+const (
+	OnaConfigPath = ".ona/config.yaml"
+	OnaIDPattern  = `^[a-zA-Z0-9_-]{1,128}$`
+)
+
+// OnaOtherConfigPaths are read when .ona/config.yaml is missing.
+var OnaOtherConfigPaths = []string{".ona/config.yml", ".ona/automations.yaml", ".ona/automations.yml", ".gitpod/automations.yaml", ".gitpod/automations.yml"}
+
+// OnaTriggers are the triggers a config file may use; postMachineStart and
+// beforeSnapshot are API-only.
+var OnaTriggers = []string{"manual", "postDevcontainerStart", "postEnvironmentStart", "prebuild"}
+
+// OnaTaskKeys and OnaServiceKeys are the fields the schema allows.
+var (
+	OnaTopKeys     = []string{"services", "tasks"}
+	OnaTaskKeys    = []string{"name", "description", "command", "triggeredBy", "dependsOn", "prebuildRequiresSuccess", "runsOn"}
+	OnaServiceKeys = []string{"name", "description", "commands", "triggeredBy", "role", "runsOn", "readinessTimeout"}
+)
+
+// Devin, from docs.devin.ai's blueprint reference: .devin/blueprint.yaml,
+// synced in Devin's settings or API after it's committed. initialize and
+// maintenance run at build time from the repository's root and end up in
+// the snapshot; maintenance isn't run at session start, and nothing is.
+// knowledge entries are never run; Devin reads them (lint, test, build).
+const DevinPath = ".devin/blueprint.yaml"
+
+// DevinKeys are the top-level keys a repository blueprint may use
+// (post-build is organization and enterprise only).
+var DevinKeys = []string{"initialize", "maintenance", "knowledge", "runs-on", "shell", "includes", "clone"}
+
 // Paths of the generated files.
 const (
 	DevcontainerPath = ".devcontainer/devcontainer.json"
@@ -109,7 +174,14 @@ const (
 )
 
 // Targets in the order they are written.
-var Targets = []string{"devcontainer", "copilot", "cursor", "cloud-init", "script"}
+var Targets = []string{"devcontainer", "copilot", "cursor", "claude-code", "codex", "ona", "devin", "cloud-init", "script"}
+
+// DefaultTargets are written when preconfig.yaml lists none: the ones 0.1
+// wrote, so that a new version doesn't add files to a repository unasked.
+var DefaultTargets = []string{"devcontainer", "copilot", "cursor", "cloud-init", "script"}
+
+// NeedsScript are the targets that run .preconfig/setup.sh.
+var NeedsScript = []string{"cursor", "claude-code", "codex", "devin"}
 
 // ---- runtimes ----
 

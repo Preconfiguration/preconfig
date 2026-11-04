@@ -153,6 +153,12 @@ func cmdBuild(args []string, stdout, stderr io.Writer) int {
 			continue
 		}
 		old, err := os.ReadFile(p)
+		content, merr := f.Expected(string(old), err == nil)
+		if merr != nil {
+			fmt.Fprintf(stderr, "preconfig: %v\n", merr)
+			return exitFindings
+		}
+		f.Content = content
 		unchanged := err == nil && string(old) == f.Content
 		if !unchanged {
 			if err := os.MkdirAll(filepath.Dir(p), 0o755); err != nil {
@@ -362,11 +368,16 @@ func cmdTargets(stdout io.Writer) int {
 		{"devcontainer", kb.DevcontainerPath + ", and " + kb.ComposePath + " when there are services"},
 		{"copilot", kb.CopilotWorkflowPath},
 		{"cursor", kb.CursorEnvPath + " and " + kb.CursorDocker},
+		{"claude-code", kb.ClaudeSettingsPath + " (a SessionStart hook, merged into an existing file) and " + kb.ClaudeScriptPath},
+		{"codex", kb.CodexPath + ": what to enter in the Codex environment's settings"},
+		{"ona", kb.OnaConfigPath + ", with the devcontainer target"},
+		{"devin", kb.DevinPath},
 		{"cloud-init", kb.CloudInitPath},
 		{"script", kb.ScriptPath},
 	}
 	for _, r := range rows {
 		fmt.Fprintf(stdout, "  %-13s %s\n", r[0], r[1])
 	}
+	fmt.Fprintf(stdout, "Written when preconfig.yaml lists no targets: %s.\n", strings.Join(kb.DefaultTargets, ", "))
 	return exitOK
 }

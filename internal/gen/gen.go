@@ -21,6 +21,22 @@ type File struct {
 	Target  string `json:"target"`
 	Content string `json:"content"`
 	Mode    string `json:"mode,omitempty"` // "0755" for scripts
+	// Merge, when set, combines the generated content with a file that is
+	// already there (preconfig owns only part of it, as with
+	// .claude/settings.json). Build writes, and check expects, its result.
+	Merge string `json:"merge,omitempty"` // "claude-settings"
+}
+
+// MergeClaude is the Merge kind of .claude/settings.json.
+const MergeClaude = "claude-settings"
+
+// Expected is what f's path should hold, given what it holds now.
+func (f File) Expected(existing string, exists bool) (string, error) {
+	switch f.Merge {
+	case MergeClaude:
+		return MergeClaudeSettings(f.Content, existing, exists)
+	}
+	return f.Content, nil
 }
 
 // Result is the output of a build.
@@ -49,6 +65,14 @@ func Build(s *spec.Spec) Result {
 			}
 		case "script":
 			r.Files = append(r.Files, Script(s))
+		case "claude-code":
+			r.Files = append(r.Files, claudeCode(s)...)
+		case "codex":
+			r.Files = append(r.Files, codex(s))
+		case "ona":
+			r.Files = append(r.Files, ona(s))
+		case "devin":
+			r.Files = append(r.Files, devin(s))
 		}
 	}
 	r.Notes = append(r.Notes, notes(s)...)
@@ -83,10 +107,45 @@ func notes(s *spec.Spec) []spec.Diagnostic {
 			ns = append(ns, spec.Diagnostic{File: kb.DevcontainerPath, Severity: spec.Note, Code: "B003",
 				Message: "devcontainer.json lists " + names + pick(" as a recommended secret; Codespaces asks for it, local containers read it", " as recommended secrets; Codespaces asks for them, local containers read them") + " from the environment"})
 		}
+		if s.Has("claude-code") {
+			ns = append(ns, spec.Diagnostic{File: kb.ClaudeSettingsPath, Severity: spec.Note, Code: "B012",
+				Message: "set " + names + " in the Claude Code environment's environment variables (anyone using the environment can read them), or as a network secret when only an HTTPS API needs " + pick("it", "them")})
+		}
+		if s.Has("codex") {
+			ns = append(ns, spec.Diagnostic{File: kb.CodexPath, Severity: spec.Note, Code: "B013",
+				Message: "set " + names + pick(" as a secret", " as secrets") + " in the Codex environment's settings"})
+		}
+		if s.Has("ona") {
+			ns = append(ns, spec.Diagnostic{File: kb.OnaConfigPath, Severity: spec.Note, Code: "B014",
+				Message: "set " + names + pick(" as an Ona secret", " as Ona secrets") + " (project or user, as environment variables)"})
+		}
+		if s.Has("devin") {
+			ns = append(ns, spec.Diagnostic{File: kb.DevinPath, Severity: spec.Note, Code: "B015",
+				Message: "set " + names + " in Devin's Secrets settings; the blueprint's build steps read " + pick("it", "them") + " as $" + s.Secrets[0] + pick("", " and so on")})
+		}
 		if s.Has("script") || s.Has("cloud-init") {
 			ns = append(ns, spec.Diagnostic{File: kb.ScriptPath, Severity: spec.Note, Code: "B004",
 				Message: "the setup script expects " + names + " in its environment and warns when " + pick("it is", "one is") + " missing"})
 		}
+	}
+	if s.Has("claude-code") {
+		msg := "the first cloud session sets up the machine from the SessionStart hook; the environment's Trusted network level is enough"
+		if hosts := extraHosts(s); len(hosts) > 0 {
+			msg = "the first cloud session sets up the machine from the SessionStart hook; set the environment's network to Custom, with the default list included, and add " + andList(hosts)
+		}
+		ns = append(ns, spec.Diagnostic{File: kb.ClaudeSettingsPath, Severity: spec.Note, Code: "B016", Message: msg})
+	}
+	if s.Has("codex") {
+		ns = append(ns, spec.Diagnostic{File: kb.CodexPath, Severity: spec.Note, Code: "B017",
+			Message: "Codex has no setup file; enter what " + kb.CodexPath + " lists in the environment's settings"})
+	}
+	if s.Has("devin") {
+		ns = append(ns, spec.Diagnostic{File: kb.DevinPath, Severity: spec.Note, Code: "B018",
+			Message: "after committing it, sync the blueprint in Devin (Settings, Environment, Blueprints, or the API) and build"})
+	}
+	if s.Has("ona") && len(s.Services) > 0 {
+		ns = append(ns, spec.Diagnostic{File: kb.ComposePath, Severity: spec.Note, Code: "B019",
+			Message: "compose.yaml puts every service on the host's network, as Ona requires; on Docker Desktop that needs host networking turned on (Settings, Resources, Network)"})
 	}
 	if s.Has("cloud-init") && s.Repo == "" {
 		ns = append(ns, spec.Diagnostic{File: kb.CloudInitPath, Severity: spec.Note, Code: "B011",

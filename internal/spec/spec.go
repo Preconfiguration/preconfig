@@ -637,7 +637,7 @@ func (l *loader) commands(n *tree.Node, what string) []string {
 
 func (l *loader) targets(n *tree.Node) {
 	if n == nil {
-		l.s.Targets = append([]string(nil), kb.Targets...)
+		l.s.Targets = append([]string(nil), kb.DefaultTargets...)
 		return
 	}
 	seen := map[string]bool{}
@@ -663,12 +663,21 @@ func (l *loader) targets(n *tree.Node) {
 		picked = append(picked, str)
 	}
 	if len(picked) == 0 && !HasErrors(l.ds) {
-		l.errf("S090", n, "Leave targets out to write all of them, or list at least one.", "no targets to write")
+		l.errf("S090", n, "Leave targets out to write the default ones, or list at least one.", "no targets to write")
 	}
-	// The Cursor Dockerfile and cloud-init run the setup script.
-	if seen["cursor"] && !seen["script"] {
-		l.add(Note, "S091", n, "the cursor target runs .preconfig/setup.sh, so the script target is written too", "")
-		picked = append(picked, "script")
+	// Targets that run the setup script bring it along.
+	for _, t := range kb.NeedsScript {
+		if seen[t] && !seen["script"] {
+			l.add(Note, "S091", n, "the "+t+" target runs .preconfig/setup.sh, so the script target is written too", "")
+			picked = append(picked, "script")
+			seen["script"] = true
+		}
+	}
+	// Ona starts the dev container.
+	if seen["ona"] && !seen["devcontainer"] {
+		l.add(Note, "S091", n, "Ona starts the dev container, so the devcontainer target is written too", "")
+		picked = append(picked, "devcontainer")
+		seen["devcontainer"] = true
 	}
 	// Keep the canonical order.
 	var ordered []string

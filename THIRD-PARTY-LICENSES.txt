@@ -2,7 +2,7 @@ Third-party licenses
 ====================
 
 preconfig is written in Go and uses no third-party modules. The preconfig
-binaries in this folder include the Go standard library and runtime, under the
+binaries include the Go standard library and runtime, under the
 license below. The browser demos carry their own notices, in
 demo/app/THIRD-PARTY-LICENSES.txt and demo/doctor/THIRD-PARTY-LICENSES.txt.
 

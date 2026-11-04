@@ -32,9 +32,9 @@ on:
 permissions:
   contents: read
 
-# The Go that built bin/, so the same source gives the same bytes.
+# The current stable Go. go.mod's go line is the oldest Go that builds it.
 env:
-  GO_VERSION: "1.24.7"
+  GO_VERSION: stable
 
 jobs:
   plan:
@@ -96,7 +96,7 @@ jobs:
           esac
 
   # preconfig is pure Go with no cgo, so one Linux machine builds all five
-  # binaries with tools/build.sh, the same way bin/ was built.
+  # binaries with tools/build.sh.
   build:
     needs: plan
     if: needs.plan.outputs.tag != ''
@@ -109,15 +109,8 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
       - run: bash tools/build.sh out
-      - name: Compare with bin/
-        # For the record only: bin/ may hold an older version.
-        run: |
-          (cd out && sha256sum preconfig-*) | tee built.txt
-          if diff <(sort -k2 built.txt) <(sort -k2 bin/SHA256SUMS.txt) > /dev/null; then
-            echo "The binaries match bin/SHA256SUMS.txt byte for byte."
-          else
-            echo "The binaries differ from bin/; bin/ holds another version."
-          fi
+      - name: Checksums of the build
+        run: (cd out && sha256sum preconfig-*)
       - name: Package
         run: |
           mkdir dist
@@ -132,7 +125,7 @@ jobs:
             if [ "$os" = windows ]; then exe=preconfig.exe; else exe=preconfig; fi
             cp "$f" "$pkg/$exe"
             chmod +x "$pkg/$exe"
-            cp LICENSE NOTICE README.md bin/THIRD-PARTY-LICENSES.txt "$pkg/"
+            cp LICENSE NOTICE README.md THIRD-PARTY-LICENSES.txt "$pkg/"
             if [ "$os" = windows ]; then
               (cd "$pkg" && zip -q -X "../dist/preconfig_${os}_${arch}.zip" *)
             else

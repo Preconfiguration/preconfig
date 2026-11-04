@@ -1,4 +1,4 @@
-# preconfig: the Preconfiguration.com Alpha
+# preconfig
 
 preconfig gets an AI coding agent's machine ready before the agent starts. A
 team describes the machine once, in `preconfig.yaml`, and preconfig writes the
@@ -9,9 +9,10 @@ project's own ready check, usually its tests, on a clean machine.
 When a setup fails, Preconfig Doctor reads its log, names the cause and, when
 the cause is in the spec, writes the change to `preconfig.yaml` that fixes it.
 
-This is the Alpha prototype: the engine, its tests, the tools that measured it
-and the live demos' source. Preconfig Core 0.1.0, knowledge base dated
-2026-09-29, with Preconfig Doctor 0.1.0, its knowledge dated 2026-09-30.
+This repository holds the engine, its tests, the tools that measured it and the
+live demos' source. preconfig 0.2.0, knowledge base dated 2026-11-04, with
+Preconfig Doctor, its knowledge dated 2026-09-30. Releases, with binaries for
+Linux, macOS and Windows, are on GitHub.
 
 The site, with both live demos, is at https://preconfiguration.com/.
 
@@ -40,9 +41,71 @@ with 0 when the log shows no failure or `--fix` applied the change, 1 when it
 found the cause, 2 when no rule explains the failure, and 4 when `--fix`
 couldn't change the spec.
 
-The five targets: `.devcontainer/devcontainer.json` (and `compose.yaml` with
-services), `.github/workflows/copilot-setup-steps.yml`, `.cursor/environment.json`
-and `.cursor/Dockerfile`, `cloud-init.yaml`, and `.preconfig/setup.sh`.
+The nine targets:
+
+| Target | Writes | For |
+|---|---|---|
+| devcontainer | `.devcontainer/devcontainer.json`, and `compose.yaml` with services | Dev containers, Codespaces |
+| copilot | `.github/workflows/copilot-setup-steps.yml` | GitHub Copilot's coding agent |
+| cursor | `.cursor/environment.json` and `.cursor/Dockerfile` | Cursor's cloud agents |
+| claude-code | `.claude/settings.json` (a SessionStart hook) and `.preconfig/claude-code.sh` | Claude Code cloud sessions |
+| codex | `.preconfig/codex.md`, the values to enter in Codex's settings | OpenAI Codex cloud environments |
+| ona | `.ona/config.yaml`, with the devcontainer target | Ona (formerly Gitpod) |
+| devin | `.devin/blueprint.yaml` | Devin |
+| cloud-init | `cloud-init.yaml` | a plain cloud server |
+| script | `.preconfig/setup.sh` | anything that runs a shell script |
+
+`targets:` in preconfig.yaml picks them. Without it, build writes the five
+that 0.1 wrote (devcontainer, copilot, cursor, cloud-init, script), so a new
+version never adds files to a repository unasked; the others are listed by
+name. Targets that run the setup script bring the script target along, and
+ona brings devcontainer.
+
+## The agent platforms added in 0.2
+
+Each platform's own documentation was read on 2026-11-04 before its target
+was written. Two of them take their setup from the repository, two from
+their own settings, so the targets differ in what they can do.
+
+**Claude Code cloud sessions.** The environment (network access, environment
+variables, a setup script) is set in Claude Code's settings; a repository
+reaches a session through `.claude/settings.json`. preconfig adds a
+SessionStart hook there, merged into the file you already have (your own
+settings and hooks stay, and preconfig's env values and hook replace earlier
+ones). The hook runs `.preconfig/claude-code.sh`, which does nothing on your
+own machine and, in a cloud session, sets up the machine and the project
+once per version of the setup script and starts the services every session,
+since a session keeps files but not running processes. The setup script
+needs only the Trusted network level unless it reaches NodeSource or the
+PostgreSQL or Redis apt repositories, which build names. Tested: the hook's
+command run in a Claude Code cloud session (results/platforms/claude-code-hook-run.txt),
+which found that its image makes `python3` Python 3.13; the setup script
+now points `python3` at Ubuntu's 3.12 when that's the version asked for.
+Not tested: Claude Code reading the settings file in a fresh session.
+
+**OpenAI Codex.** Codex keeps environments in its own settings, where it
+works out the setup with you and records an install script and a start
+step; no repository file configures it. The codex target writes
+`.preconfig/codex.md` with what goes in each field: the install script, the
+services' start, the ready check, the environment variables, the secrets
+and the network access setup needs. Not run on Codex.
+
+**Ona.** Ona builds the dev container from `devcontainer.json` and reads tasks
+and services from `.ona/config.yaml`. The ona target adds the ready check as a
+manual task, and, since Ona requires `network_mode: host` on every Compose
+service, puts the dev container's services on the host network (on Docker
+Desktop that needs host networking turned on). check reads `.ona/config.yaml`
+and the older names Ona still reads, and warns about `.gitpod.yml`. Ona's CLI
+validates dev containers but not the tasks file, and neither ran here; the
+file is checked against the documented schema. Not run on Ona.
+
+**Devin.** Devin builds a snapshot from `.devin/blueprint.yaml` once it is
+synced in Devin's settings. The devin target puts the machine step in
+`initialize`, the environment in `$ENVRC`, the project step in
+`maintenance`, and the ready check and the services' start in `knowledge`,
+because nothing runs at a Devin session's start. check applies the
+blueprint reference's rules (run or uses, no uses in maintenance, no
+post-build in a repository). Devin documents no validator. Not run on Devin.
 
 ## Layout
 
@@ -68,11 +131,12 @@ tools/               builds, platform validation, planted bugs, quoting and
 results/doctor/      Doctor's measured results: scores, proofs, the freeze
 demo/app/            the Core live demo: open index.html in a browser
 demo/doctor/         the Doctor live demo
-bin/                 ready-built binaries for Linux, macOS and Windows
+results/platforms/   recorded runs on the agent platforms
 ```
 
-Go 1.24, standard library only. Core is 6,842 lines in 19 files, with 3,144
-lines of tests. Doctor adds 2,999 lines, with 820 lines of tests.
+Go 1.24 or later, standard library only. Core (cmd/preconfig and internal/
+apart from Doctor) is 7,609 lines in 20 files, with 3,470 lines of tests.
+Doctor adds 2,999 lines, with 820 lines of tests.
 
 ## Build
 
@@ -88,21 +152,19 @@ the Doctor demo uses; the Core demo keeps `engine.v1.js`, built from Core 0.1.0.
 
 ## Binaries
 
-`bin/` holds preconfig 0.1.0 built from this tree with `tools/build.sh` and Go
-1.24.7, for Linux (x86-64 and Arm), macOS (Intel and Apple silicon) and
-Windows (x86-64). The build is reproducible: the same command on this tree
-gives the same bytes. Check a download against `bin/SHA256SUMS.txt`:
+Each release on GitHub has preconfig for Linux (x86-64 and Arm), macOS (Intel
+and Apple silicon) and Windows (x86-64), packed with the license files, at
+`releases/latest/download/preconfig_{linux,darwin}_{amd64,arm64}.tar.gz` and
+`preconfig_windows_amd64.zip`, with a `SHA256SUMS`:
 
 ```
-sha256sum -c SHA256SUMS.txt          # Linux, in bin/
-shasum -a 256 -c SHA256SUMS.txt      # macOS, in bin/
+sha256sum -c --ignore-missing SHA256SUMS      # Linux
+shasum -a 256 -c --ignore-missing SHA256SUMS  # macOS
 ```
 
-The same binaries come with each release on GitHub, packed with the license
-files, at `releases/latest/download/preconfig_{linux,darwin}_{amd64,arm64}.tar.gz`
-and `preconfig_windows_amd64.zip`, with a `SHA256SUMS`. Before a release goes
-out, `tools/smoke.sh` runs each binary on its own system: Linux on x86-64 and
-Arm, macOS on Apple silicon (and Intel where the runner can), and Windows.
+Before a release goes out, `tools/smoke.sh` runs each binary on its own
+system: Linux on x86-64 and Arm, macOS on Apple silicon (and Intel where the
+runner can), and Windows. Binaries aren't kept in the repository.
 
 ## Releases
 
@@ -116,8 +178,8 @@ passes.
 
 | Command | What it reproduces |
 |---|---|
-| `go test ./...` | 125 test functions, Core's 110 and Doctor's 15; the golden files; the setup script run under bash |
-| `go test -cover ./cmd/preconfig ./internal/...` | Coverage: 90.5% of Core's statements, 84.1% of Doctor's |
+| `go test ./...` | 134 test functions, Core's 119 and Doctor's 15; the golden files; the setup script and the Claude Code hook run under bash |
+| `go test -coverpkg=<Core's packages> ./cmd/preconfig ./internal/...` | Coverage: 92.6% of Core's statements; Doctor's own package 84.1% |
 | `go test -run '^$' -bench . ./internal/...` | The speed of build, check and detect |
 | `go test ./internal/<package> -fuzz <target>` | Fuzzing: FuzzLoad (spec), FuzzParse (yaml, jsonc), FuzzCheck (check), FuzzDetect and FuzzYamlStr (detect) |
 | `python3 tools/mutate.py`, `python3 tools/doctor/mutate.py` | Planted bugs, one at a time, with the source put back after each: 32 in Core, 14 in Doctor |
@@ -141,13 +203,13 @@ Alpha report v1.1 sets them out.
 
 ## Status
 
-A working compiler, checker and verifier, tested on one Linux machine, and a
-Doctor measured on 39 recorded cases, 11 of them recorded after its rules were
-frozen. Python installed with uv has run since the Core Alpha: Python 3.13
-reached READY on September 30. Not done yet, and the job of the Beta: runs on
-Copilot, Cursor and Codespaces themselves; the Node.js, Go, PostgreSQL (other
-than 16) and Redis 8 install paths, which the test machine couldn't reach;
-real repositories at scale; macOS, Windows and Arm, whose binaries compile but
-haven't run; cloud-init on a real server.
+A working compiler, checker and verifier, tested on Linux, with release
+binaries smoke-tested on Linux, macOS and Windows, and a Doctor measured on 39
+recorded cases, 11 of them recorded after its rules were frozen. Of the agent
+platforms, only Claude Code's cloud sessions have run preconfig's setup (the
+hook's command, recorded). Not done yet: runs on Copilot, Cursor, Codex, Ona,
+Devin and Codespaces themselves; the Node.js, Go, PostgreSQL (other than 16)
+and Redis 8 install paths on a clean machine; real repositories at scale;
+cloud-init on a real server.
 
 Contact: info@preconfiguration.com

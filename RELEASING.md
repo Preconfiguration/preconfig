@@ -29,9 +29,8 @@ is started by a finished `test` run, not by the push itself.
   Stops quietly if `vX.Y.Z` is already a tag. Fails loudly if the version is
   lower than the newest tag.
 - **build.** preconfig is pure Go with no cgo, so one Linux machine builds all
-  five binaries with `tools/build.sh`, the same way `bin/` was built. It
-  compares them with `bin/SHA256SUMS.txt` for the record only, since `bin/`
-  may hold an older version.
+  five binaries with `tools/build.sh`, with the current stable Go, and prints
+  their checksums.
 - **check.** Each archive is unpacked and run through `tools/smoke.sh` on its
   own system: Linux x86-64 and ARM, macOS Apple silicon and Intel (format
   check only when the runner can't run Intel binaries), and Windows.
@@ -106,8 +105,8 @@ made, so the same version goes out on the next green run.
   `workflows: [test]`. Renaming one means renaming the other.
 - `workflow_run` only fires for workflow files on the default branch, so
   changes to either workflow take effect once they're on `main`.
-- The committed binaries in `bin/` stay as they are. The release builds its
-  own; refresh `bin/` with `tools/build.sh bin` only when asked.
+- Binaries are not committed. Each release builds its own (the `bin/`
+  folder that held 0.1.0's was removed in 0.2.0).
 
 ## Bringing this to another project
 

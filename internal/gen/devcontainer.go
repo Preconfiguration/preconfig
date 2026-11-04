@@ -108,12 +108,23 @@ func devcontainer(s *spec.Spec) []File {
 func compose(s *spec.Spec) string {
 	var b sb
 	b.WriteString(Header("#"))
-	b.line("# The dev container (app) and its services. The services share app's network,")
-	b.line("# so they answer on localhost inside the dev container.")
+	net := "service:app"
+	if s.Has("ona") {
+		// Ona requires network_mode: host on every Compose service.
+		net = "host"
+		b.line("# The dev container (app) and its services, all on the host's network, as")
+		b.line("# Ona requires, so the services answer on localhost inside the dev container.")
+	} else {
+		b.line("# The dev container (app) and its services. The services share app's network,")
+		b.line("# so they answer on localhost inside the dev container.")
+	}
 	b.line("services:")
 	b.line("  app:")
 	b.line("    image: %s", yq(s.Base.DevcontainerImage))
 	b.line("    command: sleep infinity")
+	if net == "host" {
+		b.line("    network_mode: host")
+	}
 	b.line("    volumes:")
 	b.line("      - ../..:/workspaces:cached")
 	var volumes []string
@@ -123,7 +134,7 @@ func compose(s *spec.Spec) string {
 			b.line("  postgres:")
 			b.line("    image: %s", yq(fmt.Sprintf("postgres:%d", sv.Major)))
 			b.line("    restart: unless-stopped")
-			b.line("    network_mode: service:app")
+			b.line("    network_mode: %s", net)
 			b.line("    environment:")
 			b.line("      POSTGRES_USER: %s", yq(sv.User))
 			b.line("      POSTGRES_PASSWORD: %s", yq(sv.Password))
@@ -135,7 +146,7 @@ func compose(s *spec.Spec) string {
 			b.line("  redis:")
 			b.line("    image: %s", yq(fmt.Sprintf("redis:%d", sv.Major)))
 			b.line("    restart: unless-stopped")
-			b.line("    network_mode: service:app")
+			b.line("    network_mode: %s", net)
 		}
 	}
 	if len(volumes) > 0 {

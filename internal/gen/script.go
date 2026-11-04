@@ -196,8 +196,18 @@ func pythonStep(s *spec.Spec) step {
 		check = fmt.Sprintf(`python3 -c 'import platform, sys; sys.exit(platform.python_version() != "%s")' || fail "python3 is $(python3 --version 2>&1), not %s"`, v, v)
 	}
 	if v == s.Base.DistroPython {
+		// Some images make python3 another version, such as Claude Code's
+		// cloud image (3.13, through update-alternatives and /usr/local/bin).
+		// Ubuntu's own interpreter is still /usr/bin/python3.N: point
+		// python3 in /usr/local/bin at it.
+		test := strings.SplitN(check, " || ", 2)[0]
+		exe := "/usr/bin/python" + parts[0] + "." + parts[1]
 		return step{"python " + v, []string{
 			`apt_install python3 python3-venv python3-pip`,
+			`if ! ` + test + ` 2>/dev/null && [ -x ` + exe + ` ]; then`,
+			`  as_root ln -sf ` + exe + ` /usr/local/bin/python3`,
+			`  hash -r`,
+			`fi`,
 			check,
 		}}
 	}
