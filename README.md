@@ -124,7 +124,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: Preconfiguration/preconfig@v0.3.0
+      - uses: Preconfiguration/preconfig@v0.3.1
 ```
 
 The action downloads the preconfig release for the runner, checks it against
