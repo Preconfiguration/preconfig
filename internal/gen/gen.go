@@ -129,7 +129,7 @@ func notes(s *spec.Spec) []spec.Diagnostic {
 		}
 	}
 	if s.Has("claude-code") {
-		msg := "the first cloud session sets up the machine from the SessionStart hook; the environment's Trusted network level is enough"
+		msg := "the first cloud session sets up the machine from the SessionStart hook; the setup script reaches nothing outside the Trusted network level's list that preconfig knows of"
 		if hosts := extraHosts(s); len(hosts) > 0 {
 			msg = "the first cloud session sets up the machine from the SessionStart hook; set the environment's network to Custom, with the default list included, and add " + andList(hosts)
 		}

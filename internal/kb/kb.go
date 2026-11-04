@@ -114,12 +114,6 @@ const (
 	ClaudeHookTimeout = 1800
 )
 
-// ClaudeTrustedHosts are hosts on the Trusted network level's default
-// allowlist that the setup script reaches. Hosts it needs that aren't on the
-// list (NodeSource, the PostgreSQL and Redis apt repositories) need the
-// Custom level with the default list included.
-var ClaudeTrustedHosts = []string{"archive.ubuntu.com", "security.ubuntu.com", "ppa.launchpad.net", "pypi.org", "files.pythonhosted.org", "registry.npmjs.org", "proxy.golang.org", "github.com"}
-
 // OpenAI Codex cloud environments, from "Cloud environments" on
 // learn.chatgpt.com (and the legacy page it replaced). Everything is set in
 // the Codex app: Codex works out the setup with you and records an install

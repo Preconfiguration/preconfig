@@ -70,12 +70,17 @@ their own settings, so the targets differ in what they can do.
 **Claude Code cloud sessions.** The environment (network access, environment
 variables, a setup script) is set in Claude Code's settings; a repository
 reaches a session through `.claude/settings.json`. preconfig adds a
-SessionStart hook there, merged into the file you already have (your own
-settings and hooks stay, and preconfig's env values and hook replace earlier
-ones). The hook runs `.preconfig/claude-code.sh`, which does nothing on your
-own machine and, in a cloud session, sets up the machine and the project
-once per version of the setup script and starts the services every session,
-since a session keeps files but not running processes. The setup script
+SessionStart hook there, merged into the file you already have: your own
+settings and hooks stay (comments don't, as the file is written back as plain
+JSON), and preconfig's hook replaces an earlier one. The hook runs
+`.preconfig/claude-code.sh`, which does nothing on your own machine and, in a
+cloud session, sets up the machine and the project once per version of the
+setup script, starts the services every session (a session keeps files but
+not running processes), and hands the project's environment variables to
+Claude's later commands through `$CLAUDE_ENV_FILE`. Nothing goes into the
+settings' own `env`, which local sessions read too. When a step fails, the
+hook tells Claude which one and shows the end of its log; the session still
+starts. After changing dependencies, run `bash .preconfig/setup.sh project`. The setup script
 needs only the Trusted network level unless it reaches NodeSource or the
 PostgreSQL or Redis apt repositories, which build names. Tested: the hook's
 command run in a Claude Code cloud session (results/platforms/claude-code-hook-run.txt),
@@ -87,8 +92,10 @@ Not tested: Claude Code reading the settings file in a fresh session.
 works out the setup with you and records an install script and a start
 step; no repository file configures it. The codex target writes
 `.preconfig/codex.md` with what goes in each field: the install script, the
-services' start, the ready check, the environment variables, the secrets
-and the network access setup needs. Not run on Codex.
+maintenance script of Codex Cloud (Legacy) environments, the services'
+start, the ready check, the environment variables, how to hold the secrets
+(in Legacy environments they reach only the setup script) and the network
+access setup needs. Not run on Codex.
 
 **Ona.** Ona builds the dev container from `devcontainer.json` and reads tasks
 and services from `.ona/config.yaml`. The ona target adds the ready check as a

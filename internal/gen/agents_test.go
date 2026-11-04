@@ -112,8 +112,10 @@ func TestMergeClaudeSettings(t *testing.T) {
 	if root.Path("permissions", "allow").Strings()[0] != "Bash(npm test)" || root.Path("env", "KEEP").Str() != "1" || root.Path("hooks", "Stop") == nil {
 		t.Errorf("the file's own settings weren't kept:\n%s", got)
 	}
-	if root.Path("env", "DATABASE_URL").Str() == "old" {
-		t.Error("preconfig.yaml's env value didn't win")
+	// preconfig's env goes to cloud sessions only, through the hook, never
+	// into settings.json, which local sessions read too.
+	if root.Path("env", "DATABASE_URL").Str() != "old" || strings.Contains(gen, "DATABASE_URL") {
+		t.Errorf("env in settings.json:\n%s", got)
 	}
 	ss := root.Path("hooks", "SessionStart").Items
 	if len(ss) != 2 || ss[0].Get("hooks").Items[0].Get("command").Str() != "echo mine" || ss[1].Get("hooks").Items[0].Get("command").Str() != ClaudeHookCommand {
@@ -123,7 +125,18 @@ func TestMergeClaudeSettings(t *testing.T) {
 	if again != got {
 		t.Error("merging twice changed the file")
 	}
-	for _, bad := range []string{`[1]`, `{"hooks": 3}`, `{"hooks": {"SessionStart": {}}}`, `{"env": []}`, `{"a":`} {
+	// A user's entry that also runs preconfig's script loses only that hook.
+	mixed := `{"hooks": {"SessionStart": [{"matcher": "startup", "hooks": [{"type": "command", "command": "bash .preconfig/claude-code.sh"}, {"type": "command", "command": "echo mine"}]}]}}`
+	got, _ = MergeClaudeSettings(gen, mixed, true)
+	if strings.Count(got, kb.ClaudeScriptPath) != 1 || !strings.Contains(got, "echo mine") {
+		t.Errorf("mixed entry:\n%s", got)
+	}
+	// A key that appears twice keeps its last value, as Claude Code reads it.
+	got, err = MergeClaudeSettings(gen, `{"model": "a", "model": "b"}`, true)
+	if err != nil || !strings.Contains(got, `"model": "b"`) || strings.Contains(got, `"a"`) {
+		t.Errorf("duplicate key: %v\n%s", err, got)
+	}
+	for _, bad := range []string{`[1]`, `{"hooks": 3}`, `{"hooks": {"SessionStart": {}}}`, `{"a":`} {
 		if _, err := MergeClaudeSettings(gen, bad, true); err == nil {
 			t.Errorf("merged into %s", bad)
 		}
@@ -182,10 +195,72 @@ func TestClaudeHook(t *testing.T) {
 	if !strings.HasSuffix(string(b), "machine\nproject\nservices\n") {
 		t.Errorf("after a change: %q", b)
 	}
-	// A failing step fails the hook and says where to look.
-	os.WriteFile(filepath.Join(dir, kb.ScriptPath), []byte("echo boom; exit 3\n"), 0o755)
-	if out, code := run(true); code == 0 || !strings.Contains(out, "machine step") || !strings.Contains(out, "boom") {
+	// A failing step tells Claude, on standard output, which step and why;
+	// the session still starts. The log holds this run only.
+	os.WriteFile(filepath.Join(dir, kb.ScriptPath), []byte("echo boom-$1; exit 3\n"), 0o755)
+	out, code := run(true)
+	if code != 0 || !strings.Contains(out, "machine step") || !strings.Contains(out, "boom-machine") {
 		t.Errorf("failing step: %d %q", code, out)
+	}
+	out, _ = run(true)
+	if strings.Count(out, "boom-machine") != 1 {
+		t.Errorf("the log kept an earlier run: %q", out)
+	}
+	// No setup script: a message, not a crash.
+	os.Remove(filepath.Join(dir, kb.ScriptPath))
+	if out, code := run(true); code != 0 || !strings.Contains(out, "missing") {
+		t.Errorf("no setup script: %d %q", code, out)
+	}
+}
+
+// The project's environment reaches a cloud session's later commands
+// through CLAUDE_ENV_FILE, quoted so that any value survives.
+func TestClaudeHookEnv(t *testing.T) {
+	needBash(t)
+	s := load(t, "version: 1\nname: app\nruntimes: {go: \"1.24\"}\nenv:\n  JAVA_OPTS: \"-Xmx1g -Dx=1\"\n  ODD: \"it's $HOME `x` \\\\n\"\ntargets: [claude-code]\n")
+	var script string
+	for _, f := range Build(s).Files {
+		if f.Path == kb.ClaudeScriptPath {
+			script = f.Content
+		}
+	}
+	dir := t.TempDir()
+	os.MkdirAll(filepath.Join(dir, ".preconfig"), 0o755)
+	os.WriteFile(filepath.Join(dir, kb.ClaudeScriptPath), []byte(script), 0o755)
+	os.WriteFile(filepath.Join(dir, kb.ScriptPath), []byte("true\n"), 0o755)
+	envFile := filepath.Join(dir, "env.sh")
+	cmd := exec.Command("bash", filepath.Join(dir, kb.ClaudeScriptPath))
+	cmd.Env = append(os.Environ(), "CLAUDE_CODE_REMOTE=true", "CLAUDE_PROJECT_DIR="+dir, "XDG_STATE_HOME="+dir+"/state", "CLAUDE_ENV_FILE="+envFile)
+	if out, err := cmd.CombinedOutput(); err != nil {
+		t.Fatalf("%v %s", err, out)
+	}
+	out, err := exec.Command("bash", "-c", `. "$1"; printf '%s|%s|%s' "$JAVA_OPTS" "$ODD" "$GOTOOLCHAIN"`, "_", envFile).Output()
+	if err != nil || string(out) != "-Xmx1g -Dx=1|it's $HOME `x` \\n|go1.24.0+auto" {
+		t.Errorf("env file read back as %q (%v)", out, err)
+	}
+}
+
+// Devin's $ENVRC is read as shell: values with spaces, quotes and $ survive.
+func TestDevinEnvrc(t *testing.T) {
+	needBash(t)
+	s := load(t, "version: 1\nname: app\nenv:\n  JAVA_OPTS: \"-Xmx1g -Dx=1\"\n  ODD: \"it's $HOME\"\ntargets: [devin]\n")
+	var bp string
+	for _, f := range Build(s).Files {
+		if f.Path == kb.DevinPath {
+			bp = f.Content
+		}
+	}
+	root, err := yaml.Parse(bp)
+	if err != nil {
+		t.Fatal(err)
+	}
+	run := root.Get("initialize").Items[1].Get("run").Str()
+	envrc := filepath.Join(t.TempDir(), "envrc")
+	cmd := exec.Command("bash", "-c", run+"\n. \"$ENVRC\"; printf '%s|%s' \"$JAVA_OPTS\" \"$ODD\"")
+	cmd.Env = append(os.Environ(), "ENVRC="+envrc)
+	out, err := cmd.CombinedOutput()
+	if err != nil || string(out) != "-Xmx1g -Dx=1|it's $HOME" {
+		t.Errorf("$ENVRC read back as %q (%v)", out, err)
 	}
 }
 

@@ -318,3 +318,29 @@ func TestVerifyPassesSecrets(t *testing.T) {
 		t.Errorf("args:\n%s", args)
 	}
 }
+
+// build merges into an existing .claude/settings.json before it prints,
+// so --json and --dry-run show what would be written.
+func TestBuildMergesClaudeSettings(t *testing.T) {
+	dir := copyRepo(t, "orders-api", true)
+	specPath := filepath.Join(dir, "preconfig.yaml")
+	b, _ := os.ReadFile(specPath)
+	os.WriteFile(specPath, append(b, []byte("targets: [claude-code]\n")...), 0o644)
+	os.MkdirAll(filepath.Join(dir, ".claude"), 0o755)
+	os.WriteFile(filepath.Join(dir, kb.ClaudeSettingsPath), []byte(`{"model": "mine"}`), 0o644)
+	code, out, _ := runCLI("build", "--dir", dir, "--json", "--dry-run")
+	if code != exitOK || !strings.Contains(out, `\"model\": \"mine\"`) || !strings.Contains(out, "claude-code.sh") {
+		t.Errorf("build --json: %d %s", code, out)
+	}
+	if code, _, _ := runCLI("build", "--dir", dir); code != exitOK {
+		t.Fatalf("build: %d", code)
+	}
+	got, _ := os.ReadFile(filepath.Join(dir, kb.ClaudeSettingsPath))
+	if !strings.Contains(string(got), `"model": "mine"`) || !strings.Contains(string(got), "SessionStart") {
+		t.Errorf("written: %s", got)
+	}
+	os.WriteFile(filepath.Join(dir, kb.ClaudeSettingsPath), []byte(`[1]`), 0o644)
+	if code, _, errOut := runCLI("build", "--dir", dir, "--dry-run"); code == exitOK || !strings.Contains(errOut, "settings.json") {
+		t.Errorf("unmergeable file in a dry run: %d %q", code, errOut)
+	}
+}

@@ -16,6 +16,9 @@ import (
 type Options struct {
 	Comments       bool
 	TrailingCommas bool
+	// LastDuplicate keeps the last value of a key that appears twice, as
+	// JavaScript's JSON.parse does, instead of failing.
+	LastDuplicate bool
 }
 
 // JSONC is what devcontainer.json allows.
@@ -177,7 +180,7 @@ func (r *reader) object() (*tree.Node, error) {
 		if err != nil {
 			return nil, err
 		}
-		if prev, dup := seen[k]; dup {
+		if prev, dup := seen[k]; dup && !r.opts.LastDuplicate {
 			return nil, &Error{Line: kl, Col: kc, Msg: fmt.Sprintf("the key %q appears twice (first on line %d)", k, prev)}
 		}
 		seen[k] = kl
@@ -195,8 +198,19 @@ func (r *reader) object() (*tree.Node, error) {
 		if err != nil {
 			return nil, err
 		}
-		n.Keys = append(n.Keys, &tree.Node{Kind: tree.Scalar, Type: tree.String, Value: k, Line: kl, Col: kc})
-		n.Values = append(n.Values, v)
+		replaced := false
+		if r.opts.LastDuplicate {
+			for i, ek := range n.Keys {
+				if ek.Value == k {
+					n.Values[i] = v
+					replaced = true
+				}
+			}
+		}
+		if !replaced {
+			n.Keys = append(n.Keys, &tree.Node{Kind: tree.Scalar, Type: tree.String, Value: k, Line: kl, Col: kc})
+			n.Values = append(n.Values, v)
+		}
 		if err := r.skip(); err != nil {
 			return nil, err
 		}

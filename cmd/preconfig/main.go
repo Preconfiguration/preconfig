@@ -141,10 +141,26 @@ func cmdBuild(args []string, stdout, stderr io.Writer) int {
 		return code
 	}
 	res := gen.Build(s)
+	// Files preconfig shares with the repository (.claude/settings.json) are
+	// merged with what's there before anything is printed or written.
+	olds := make([]*string, len(res.Files))
+	for i, f := range res.Files {
+		b, err := os.ReadFile(filepath.Join(*dir, filepath.FromSlash(f.Path)))
+		if err == nil {
+			t := string(b)
+			olds[i] = &t
+		}
+		content, merr := f.Expected(string(b), err == nil)
+		if merr != nil {
+			fmt.Fprintf(stderr, "preconfig: %v\n", merr)
+			return exitFindings
+		}
+		res.Files[i].Content = content
+	}
 	if *asJSON {
 		printJSON(stdout, map[string]any{"files": res.Files, "notes": res.Notes, "diagnostics": ds})
 	}
-	for _, f := range res.Files {
+	for i, f := range res.Files {
 		p := filepath.Join(*dir, filepath.FromSlash(f.Path))
 		if *dry {
 			if !*asJSON {
@@ -152,14 +168,7 @@ func cmdBuild(args []string, stdout, stderr io.Writer) int {
 			}
 			continue
 		}
-		old, err := os.ReadFile(p)
-		content, merr := f.Expected(string(old), err == nil)
-		if merr != nil {
-			fmt.Fprintf(stderr, "preconfig: %v\n", merr)
-			return exitFindings
-		}
-		f.Content = content
-		unchanged := err == nil && string(old) == f.Content
+		unchanged := olds[i] != nil && *olds[i] == f.Content
 		if !unchanged {
 			if err := os.MkdirAll(filepath.Dir(p), 0o755); err != nil {
 				fmt.Fprintf(stderr, "preconfig: %v\n", err)

@@ -96,7 +96,7 @@ func TestClaudeSettingsRules(t *testing.T) {
 }
 
 // A settings.json with the user's own settings beside preconfig's hook isn't
-// drift; an old hook or a stale env value is.
+// drift; an older form of the hook is.
 func TestClaudeSettingsDrift(t *testing.T) {
 	src := "version: 1\nname: app\nruntimes:\n  python: \"3.12\"\nenv:\n  MODE: test\nready:\n  - python3 -c pass\ntargets: [claude-code]\n"
 	s, ds := spec.Load(kb.SpecPath, src)
@@ -107,7 +107,7 @@ func TestClaudeSettingsDrift(t *testing.T) {
 	for _, f := range gen.Build(s).Files {
 		files[f.Path] = f.Content
 	}
-	own := `{"permissions": {"allow": ["Bash(make)"]}}`
+	own := `{"permissions": {"allow": ["Bash(make)"]}, "env": {"MINE": "1"}}`
 	merged, err := gen.MergeClaudeSettings(files[kb.ClaudeSettingsPath], own, true)
 	if err != nil {
 		t.Fatal(err)
@@ -116,13 +116,20 @@ func TestClaudeSettingsDrift(t *testing.T) {
 	if r := Check(Input{Files: files}); r.Errors != 0 {
 		t.Errorf("merged settings: %v", codes(r))
 	}
-	files[kb.ClaudeSettingsPath] = strings.Replace(merged, `"MODE": "test"`, `"MODE": "old"`, 1)
+	files[kb.ClaudeSettingsPath] = strings.Replace(merged, `"timeout": 1800`, `"timeout": 600`, 1)
 	r := Check(Input{Files: files})
 	if d, ok := find(r, "X002"); !ok || d.File != kb.ClaudeSettingsPath || strings.Contains(d.Message, "not written by preconfig") {
-		t.Errorf("stale env: %v", r.Findings)
+		t.Errorf("older hook: %v", r.Findings)
 	}
 	files[kb.ClaudeSettingsPath] = "[]"
 	if r := Check(Input{Files: files}); !hasCode(r, "X003") {
 		t.Errorf("settings.json that can't take the hook: %v", codes(r))
+	}
+	// A key twice is a warning, not an unreadable file (build would write
+	// it back once, so it's drift too).
+	files[kb.ClaudeSettingsPath] = strings.Replace(merged, "{", `{"model": "a", "model": "b",`, 1)
+	r = Check(Input{Files: files})
+	if !hasCode(r, "A005") || hasCode(r, "A001") || hasCode(r, "X003") {
+		t.Errorf("duplicate key: %v", codes(r))
 	}
 }
