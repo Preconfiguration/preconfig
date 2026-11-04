@@ -340,6 +340,18 @@ func TestDrift(t *testing.T) {
 	}
 }
 
+// A Windows checkout with CRLF line endings isn't drift: the repository
+// holds LF, which is what the platforms read.
+func TestCRLFCheckoutIsNotDrift(t *testing.T) {
+	files := sampleFiles(t)
+	for p, c := range files {
+		files[p] = strings.ReplaceAll(c, "\n", "\r\n")
+	}
+	if r := Check(Input{Files: files}); len(r.Findings) != 0 {
+		t.Errorf("findings on a CRLF checkout: %v", r.Findings)
+	}
+}
+
 // An edit to environment.json, which carries no generated-by line, is still
 // told apart from a file preconfig never wrote.
 func TestDriftInEnvironmentJSON(t *testing.T) {

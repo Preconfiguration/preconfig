@@ -475,6 +475,9 @@ func (c *checker) drift(s *spec.Spec) {
 				"%s is missing: preconfig.yaml lists the %s target", f.Path, f.Target)
 			continue
 		}
+		// Git on Windows checks text out with CRLF line endings by default;
+		// the platforms read the LF the repository holds.
+		actual = strings.ReplaceAll(actual, "\r\n", "\n")
 		want, err := f.Expected(actual, true)
 		if err != nil {
 			c.add(f.Path, nil, spec.Error, "X020", "Fix the file by hand, then run preconfig build.", "%v", err)
