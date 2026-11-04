@@ -18,7 +18,7 @@ release builds its own with the current stable Go.
 
 ## Start here
 
-- Latest release: v0.1.0 (October 8 2026). In progress: item 11 of
+- Latest release: v0.2.0 (November 4 2026). In progress: item 11 of
   softdev-plan.md (photozeitgeist/jollyroger.biz), approved by YK on
   2026-11-04 ("Go"): Phase 0 and Phase A as 0.2.0, Phase B as 0.3.0.
   Phase C (real runs on Copilot and Cursor) needs YK and isn't started.
@@ -66,6 +66,8 @@ Steps:
        5 minor; env moved from settings.json to CLAUDE_ENV_FILE, quoted
        $ENVRC, failures on the hook's stdout, duplicate keys as JSON.parse
        reads them), fixes with tests; release 0.2.0
-5. [ ] after the release: assets checked, site post and pages,
-       softdevstudio note, softdev-plan.md
+5. [x] after the release (tag on 15b0874, run 41837923182): six assets,
+       Linux binary checked against SHA256SUMS and run on web-shop with
+       the four new targets; preconfiguration.com 2b01c14 (post, About,
+       Roadmap); softdevstudio note 2944e55; softdev-plan.md ae431fd
 6. [ ] Phase B the same way, as 0.3.0
